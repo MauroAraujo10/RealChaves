@@ -1,0 +1,24 @@
+button{
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+    width: 150px;
+    min-width: 150;
+    color: #FFF;
+    text-decoration: none;
+    border-radius: 10px;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+}
+
+button svg{
+    margin-bottom: 20px;
+}
+
+button:hover{
+    opacity: 0.90;
+    color: #000;
+    transition: all 0.50s;
+}
