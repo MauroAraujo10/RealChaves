@@ -1,4 +1,4 @@
-button{
+.BotaoHome{
     display: flex;
     flex-direction: column;
     height: 150px;
@@ -13,11 +13,11 @@ button{
     font-size: 20px;
 }
 
-button svg{
+.BotaoHome svg{
     margin-bottom: 20px;
 }
 
-button:hover{
+.BotaoHome:hover{
     opacity: 0.90;
     color: #000;
     transition: all 0.50s;

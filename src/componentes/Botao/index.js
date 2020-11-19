@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './style.css'
-import { FaKey } from 'react-icons/fa';
+import {withRouter} from 'react-router-dom';
+import './style.css';
 
 class Botao extends Component {
     constructor(props) {
@@ -9,18 +9,21 @@ class Botao extends Component {
     }
 
     Redirect(){
+        const {url} = this.props;
+        this.props.history.replace(`${url}`);
     }
 
     render() {
         return (
             <button 
-            style={{backgroundColor: this.props.color}}
-            onClick={this.Redirect}>
-                <FaKey size={30} color="#FF0"/>
+                className="BotaoHome"
+                style={{backgroundColor: this.props.color}} 
+                onClick={this.Redirect}>
+                {this.props.icon}
                 {this.props.text}
             </button>
         );
     }
 }
 
-export default Botao;
+export default withRouter(Botao);

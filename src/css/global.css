@@ -1,3 +1,25 @@
+.tabela{
+    width: 100%;
+    margin-top: 20px;
+}
+
+.btn-Primary{
+    text-decoration: none;
+    background-color: #0275d8;
+    color: #FFF;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-Primary:hover{
+    opacity: 0.90;
+    color: #000;
+    transition: all 0.50s;
+}
+
 .container{
     background-color: #FFF;
     margin: 20px 200px;
@@ -17,4 +39,12 @@
     justify-content: center;
     justify-content: space-between;
     border: none;
+}
+
+.mr-3{
+    margin-right: 10px;
+}
+
+svg:hover{
+    cursor: pointer;
 }
