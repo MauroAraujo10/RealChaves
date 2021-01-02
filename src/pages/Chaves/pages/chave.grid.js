@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import service from '../../service';
-import '../../css/global.css';
-import './css/chaves.css';
+import service from '../../../service';
+import service2 from '../service/chave.service';
+import '../../../css/global.css';
+import '../css/chaves.css';
 
 import { FaPlusCircle, FaArrowAltCircleLeft, FaEdit, FaTrashAlt } from 'react-icons/fa';
 
@@ -28,7 +29,8 @@ class Grid extends Component {
                     Marca: x.val().Marca,
                     NumeroSerie: x.val().NumeroSerie,
                     Quantidade: x.val().Quantidade,
-                    Tipo: x.val().Tipo
+                    Tipo: x.val().Tipo,
+                    Data: x.val().Data
                 })
             })
             this.setState({ chaves: chaves });
@@ -36,11 +38,13 @@ class Grid extends Component {
     }
 
     edit(id){
-        alert('id: ' +id);
+        this.props.history.replace(`/Chaves/edit/${id}`);
     }
     
-    delete(id){
-        alert('id: ' +id);
+    async delete(id){
+        await service2.delete(id).then(() => {
+            alert('Registro Excluído com sucesso');
+        })
     }
 
     render() {
@@ -64,6 +68,7 @@ class Grid extends Component {
                     <th>Número de Série</th>
                     <th>Quantidade</th>
                     <th>Tipo</th>
+                    <th>Data</th>
                     <th>Ações</th>
                     {this.state.chaves.map((x) => {
                         return (
@@ -72,6 +77,7 @@ class Grid extends Component {
                                 <td>{x.NumeroSerie}</td>
                                 <td>{x.Quantidade}</td>
                                 <td>{x.Tipo}</td>
+                                <td>{x.Data}</td>
                                 <td>
                                 <FaEdit className="mr-3" onClick={() => this.edit(x.Id)}/>
                                 <FaTrashAlt onClick={() => this.delete(x.Id)}/>
@@ -80,8 +86,6 @@ class Grid extends Component {
                         );
                     })}
                 </table>
-
-
             </div >
         );
     }

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { HiKey } from 'react-icons/hi';
 import './style.css'
 
-export default function Header() {
+function Header() {
     return (
         <header>
             <Link to="/">
@@ -13,3 +13,5 @@ export default function Header() {
         </header>
     );
 }
+
+export default withRouter(Header);
