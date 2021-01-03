@@ -11,6 +11,10 @@ import Alicates from './pages/Alicates/pages/alicates.grid';
 import NewAlicate from './pages/Alicates/pages/alicates.new';
 import EditAlicate from './pages/Alicates/pages/alicates.edit';
 
+// import Servicos from './pages/Servicos/pages/servicos.grid';
+import NewServicos from './pages/Servicos/pages/servicos.new';
+import EditServicos from './pages/Servicos/pages/servicos.edit';
+
 export default function Routes() {
     return (
         <BrowserRouter>
@@ -24,6 +28,10 @@ export default function Routes() {
                 <Route path="/Alicates" exact component={Alicates} />
                 <Route path="/Alicates/new" exact component={NewAlicate} />
                 <Route path="/Alicates/edit/:id" exact component={EditAlicate} />
+
+                <Route path="/Servicos" exact component={Alicates} />
+                <Route path="/Servicos/new" exact component={NewServicos} />
+                <Route path="/Servicos/edit/:id" exact component={EditServicos} />
             </Switch>
         </BrowserRouter>
     );

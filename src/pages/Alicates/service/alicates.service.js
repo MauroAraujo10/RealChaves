@@ -1,6 +1,6 @@
 import service from '../../../service';
 
-const tableName = 'Chave';
+const tableName = 'Alicates';
 
 const methods = {
     async post(dto){
@@ -8,33 +8,19 @@ const methods = {
 
         return await service.app.ref(tableName).child(id).set({
             Marca: dto.Marca,
-            NumeroSerie: Number(dto.NumeroSerie),
+            Cliente: dto.Cliente,
             Quantidade: Number(dto.Quantidade),
-            Tipo: dto.Tipo,
+            Valor: dto.Valor,
             Data: dto.Data
         });
     },
     async update(dto){
         return await service.app.ref(tableName).child(dto.id).set({
             Marca: dto.Marca,
-            NumeroSerie: Number(dto.NumeroSerie),
+            Cliente: dto.Cliente,
             Quantidade: Number(dto.Quantidade),
-            Tipo: dto.Tipo,
+            Valor: dto.Valor,
             Data: dto.Data
-        });
-    },
-    async getById(id){
-        
-            await service.app.ref(tableName).child(id).once('value', (snapshot) => {
-
-                var teste = {
-                    Marca: snapshot.val().Marca,
-                    NumeroSerie: snapshot.val().NumeroSerie,
-                    Quantidade: snapshot.val().Quantidade,
-                    Tipo: snapshot.val().Tipo
-                };
-
-                return teste;
         });
     },
     async delete(id){

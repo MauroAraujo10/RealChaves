@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import service from '../service/alicates.service';
+import {Link, withRouter} from 'react-router-dom';
+import service from '../../../service';
+import alicateService from '../service/alicates.service';
 
-class New extends Component {
-    constructor(props) {
+class Edit extends Component {
+    constructor(props){
         super(props);
         this.state = {
+            id: '',
             Marca: '',
             Cliente: '',
             Quantidade: '',
@@ -15,35 +17,40 @@ class New extends Component {
         this.submitForm = this.submitForm.bind(this);
     }
 
-    submitForm(e){
-        e.preventDefault();
-        const {Marca, Cliente, Quantidade, Valor, Data} = this.state;
+    async componentDidMount() {
+        const {id} = this.props.match.params;
+        this.setState({id});
 
-        if (Marca !== '' && Cliente !== '' && Quantidade !== '' && Valor !== '' && Data !== ''){
-            service.post(this.state);
-            alert('Cadastrado com sucesso');
-            this.limparCampos();
-        }
-        else{
-            alert('Preencha todos os campos');
-        }
+        await service.app.ref('Alicates').child(id).once('value', (snapshot) => {
+            this.setState({
+                Marca: snapshot.val().Marca,
+                Cliente: snapshot.val().Cliente,
+                Quantidade: snapshot.val().Quantidade,
+                Valor: snapshot.val().Valor,
+                Data: snapshot.val().Data,
+            })
+        })
     }
 
-    limparCampos(){
-        this.setState({
-            Marca: '',
-            Cliente: '',
-            Quantidade: '',
-            Valor: '',
-            Data: ''
-        });
+    submitForm(e){
+        e.preventDefault();
+        const { Marca, Cliente, Quantidade, Valor, Data } = this.state;
+
+        if (Marca !== '' && Cliente !== '' && Quantidade !== '' && Valor !== '' && Data !== '') {
+            alicateService.update(this.state);
+            alert('Editado com sucesso');
+        }
+        else {
+            alert('Preencha todos os campos');
+        }
+
     }
 
     render() {
         return (
             <div className="container">
                 <h1>
-                    Cadastrar Alicate
+                    Editar Alicate
                 </h1>
                 <Link to="/Alicates">
                     Voltar
@@ -93,4 +100,4 @@ class New extends Component {
     }
 }
 
-export default withRouter(New);
+export default withRouter(Edit);

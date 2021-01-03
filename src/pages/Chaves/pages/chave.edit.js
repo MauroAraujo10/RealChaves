@@ -11,7 +11,8 @@ class Edit extends Component {
             Marca: '',
             NumeroSerie: '',
             Quantidade: '',
-            Tipo: ''
+            Tipo: '',
+            Data: ''
         };
         this.submitForm = this.submitForm.bind(this);
     }
@@ -26,15 +27,16 @@ class Edit extends Component {
                 NumeroSerie: snapshot.val().NumeroSerie,
                 Quantidade: snapshot.val().Quantidade,
                 Tipo: snapshot.val().Tipo,
+                Data: snapshot.val().Data,
             })
         })
     }
 
     submitForm(e){
         e.preventDefault();
-        const { Marca, NumeroSerie, Quantidade, Tipo } = this.state;
+        const { Marca, NumeroSerie, Quantidade, Tipo, Data } = this.state;
 
-        if (Marca !== '' && NumeroSerie !== '' && Quantidade !== '' && Tipo !== '') {
+        if (Marca !== '' && NumeroSerie !== '' && Quantidade !== '' && Tipo !== '' && Data !== '') {
             chaveService.update(this.state);
             alert('Editado com sucesso');
         }
@@ -72,6 +74,12 @@ class Edit extends Component {
                         type="number"
                         value={this.state.Quantidade}
                         onChange={(e) => this.setState({ Quantidade: e.target.value })} />
+                    <br />
+                    <label>Data: </label>
+                    <input
+                        type="text"
+                        value={this.state.Data}
+                        onChange={(e) => this.setState({ Data: e.target.value })} />
                     <br />
                     <label>Tipo da Chave: </label>
                     <select 

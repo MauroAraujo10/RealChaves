@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import service from '../../../service';
-import service2 from '../service/chave.service';
+import chaveService from '../service/chave.service';
 import '../../../css/global.css';
 import '../css/chaves.css';
 
@@ -18,8 +18,6 @@ class Grid extends Component {
     }
 
     componentDidMount = async () => {
-        // const chaves = await service.GetChaves();
-
         await service.app.ref('Chave').once('value', (snapshot) => {
 
             let chaves = [];
@@ -42,7 +40,7 @@ class Grid extends Component {
     }
     
     async delete(id){
-        await service2.delete(id).then(() => {
+        await chaveService.delete(id).then(() => {
             alert('Registro Excluído com sucesso');
         })
     }
