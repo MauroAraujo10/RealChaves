@@ -4,7 +4,7 @@ import service from '../../../service';
 import alicateService from '../service/alicates.service';
 import '../css/alicates.css';
 
-import { FaPlusCircle, FaArrowAltCircleLeft, FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 class Grid extends Component {
     constructor(props) {

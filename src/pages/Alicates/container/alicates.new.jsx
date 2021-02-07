@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import service from '../service/alicates.service';
 
-class New extends Component {
+class AlicatesForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -15,21 +15,21 @@ class New extends Component {
         this.submitForm = this.submitForm.bind(this);
     }
 
-    submitForm(e){
+    submitForm(e) {
         e.preventDefault();
-        const {Marca, Cliente, Quantidade, Valor, Data} = this.state;
+        const { Marca, Cliente, Quantidade, Valor, Data } = this.state;
 
-        if (Marca !== '' && Cliente !== '' && Quantidade !== '' && Valor !== '' && Data !== ''){
+        if (Marca !== '' && Cliente !== '' && Quantidade !== '' && Valor !== '' && Data !== '') {
             service.post(this.state);
             alert('Cadastrado com sucesso');
             this.limparCampos();
         }
-        else{
+        else {
             alert('Preencha todos os campos');
         }
     }
 
-    limparCampos(){
+    limparCampos() {
         this.setState({
             Marca: '',
             Cliente: '',
@@ -51,46 +51,47 @@ class New extends Component {
                 <form
                     className="form-Chaves"
                     onSubmit={(e) => this.submitForm(e)}>
+
                     <label>Cliente: </label>
-                    <input 
+                    <input
                         type="text"
-                        autoFocus 
+                        autoFocus
                         value={this.state.Cliente}
-                        onChange={(e) => this.setState({Cliente: e.target.value})}
+                        onChange={(e) => this.setState({ Cliente: e.target.value })}
                     />
                     <label>Marca: </label>
-                    <input 
+                    <input
                         type="text"
                         value={this.state.Marca}
-                        onChange={(e) => this.setState({Marca: e.target.value})}
+                        onChange={(e) => this.setState({ Marca: e.target.value })}
                     />
                     <label>Quantidade: </label>
-                    <input 
+                    <input
                         type="number"
                         value={this.state.Quantidade}
-                        onChange={(e) => this.setState({Quantidade: e.target.value})}
+                        onChange={(e) => this.setState({ Quantidade: e.target.value })}
                     />
                     <label>Valor: </label>
-                    <input 
+                    <input
                         type="number"
                         value={this.state.Valor}
-                        onChange={(e) => this.setState({Valor: e.target.value})}
+                        onChange={(e) => this.setState({ Valor: e.target.value })}
                     />
                     <label>Data: </label>
-                    <input 
+                    <input
                         type="text"
                         value={this.state.Data}
-                        onChange={(e) => this.setState({Data: e.target.value})}
+                        onChange={(e) => this.setState({ Data: e.target.value })}
                     />
                     <button
                         className="btn-Primary"
                         type="submit">
                         Cadastrar
-                 </button>
+                    </button>
                 </form>
             </div>
         );
     }
 }
 
-export default withRouter(New);
+export default withRouter(AlicatesForm);
