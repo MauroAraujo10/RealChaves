@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import Home from './pages/Home';
+import Erro from './pages/Erro';
 
 import GridChaves from './pages/Chaves/container/chave.grid';
 import NewChaves from './pages/Chaves/container/chave.new';
@@ -14,6 +15,10 @@ import EditAlicate from './pages/Alicates/container/alicates.edit';
 import Servicos from './pages/Servicos/container/servicos.grid';
 import NewServicos from './pages/Servicos/container/servicos.new';
 import EditServicos from './pages/Servicos/container/servicos.edit';
+
+import Estatisticas from './pages/Estatistica/container/page1';
+import EstatisticasVendas from './pages/Estatistica/container/Vendas';
+import EstatisticasLucros from './pages/Estatistica/container/Lucros';
 
 export default function Routes() {
     return (
@@ -32,6 +37,12 @@ export default function Routes() {
                 <Route path="/Servicos" exact component={Servicos} />
                 <Route path="/Servicos/new" exact component={NewServicos} />
                 <Route path="/Servicos/edit/:id" exact component={EditServicos} />
+
+                <Route path="/Estatisticas" exact component={Estatisticas} />
+                <Route path="/Estatisticas/vendas" exact component={EstatisticasVendas} />
+                <Route path="/Estatisticas/lucros" exact component={EstatisticasLucros} />
+
+                <Route path="*" component={Erro} />
             </Switch>
         </BrowserRouter>
     );

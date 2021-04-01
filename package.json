@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/charts": "^1.0.17",
+    "antd": "^4.12.2",
     "bootstrap": "^4.6.0",
     "firebase": "^7.24.0",
     "history": "^5.0.0",

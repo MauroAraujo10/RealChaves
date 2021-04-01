@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import service from '../service/servicos.service';
+import { Link, withRouter } from 'react-router-dom';
+import service from '../../../service';
+import servicosService from '../service/servicos.service';
 
 class ServicosForm extends Component {
     constructor(props) {
@@ -13,23 +14,39 @@ class ServicosForm extends Component {
         this.submitForm = this.submitForm.bind(this);
     }
 
-    // componentDidMount() {
-    //     const { prefix } = this.props;
+    async componentDidMount() {
+        const { prefix } = this.props;
 
-    //     if (prefix === 'E') {
-    //         //getById
-    //     }
-    // }
+        if (prefix === 'E') {
+            //const { id } = 1612710980709;
+            const id = 1612718997034;
+
+            await service.app.ref('Servicos').child(id).once('value', (snapshot) => {
+                this.setState({
+                    Data: snapshot.val().Data,
+                    Servico: snapshot.val().Servico,
+                    Valor: snapshot.val().Valor
+                })
+            });
+        }
+    }
 
     submitForm(e) {
         e.preventDefault();
         const { Data, Servico, Valor } = this.state;
-        console.log(Data, Servico, Valor);
+        const {prefix} = this.props;
 
         if (Data !== '' && Servico !== '' && Valor !== '') {
-            service.post(this.state);
-            alert('Cadastrado com sucesso');
-            this.limpaForm();
+
+            if (prefix === 'E'){
+                servicosService.update(1612718997034, this.state);
+                alert('Editado com sucesso');
+            }
+            else{
+                servicosService.post(this.state);
+                this.limpaForm();
+                alert('Cadastrado com sucesso');
+            }
         }
         else {
             alert('Preencha todos os campos');
@@ -45,10 +62,13 @@ class ServicosForm extends Component {
     }
 
     render() {
+        const {prefix} = this.props;
+        
         return (
             <div className="container">
                 <h1>
-                    Cadastrar Serviço
+                    {prefix === 'E' ? 'Editar ' : 'Cadastrar '}
+                    Serviço
                 </h1>
                 <Link to="/Servicos">
                     Voltar
@@ -78,7 +98,7 @@ class ServicosForm extends Component {
                     <button
                         className="btn-Primary"
                         type="submit">
-                        Cadastrar
+                            {prefix === 'E'? 'Editar': 'Cadastrar'}
                     </button>
                 </form>
             </div>
@@ -86,4 +106,4 @@ class ServicosForm extends Component {
     }
 }
 
-export default ServicosForm;
+export default withRouter(ServicosForm);

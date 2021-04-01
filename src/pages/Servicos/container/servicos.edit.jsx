@@ -1,5 +1,14 @@
 import React from 'react';
+import { Link, withRouter } from 'react-router-dom';
+import ServicoForm from '../components/servicos.form';
 
-export default function Edit() {
-    return (<h1>Edit</h1>);
+function ServicoEdit() {
+    return (
+        <div>
+            <ServicoForm prefix={'E'}/>
+            <Link to="/Servicos">Voltar</Link>
+        </div>
+    );
 }
+
+export default withRouter(ServicoEdit);

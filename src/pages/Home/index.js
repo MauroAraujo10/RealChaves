@@ -10,7 +10,6 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            Chave: [],
             sizeOfIcon: 28
         };
     }
