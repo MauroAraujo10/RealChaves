@@ -39,8 +39,8 @@ export default function Routes() {
                 <Route path="/Servicos/edit/:id" exact component={EditServicos} />
 
                 <Route path="/Estatisticas" exact component={Estatisticas} />
-                <Route path="/Estatisticas/vendas" exact component={EstatisticasVendas} />
-                <Route path="/Estatisticas/lucros" exact component={EstatisticasLucros} />
+                <Route path="/Estatisticas/Vendas" exact component={EstatisticasVendas} />
+                <Route path="/Estatisticas/Lucros" exact component={EstatisticasLucros} />
 
                 <Route path="*" component={Erro} />
             </Switch>

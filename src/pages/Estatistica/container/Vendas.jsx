@@ -1,36 +1,61 @@
 import React, { Component } from 'react';
-import { Card, Radio } from 'antd';
-import { Area } from '@ant-design/charts';
+import {Link} from 'react-router-dom';
+import service from '../../../service'
+import serviceVendas from '../service/estatisticas.service';
 
 class Vendas extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: 1
+            Vendas: []
         };
-        this.onChangeRadio = this.onChangeRadio.bind(this);
     }
 
-    onChangeRadio(e) {
-        this.setState({
-            value: e.target.value,
+    componentDidMount = async () => {
+        console.log(service);
+        await service.app.ref('Vendas').once('value', (snapshot) => {
+
+            let vendas = [];
+            snapshot.forEach((x) => {
+                vendas.push({
+                    Id: x.key,
+                    Produto: x.val().Produto,
+                    Data: x.val().Data,
+                    IdProduto: x.val().IdProduto,
+                    Quantidade: x.val().Quantidade,
+                    Valor: x.val().Valor
+                })
+            })
+            this.setState({ Vendas: vendas });
         });
     }
 
     render() {
-        const { value } = this.state;
         return (
             <div className="container">
                 <h1>Vendas</h1>
                 <br />
-                <div className="site-card-wrapper">
-                    <Card title="Controle de informações" bordered>
-                        <Radio.Group onChange={this.onChangeRadio}>
-                            <Radio value={1}>Anual</Radio>
-                            <Radio value={2}>Mensal</Radio>
-                        </Radio.Group>
-                    </Card>
-                </div>
+                <Link to="/Estatisticas">
+                    Voltar
+                </Link>
+
+                <table className="tabela-chaves">
+                    <th>Produto</th>
+                    <th>Data da Venda</th>
+                    <th>Quantidade</th>
+                    <th>Valor</th>
+                    <th>Ações</th>
+                    {this.state.Vendas.map((x)=>{
+                        return(
+                            <tr key={x.key}>
+                                <td>{x.Produto}</td>
+                                <td>{x.Data}</td>
+                                <td>{x.Quantidade}</td>
+                                <td>{x.Valor}</td>
+                            </tr>
+                        )
+                    })}
+                </table>
             </div>
         );
     }

@@ -4,8 +4,6 @@ import Routes from './routes';
 
 import Header from './header';
 
-// import Header from './header';
-
 export default function App() {
   return (
     <BrowserRouter>

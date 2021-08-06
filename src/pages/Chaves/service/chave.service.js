@@ -3,9 +3,9 @@ import service from '../../../service';
 const tableName = 'Chave';
 
 const methods = {
-    async post(dto){
-        let id = Date.now();
 
+    async post(dto) {
+        let id = Date.now();
         return await service.app.ref(tableName).child(id).set({
             Marca: dto.Marca,
             NumeroSerie: Number(dto.NumeroSerie),
@@ -14,30 +14,31 @@ const methods = {
             Data: dto.Data
         });
     },
-    async update(dto){
-        return await service.app.ref(tableName).child(dto.id).set({
+    async update(dto) {
+        return await service.app.ref(tableName).child(dto.Id).set({
             Marca: dto.Marca,
             NumeroSerie: Number(dto.NumeroSerie),
             Quantidade: Number(dto.Quantidade),
-            Tipo: dto.Tipo,
+            //Tipo: dto.Tipo == ,
+            Tipo: 'Plana',
             Data: dto.Data
         });
     },
-    async getById(id){
-        
-            await service.app.ref(tableName).child(id).once('value', (snapshot) => {
+    async getById(id) {
 
-                var teste = {
-                    Marca: snapshot.val().Marca,
-                    NumeroSerie: snapshot.val().NumeroSerie,
-                    Quantidade: snapshot.val().Quantidade,
-                    Tipo: snapshot.val().Tipo
-                };
+        await service.app.ref(tableName).child(id).once('value', (snapshot) => {
 
-                return teste;
+            var teste = {
+                Marca: snapshot.val().Marca,
+                NumeroSerie: snapshot.val().NumeroSerie,
+                Quantidade: snapshot.val().Quantidade,
+                Tipo: snapshot.val().Tipo
+            };
+
+            return teste;
         });
     },
-    async delete(id){
+    async delete(id) {
         await service.app.ref(tableName).child(id).remove();
     }
 };
