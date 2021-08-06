@@ -1,12 +1,6 @@
-.tabela-chaves{
-    width: 100%;
-    margin-top: 20px;
-}
-
-.tabela-chaves th{
-    background-color:#0275d8;
-    line-height: 30px;
-    color: #FFF;
+.Grid-Chaves th{
+    background-color: #3395eb !important;
+    color: #FFF !important;
 }
 
 .form-Chaves{

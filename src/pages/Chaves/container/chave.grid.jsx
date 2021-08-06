@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import ChavesVendaModal from '../components/chaves.venda.modal';
+import YesOrNoModal from '../../../common/yesOrNoModal';
 import service from '../../../service';
 import { messages } from '../../../common/messages';
 import chaveService from '../service/chave.service';
 import '../../../css/global.css';
 import '../css/chaves.css';
+import { Table } from 'antd';
 
 import { FaPlusCircle, FaArrowAltCircleLeft, FaEdit, FaTrashAlt, FaDollarSign } from 'react-icons/fa';
 
@@ -14,7 +16,9 @@ class Grid extends Component {
         super(props);
         this.state = {
             chaves: [],
-            modalVisible: false,
+            modalVendaVisible: false,
+            modalExclusaoVisible: false,
+            idExclusao: undefined,
             chaveSelecionada: [],
             dataCadastro: ''
         };
@@ -22,7 +26,7 @@ class Grid extends Component {
         this.delete = this.delete.bind(this);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         service.app.ref('Chave').on('value', (snapshot) => {
 
             let chaves = [];
@@ -40,12 +44,12 @@ class Grid extends Component {
         });
     }
 
-    sell(dto){
+    sell(dto) {
         let dataSplit = dto.Data.split('/');
         dto.dataCadastro = `${dataSplit[1]}/${dataSplit[0]}/${dataSplit[2]}`;
 
-        this.setState({ 
-            modalVisible: true, 
+        this.setState({
+            modalVendaVisible: true,
             chaveSelecionada: dto
         })
     }
@@ -54,22 +58,27 @@ class Grid extends Component {
         this.props.history.replace(`/Chaves/edit/${id}`);
     }
 
-    async delete(id) {
-        await chaveService.delete(id).then(() => {
-            alert(messages.exclusaoSucesso());
-        })
+    delete(id) {
+        this.setState({
+            modalExclusaoVisible: true,
+            idExclusao: id
+        });
     }
 
-    closeModal(){
-        this.setState({ 
-            modalVisible: false,
+    async excluirChave(id) {
+        await chaveService.delete(id).then(() => {
+            alert(messages.exclusaoSucesso());
+            this.setState({ modalExclusaoVisible: false });
         })
     }
 
     render() {
+
+        const { Column } = Table;
+
         return (
-            <div className="container">
-                <h1>Grid Chaves</h1>
+            <div style={{ margin: '30px' }}>
+                <h1 style={{ textAlign: 'center' }}>Chaves cadastradas</h1>
                 <div style={{ textAlign: "right" }}>
                     <Link to="/" className="btn-Primary">
                         <FaArrowAltCircleLeft className="mr-3" />
@@ -86,47 +95,54 @@ class Grid extends Component {
                     <h4>Número de Registros: {this.state.chaves.length}</h4>
                 </div>
 
-                <table className="tabela-chaves">
-                    <th>Marca</th>
-                    <th>Número de Série</th>
-                    <th>Quantidade</th>
-                    <th>Tipo</th>
-                    <th>Data</th>
-                    <th>Ações</th>
-                    {this.state.chaves.map((x) => {
-                        return (
-                            <tr key={x.key}>
-                                <td>{x.Marca}</td>
-                                <td>{x.NumeroSerie}</td>
-                                <td>{x.Quantidade}</td>
-                                <td>{x.Tipo}</td>
-                                <td>{x.Data}</td>
-                                <td>
-                                    <FaDollarSign
-                                        className="mr-3"
-                                        title="Venda de Chave"
-                                        onClick={() => this.sell(x)}
-                                    />
-                                    <FaEdit
-                                        className="mr-3"
-                                        title="Edição de Chave"
-                                        onClick={() => this.edit(x.Id)}
-                                    />
+                <Table
+                    className="Grid-Chaves"
+                    bordered
+                    dataSource={this.state.chaves}>
 
-                                    <FaTrashAlt
-                                        title="Deletar Chave"
-                                        onClick={() => this.delete(x.Id)}
-                                    />
-                                </td>
-                            </tr>
-                        );
-                    })}
-                </table>
+                    <Column title='Marca' dataIndex='Marca' />
+                    <Column title='Número de Série' dataIndex='NumeroSerie' />
+                    <Column title='Quantidade' dataIndex='Quantidade' />
+                    <Column title='Tipo' dataIndex='Tipo' />
+                    <Column title='Data de Cadastro' dataIndex='Data' />
+
+                    <Column
+                        title="Ações"
+                        dataIndex="status"
+                        key="status"
+                        render={(status, x) => (
+                            <>
+                                <FaDollarSign
+                                    className="mr-3"
+                                    title="Venda de Chave"
+                                    onClick={() => { this.sell(x) }}
+                                />
+
+                                <FaEdit
+                                    className="mr-3"
+                                    title="Edição de Chave"
+                                    onClick={() => this.edit(x.Id)}
+                                />
+                                <FaTrashAlt
+                                    title="Deletar Chave"
+                                    onClick={() => this.delete(x.Id)}
+                                />
+                            </>
+                        )}
+                    />
+                </Table>
+
                 <ChavesVendaModal
-                    visible={this.state.modalVisible}
+                    visible={this.state.modalVendaVisible}
                     chaveSelecionada={this.state.chaveSelecionada}
-                    onClose={() => this.closeModal() }
-                    onSave={this.VenderChave}
+                    onClose={() => this.setState({ modalVendaVisible: false })}
+                />
+                <YesOrNoModal
+                    title={'Exclusão de Chave'}
+                    text={'Deseja realmente excluir esta chave ?'}
+                    visible={this.state.modalExclusaoVisible}
+                    onClose={() => this.setState({ modalExclusaoVisible: false })}
+                    onOk={() => this.excluirChave(this.state.idExclusao)}
                 />
             </div >
         );
