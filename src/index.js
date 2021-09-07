@@ -4,9 +4,14 @@ import './index.css';
 import App from './App';
 import "antd/dist/antd.css";
 
+import { ConfigProvider } from 'antd';
+import language from 'antd/lib/locale/pt_BR';
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ConfigProvider locale={language}>
+      <App />
+    </ConfigProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {withRouter} from 'react-router-dom';
-import Botao from '../../componentes/Botao';
+import Botao from '../../common/components/Botao';
 import '../../css/global.css';
 
 import { FaKey, FaUntappd, FaTools, FaChartLine } from 'react-icons/fa';

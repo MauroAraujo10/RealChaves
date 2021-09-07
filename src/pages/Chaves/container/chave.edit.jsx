@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import chaveService from '../service/chave.service';
 import service from '../../../service';
+import { messages } from '../../../common/messages';
 
 class Edit extends Component {
     constructor(props) {
@@ -17,12 +18,11 @@ class Edit extends Component {
         this.submitForm = this.submitForm.bind(this);
     }
 
-    async componentDidMount(){
-        const {id} = this.props.match.params;
-        this.setState({id});
-
+    async componentDidMount() {
+        const { id } = this.props.match.params;
         await service.app.ref('Chave').child(id).once('value', (snapshot) => {
             this.setState({
+                Id: id,
                 Marca: snapshot.val().Marca,
                 NumeroSerie: snapshot.val().NumeroSerie,
                 Quantidade: snapshot.val().Quantidade,
@@ -32,17 +32,44 @@ class Edit extends Component {
         })
     }
 
-    submitForm(e){
+    submitForm(e) {
         e.preventDefault();
+
+        if (this.Validator()) {
+            chaveService.update(this.state);
+            alert(messages.EditadoSucesso('Chave'));
+        }
+    }
+
+    Validator() {
         const { Marca, NumeroSerie, Quantidade, Tipo, Data } = this.state;
 
-        if (Marca !== '' && NumeroSerie !== '' && Quantidade !== '' && Tipo !== '' && Data !== '') {
-            chaveService.update(this.state);
-            alert('Editado com sucesso');
+        if (!Marca) {
+            alert(messages.CampoVazio('Marca'));
+            return false;
+        
         }
-        else {
-            alert('Preencha todos os campos');
+        if (!NumeroSerie) { 
+            alert(messages.CampoVazio('Número de Série')); 
+            return false; 
         }
+
+        if (!Quantidade) {
+            alert(messages.CampoVazio('Quantidade'));
+            return false;
+        }
+
+        if (!Tipo) {
+            alert(messages.CampoVazio('Tipo'));
+            return false;
+        }
+
+        if (!Data) {
+            alert(messages.CampoVazio('Data'));
+            return false;
+        }
+
+        return true;
     }
 
     render() {
@@ -82,7 +109,7 @@ class Edit extends Component {
                         onChange={(e) => this.setState({ Data: e.target.value })} />
                     <br />
                     <label>Tipo da Chave: </label>
-                    <select 
+                    <select
                         value={this.state.Tipo}
                         onChange={(e) => this.setState({ Tipo: e.target.value })}>
                         <option value="Plana">Plana</option>

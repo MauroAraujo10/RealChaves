@@ -7,11 +7,33 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #9c9c9c;
-
+  background-color: #DDD !important;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+svg:hover{
+  cursor: pointer;
+}
+
+.mt-2{
+  margin-top: 20px;
+}
+
+.mr-2{
+  margin-right: 5px;
+}
+
+.mr-3{
+  margin-right: 10px;
+}
+
+.Grid th{
+  background-color: #004878 !important;
+  color: #FFF !important;
+}
+

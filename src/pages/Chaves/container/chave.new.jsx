@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import service from '../service/chave.service';
-import { DatePicker, Space } from 'antd';
+import { DatePicker, Space, Breadcrumb } from 'antd';
 import { messages } from '../../../common/messages';
+
+import { AiOutlineHome } from "react-icons/ai";
 
 class New extends Component {
     constructor(props) {
@@ -20,65 +22,73 @@ class New extends Component {
 
     submitForm(e) {
         e.preventDefault();
-        
+
         if (this.Validator()) {
             service.post(this.state);
             alert(messages.cadastradoSucesso('Chave'));
-            this.limpaForm();
+            this.setState({
+                Marca: '',
+                NumeroSerie: '',
+                Quantidade: '',
+                Tipo: 'Plana',
+                Data: ''
+            })
         }
     }
 
-    Validator(){
+    Validator() {
         const { Marca, NumeroSerie, Quantidade, Tipo, Data } = this.state;
 
-        if (!Marca){
+        if (!Marca) {
             alert(messages.CampoVazio('Marca'));
             return false;
         }
 
-        if (!NumeroSerie){
+        if (!NumeroSerie) {
             alert(messages.CampoVazio('Número de Série'));
             return false;
         }
 
-        if (!Quantidade){
+        if (!Quantidade) {
             alert(messages.CampoVazio('Quantidade'));
             return false;
         }
 
-        if (!Tipo){
+        if (!Tipo) {
             alert(messages.CampoVazio('Tipo'));
             return false;
         }
 
-        if (!Data){
+        if (!Data) {
             alert(messages.CampoVazio('Data'));
             return false;
         }
-        return true; 
-    }
-
-    limpaForm() {
-        this.setState({
-            Marca: '',
-            NumeroSerie: '',
-            Quantidade: '',
-            Tipo: 'Plana',
-            Data: ''
-        })
+        return true;
     }
 
     render() {
         return (
-            <div className="container">
-                <h1>
-                    Cadastrar Chaves
-                </h1>
-                <Link
-                    className=" mr-5"
-                    to="/Chaves">
-                    Voltar
-                </Link>
+            <div style={{ margin: '30px' }}>
+                <div style={{ textAlign: 'center' }}>
+                    <h1> Cadastrar Chave</h1>
+                    <Breadcrumb>
+                        <Breadcrumb.Item>
+                            <Link to="/">
+                                <AiOutlineHome className="mr-2" />
+                                Início
+                            </Link>
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>
+                            <Link to="/Chaves">
+                                Chaves
+                            </Link>
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>
+                            Cadastrar chave
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
+                </div>
+
                 <form
                     className="form-Chaves"
                     onSubmit={(e) => this.submitForm(e)}>
