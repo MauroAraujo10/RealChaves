@@ -11,6 +11,7 @@ const methods = {
             Cliente: dto.Cliente,
             Quantidade: Number(dto.Quantidade),
             Valor: dto.Valor,
+            Pago: dto.Pago,
             Data: dto.Data
         });
     },
@@ -20,6 +21,7 @@ const methods = {
             Cliente: dto.Cliente,
             Quantidade: Number(dto.Quantidade),
             Valor: dto.Valor,
+            Pago: dto.Pago,
             Data: dto.Data
         });
     },

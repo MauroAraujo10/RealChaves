@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Modal } from 'antd';
-import { DatePicker, Space } from 'antd';
+import { Modal, DatePicker, Space } from 'antd';
 import moment from 'moment';
 import estatisticaService from '../../Estatistica/service/estatisticas.service';
 import chavesService from '../service/chave.service';
@@ -114,7 +113,6 @@ class ChavesVendaModal extends Component {
                             onChange={(date, dateString) => this.setState({ Data: dateString })}
                             defaultValue={moment(chaveSelecionada.dataCadastro)} />
                     </Space>
-
                 </form>
             </Modal>
         );

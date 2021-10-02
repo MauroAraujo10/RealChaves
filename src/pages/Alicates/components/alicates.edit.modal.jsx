@@ -1,39 +1,50 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { DatePicker, Breadcrumb, Switch } from 'antd';
+import { withRouter } from 'react-router-dom';
+import { Modal, Input, DatePicker, Switch } from 'antd';
 import { messages } from '../../../common/messages';
+import moment from 'moment';
 
-import service from '../service/alicates.service';
+import alicateService from '../service/alicates.service';
 
-import { AiOutlineHome } from "react-icons/ai";
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 
-class AlicatesForm extends Component {
+class AlicatesEditModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            Marca: '',
-            Cliente: '',
-            Quantidade: '',
-            Valor: '',
-            Data: '',
-            Pago: false
+            Id: undefined,
+            Marca: props.alicateSelecionado.Marca,
+            Cliente: undefined,
+            Quantidade: undefined,
+            Valor: undefined,
+            Pago: false,
+            Data: undefined,
+            DataFormatada: undefined
         };
         this.submitForm = this.submitForm.bind(this);
+    }
+
+
+    componentDidMount() {
+        this.setValue();
+    }
+
+    setValue() {
+        const { Id, Marca, Cliente, Quantidade, Valor, Pago, Data, DataFormatada } = this.props.alicateSelecionado;
+        this.setState({ Id, Marca, Cliente, Quantidade, Valor, Pago, Data, DataFormatada });
     }
 
     submitForm(e) {
         e.preventDefault();
 
         if (this.Validator()) {
-            service.post(this.state);
-            alert(messages.cadastradoSucesso('Alicate'));
-            this.limparCampos();
+            alicateService.update(this.state);
+            alert(messages.EditadoSucesso('Alicate'));
         }
     }
 
     Validator() {
-        const { Cliente, Quantidade, Marca, Valor, Data } = this.state;
+        const { Marca, Cliente, Quantidade, Valor, Data } = this.state;
 
         if (!Cliente) {
             alert(messages.CampoVazio('Cliente'));
@@ -68,91 +79,66 @@ class AlicatesForm extends Component {
         return true;
     }
 
-    limparCampos() {
-        this.setState({
-            Marca: '',
-            Cliente: '',
-            Quantidade: '',
-            Valor: '',
-            Data: ''
-        });
-    }
-
     render() {
-        return (
-            <div className="container">
-                <h1>
-                    Cadastrar Alicate
-                </h1>
-                <Breadcrumb>
-                    <Breadcrumb.Item>
-                        <Link to="/">
-                            <AiOutlineHome className="mr-2" />
-                            Início
-                        </Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>
-                        <Link to="/Alicates">
-                            Alicates
-                        </Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>
-                        <Link>
-                            Cadastrar Alicate
-                        </Link>
-                    </Breadcrumb.Item>
-                </Breadcrumb>
-                <form
-                    className="form-Chaves"
-                    onSubmit={(e) => this.submitForm(e)}>
+        const { visible, onClose } = this.props;
 
+        return (
+            <Modal
+                visible={visible}
+                onCancel={onClose}
+                onOk={(e) => this.submitForm(e)}>
+                <h2 style={{ textAlign: 'center' }}>Edição de Alicate</h2>
+                <form>
                     <label>Cliente: </label>
-                    <input
+                    <Input
                         type="text"
                         autoFocus
                         value={this.state.Cliente}
                         maxLength={50}
                         onChange={(e) => this.setState({ Cliente: e.target.value })}
                     />
+                    <br />
                     <label>Quantidade: </label>
-                    <input
+                    <Input
                         type="number"
                         value={this.state.Quantidade}
                         onChange={(e) => this.setState({ Quantidade: e.target.value })}
                     />
+                    <br />
                     <label>Marca: </label>
-                    <input
+                    <Input
                         type="text"
                         value={this.state.Marca}
                         onChange={(e) => this.setState({ Marca: e.target.value })}
                     />
+                    <br />
                     <label>Valor: </label>
-                    <input
+                    <Input
                         type="number"
                         value={this.state.Valor}
                         onChange={(e) => this.setState({ Valor: e.target.value })}
                     />
+                    <br />
                     <div style={{ marginTop: '20px' }}>
                         <label>Data: </label>
                         <DatePicker
                             format={'DD/MM/YYYY'}
-                            onChange={(date, dateString) => this.setState({ Data: dateString })} />
+                            onChange={(date, dateString) => this.setState({ Data: dateString })}
+                            value={moment(this.state.dataCadastro)} />
                         <label style={{ marginLeft: '10px', marginRight: '10px' }}>Pago:</label>
                         <Switch
+                            checked={this.state.Pago === 'Sim'}
                             onChange={(value) => this.setState({ Pago: value })}
                             checkedChildren={<CheckOutlined />}
                             unCheckedChildren={<CloseOutlined />}
                         />
                     </div>
-                    <button
-                        className="btn-Primary"
-                        type="submit">
-                        Cadastrar
-                    </button>
                 </form>
-            </div>
+
+            </Modal>
         );
     }
+
 }
 
-export default withRouter(AlicatesForm);
+export default withRouter(AlicatesEditModal);

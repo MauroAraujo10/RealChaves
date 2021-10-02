@@ -32,6 +32,10 @@ svg:hover{
   margin-right: 10px;
 }
 
+.f-right{
+  float: right
+}
+
 .Grid th{
   background-color: #004878 !important;
   color: #FFF !important;

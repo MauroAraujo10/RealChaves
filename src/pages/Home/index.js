@@ -24,7 +24,7 @@ class Home extends Component {
                         icon={<FaKey size={this.state.sizeOfIcon}/>} 
                         url="/Chaves" 
                         text="Chaves" 
-                        color="#FFFF00" />
+                        color="#FFCD00" />
 
                     <Botao 
                         icon={<FaUntappd size={this.state.sizeOfIcon}/>}

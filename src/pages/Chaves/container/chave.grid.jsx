@@ -6,16 +6,14 @@ import { messages } from '../../../common/messages';
 import ChavesVendaModal from '../components/chaves.venda.modal';
 import YesOrNoModal from '../../../common/yesOrNoModal';
 
+import TotalRegistros from '../../../common/components/TotalRegistros/TotalRegistros';
+
 import service from '../../../service';
 import chaveService from '../service/chave.service';
 
-import '../../../css/global.css';
-import '../css/chaves.css';
-
-
 import { SearchOutlined } from '@ant-design/icons';
 import { AiOutlineHome, AiFillDollarCircle } from "react-icons/ai";
-import { FaPlusCircle, FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 class Grid extends Component {
     constructor(props) {
@@ -134,7 +132,7 @@ class Grid extends Component {
             { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', ...this.getColumnSearchProps('NumeroSerie'), width: '10%' },
             { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', ...this.getColumnSearchProps('Quantidade'), width: '10%' },
             { title: 'Tipo', dataIndex: 'Tipo', key: 'Tipo', ...this.getColumnSearchProps('Tipo'), width: '15%' },
-            { title: 'Data de Cadastro', dataIndex: 'Data', key: 'Quantidade', ...this.getColumnSearchProps('Quantidade'), width: '15%' },
+            { title: 'Data de Cadastro', dataIndex: 'Data', key: 'Data', ...this.getColumnSearchProps('Data'), width: '15%' },
             {
                 title: 'Ações', width: '10%', render: (status, x) => (
                     <>
@@ -180,14 +178,11 @@ class Grid extends Component {
                     </Breadcrumb>
                 </div>
 
-                <div style={{ float: 'right' }}>
-                    <Link to="/Chaves/new" className="btn-Primary">
-                        <FaPlusCircle className="mr-3" />
-                        Cadastrar
-                    </Link>
-                    <h4 style={{ marginTop: '20px' }}>
-                        Número de Registros: {<b>{this.state.chaves.length}</b>}
-                    </h4>
+                <div className="f-right">
+                    <TotalRegistros
+                        link='/Chaves/new'
+                        numeroRegistros={this.state.chaves.length}
+                    />
                 </div>
 
                 <Table
