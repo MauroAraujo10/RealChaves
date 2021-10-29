@@ -28,7 +28,6 @@ class AlicatesForm extends Component {
         if (this.Validator()) {
             service.post(this.state);
             alert(messages.cadastradoSucesso('Alicate'));
-            this.limparCampos();
         }
     }
 
@@ -66,16 +65,6 @@ class AlicatesForm extends Component {
         }
 
         return true;
-    }
-
-    limparCampos() {
-        this.setState({
-            Marca: '',
-            Cliente: '',
-            Quantidade: '',
-            Valor: '',
-            Data: ''
-        });
     }
 
     render() {

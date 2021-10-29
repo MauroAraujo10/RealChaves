@@ -19,5 +19,8 @@ export const messages = {
     },
     CampoVazio: (valor) =>{
         return `Campo ${valor} não pode estar vazio !`
+    },
+    CampoObrigatorio: () =>{
+        return 'Campo Obrigatório !';
     }
 };

@@ -33,3 +33,9 @@
     font-weight: bold;
     cursor: pointer;
   }
+
+  .container{
+      background-color: #FFF;
+      border-radius: 5px;
+  }
+

@@ -1,24 +1,11 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { FaPlusCircle } from 'react-icons/fa';
+import React from 'react';
 
-class TotalRegistros extends Component {
-
-    render() {
-        const { link, numeroRegistros } = this.props;
-
-        return (
-            <>
-                <Link to={link} className="btn-Primary">
-                    <FaPlusCircle className="mr-3" />
-                    Cadastrar
-                </Link>
-                <h4 className="mt-2">
-                    Número total de Registros: {<b>{numeroRegistros}</b>}
-                </h4>
-            </>
-        );
-    }
+export default function TotalRegistros(valor) {
+    return (
+        <div style={{float: 'right'}}>
+            <h4 className="mt-2">
+                Número total de Registros: {valor.numeroRegistros}
+            </h4>
+        </div>
+    );
 }
-
-export default TotalRegistros;

@@ -134,7 +134,6 @@ class AlicatesEditModal extends Component {
                         />
                     </div>
                 </form>
-
             </Modal>
         );
     }

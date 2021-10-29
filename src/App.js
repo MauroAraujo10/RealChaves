@@ -1,14 +1,14 @@
 import React from "react";
-import { BrowserRouter } from 'react-router-dom';
-import Routes from './routes';
+import { HashRouter } from 'react-router-dom';
 
 import Header from './header';
+import Routes from './Routes/routes';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Header />
-        <Routes />
-    </BrowserRouter>
+      <Routes />
+    </HashRouter>
   )
 }

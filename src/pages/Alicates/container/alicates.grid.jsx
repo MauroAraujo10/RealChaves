@@ -28,8 +28,8 @@ class Grid extends Component {
         this.delete = this.delete.bind(this);
     }
 
-    componentDidMount = async () => {
-        await service.app.ref('Alicates').on('value', (snapshot) => {
+    componentDidMount() {
+        service.app.ref('Alicates').on('value', (snapshot) => {
             let alicate = [];
             snapshot.forEach((x) => {
                 alicate.push({
@@ -84,7 +84,6 @@ class Grid extends Component {
 
     handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
-        debugger;
         this.setState({
             searchText: selectedKeys[0],
             searchedColumn: dataIndex,
@@ -97,7 +96,6 @@ class Grid extends Component {
     };
 
     edit(dto) {
-        debugger
         let dataSplit = dto.Data.split('/');
         dto.dataCadastro = `${dataSplit[1]}/${dataSplit[0]}/${dataSplit[2]}`;
 
@@ -168,12 +166,8 @@ class Grid extends Component {
                     </Breadcrumb>
                 </div>
 
-                <div className="f-right">
-                    <TotalRegistros
-                        link='/Alicates/new'
-                        numeroRegistros={this.state.alicates.length}
-                    />
-                </div>
+                <TotalRegistros
+                numeroRegistros={this.state.alicates.length}/>
 
                 <Table
                     className='Grid'

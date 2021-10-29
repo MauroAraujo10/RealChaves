@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { Table, Breadcrumb, Input, Space, Button } from 'antd';
 import { messages } from '../../../common/messages';
 
+import ChavesEditModal from '../components/chaves.edit.modal';
 import ChavesVendaModal from '../components/chaves.venda.modal';
 import YesOrNoModal from '../../../common/yesOrNoModal';
 
@@ -20,6 +21,7 @@ class Grid extends Component {
         super(props);
         this.state = {
             chaves: [],
+            modalEditVisible: false,
             modalVendaVisible: false,
             modalExclusaoVisible: false,
             idExclusao: undefined,
@@ -27,12 +29,12 @@ class Grid extends Component {
             dataCadastro: '',
         };
         this.edit = this.edit.bind(this);
+        this.venda = this.venda.bind(this);
         this.delete = this.delete.bind(this);
     }
 
     componentDidMount() {
         service.app.ref('Chave').on('value', (snapshot) => {
-
             let chaves = [];
             snapshot.forEach((x) => {
                 chaves.push({
@@ -97,18 +99,20 @@ class Grid extends Component {
         this.setState({ searchText: '' });
     };
 
-    sell(dto) {
+    edit(dto) {
         let dataSplit = dto.Data.split('/');
         dto.dataCadastro = `${dataSplit[1]}/${dataSplit[0]}/${dataSplit[2]}`;
 
         this.setState({
-            modalVendaVisible: true,
+            modalEditVisible: true,
             chaveSelecionada: dto
         })
     }
 
-    edit(id) {
-        this.props.history.replace(`/Chaves/edit/${id}`);
+    venda(dto) {
+        this.setState({
+            modalVendaVisible: true
+        })
     }
 
     delete(id) {
@@ -118,8 +122,8 @@ class Grid extends Component {
         });
     }
 
-    async excluirChave(id) {
-        await chaveService.delete(id).then(() => {
+    excluirChave(id) {
+        chaveService.delete(id).then(() => {
             alert(messages.exclusaoSucesso());
             this.setState({ modalExclusaoVisible: false });
         })
@@ -141,14 +145,14 @@ class Grid extends Component {
                             className="mr-3"
                             style={{ color: '#008000' }}
                             size={iconSize}
-                            onClick={() => { this.sell(x) }}
+                            onClick={() => { this.venda(x) }}
                         />
                         <FaEdit
                             title="Edição de Chave"
                             className="mr-3"
                             style={{ color: '#0f4c5c' }}
                             size={iconSize}
-                            onClick={() => this.edit(x.Id)}
+                            onClick={() => this.edit(x)}
                         />
                         <FaTrashAlt
                             title="Deletar Chave"
@@ -162,7 +166,10 @@ class Grid extends Component {
         ];
 
         return (
-            <div style={{ margin: '30px' }}>
+            <div style={{ margin: '30px', background: '#FFF', padding: '10px', borderRadius: '5px',
+            
+             }}>
+
                 <div style={{ textAlign: 'center' }}>
                     <h1>Chaves cadastradas</h1>
                     <Breadcrumb>
@@ -178,12 +185,8 @@ class Grid extends Component {
                     </Breadcrumb>
                 </div>
 
-                <div className="f-right">
-                    <TotalRegistros
-                        link='/Chaves/new'
-                        numeroRegistros={this.state.chaves.length}
-                    />
-                </div>
+                <TotalRegistros 
+                    numeroRegistros={this.state.chaves.length}/>
 
                 <Table
                     className="Grid"
@@ -192,6 +195,11 @@ class Grid extends Component {
                     columns={columns}>
                 </Table>
 
+                <ChavesEditModal
+                    visible={this.state.modalEditVisible}
+                    chaveSelecionada={this.state.chaveSelecionada}
+                    onClose={() => this.setState({ modalEditVisible: false })}
+                />
                 <ChavesVendaModal
                     visible={this.state.modalVendaVisible}
                     chaveSelecionada={this.state.chaveSelecionada}

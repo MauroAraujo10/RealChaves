@@ -77,7 +77,6 @@ class servicosGrid extends Component {
 
     handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
-        debugger;
         this.setState({
             searchText: selectedKeys[0],
             searchedColumn: dataIndex,
