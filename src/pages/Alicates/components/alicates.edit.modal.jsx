@@ -57,7 +57,7 @@ class AlicatesEditModal extends Component {
         }
 
         if (Number(Quantidade) <= 0) {
-            alert(messages.valoInferior('Quantidade'));
+            alert(messages.ValorMinimo('Quantidade'));
             return false;
         }
 

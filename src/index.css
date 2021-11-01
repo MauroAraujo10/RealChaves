@@ -7,7 +7,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #DDD !important;
+  background-color: #EEE !important;
 }
 
 code {
@@ -15,6 +15,14 @@ code {
     monospace;
 }
 
+.container{
+  background-color: #FFF;
+  border-radius: 5px;
+  margin: 30px;
+  text-align: center;
+  padding: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
 
 svg:hover{
   cursor: pointer;
@@ -39,5 +47,17 @@ svg:hover{
 .Grid th{
   background-color: #004878 !important;
   color: #FFF !important;
+}
+
+.t-center{
+  text-align: center;
+}
+
+.iconVendaChave{
+  color: #008000;
+}
+
+.iconVendaChave:hover{
+  opacity: .5;
 }
 

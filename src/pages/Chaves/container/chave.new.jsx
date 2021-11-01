@@ -1,11 +1,26 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { DatePicker, Space, Breadcrumb } from 'antd';
-import '../css/chaves.css';
+import { Form, Input, DatePicker, Select, Breadcrumb, Button, Image } from 'antd';
+import { Row, Col } from 'antd';
+import '../../../css/global.css';
+import { AiOutlinePlusCircle } from 'react-icons/ai';
+import { toast } from "react-toastify";
 
 import { messages } from '../../../common/messages';
 import service from '../service/chave.service';
 import { AiOutlineHome } from "react-icons/ai";
+
+import Plana from '../assets/Plana.jpg';
+import PlanaColorida from '../assets/PlanaColorida.jpg';
+import AutomotivaAco from '../assets/AutomotivaAco.jpg';
+import AutomotivaLogotipo from '../assets/AutomotivaLogotipo.jpg';
+import AutomotivaMetalica from '../assets/AutomotivaMetalica.jpg';
+import AutomotivaPlastica from '../assets/AutomotivaPlastica.jpg';
+import Cofre from '../assets/Cofre.jpg';
+import Transponder from '../assets/Transponder.jpg';
+import Tetra from '../assets/Tetra.jpg';
+import Gorje from '../assets/Gorje.jpg';
+import Tubular from '../assets/Tubular.jpg';
 
 class New extends Component {
     constructor(props) {
@@ -14,63 +29,48 @@ class New extends Component {
             Marca: '',
             NumeroSerie: '',
             Quantidade: '',
-            Tipo: 'Plana',
-            Data: ''
+            Tipo: '',
+            Data: '',
+            visible: false,
+            imgSrc: ''
         };
-
-        this.submitForm = this.submitForm.bind(this);
-    }
-
-    submitForm(e) {
-        e.preventDefault();
-
-        if (this.Validator()) {
-            service.post(this.state);
-            alert(messages.cadastradoSucesso('Chave'));
-            this.setState({
-                Marca: '',
-                NumeroSerie: '',
-                Quantidade: '',
-                Tipo: 'Plana',
-                Data: ''
-            })
-        }
-    }
-
-    Validator() {
-        const { Marca, NumeroSerie, Quantidade, Tipo, Data } = this.state;
-
-        if (!Marca) {
-            alert(messages.CampoVazio('Marca'));
-            return false;
-        }
-
-        if (!NumeroSerie) {
-            alert(messages.CampoVazio('Número de Série'));
-            return false;
-        }
-
-        if (!Quantidade) {
-            alert(messages.CampoVazio('Quantidade'));
-            return false;
-        }
-
-        if (!Tipo) {
-            alert(messages.CampoVazio('Tipo'));
-            return false;
-        }
-
-        if (!Data) {
-            alert(messages.CampoVazio('Data'));
-            return false;
-        }
-        return true;
     }
 
     render() {
+
+        const { Option } = Select;
+
+        const handleChange = (e) => {
+            debugger;
+            switch (e) {
+                case 'Plana': this.setState({ imgSrc: Plana, }); break;
+                case 'PlanaColorida': this.setState({ imgSrc: PlanaColorida }); break;
+                case 'AutomotivaAco': this.setState({ imgSrc: AutomotivaAco }); break;
+                case 'AutomotivaLogotipo': this.setState({ imgSrc: AutomotivaLogotipo }); break;
+                case 'AutomotivaMetalica': this.setState({ imgSrc: AutomotivaMetalica }); break;
+                case 'AutomotivaPlastica': this.setState({ imgSrc: AutomotivaPlastica }); break;
+                case 'Cofre': this.setState({ imgSrc: Cofre }); break;
+                case 'Transponder': this.setState({ imgSrc: Transponder }); break;
+                case 'Tetra': this.setState({ imgSrc: Tetra }); break;
+                case 'Gorje': this.setState({ imgSrc: Gorje }); break;
+                case 'Tubular': this.setState({ imgSrc: Tubular }); break;
+            }
+            this.setState({ Tipo: e });
+        }
+
+        const submitForm = (e) => {
+            service.post(this.state)
+                .then(() => {
+                    toast.success(messages.cadastradoSucesso('Chave'));
+                })
+                .catch(() => {
+                    toast.error(messages.cadastradoErro('Chave'));
+                });
+        }
+
         return (
-            <div className="container" style={{ margin: '30px' }}>
-                <div style={{ textAlign: 'center' }}>
+            <div className="container">
+                <div style={{ textAlign: 'center', marginBottom: '10px' }}>
                     <h1> Cadastrar Chave</h1>
                     <Breadcrumb>
                         <Breadcrumb.Item>
@@ -90,61 +90,103 @@ class New extends Component {
                     </Breadcrumb>
                 </div>
 
-                <form
-                    onSubmit={(e) => this.submitForm(e)}>
-                    <label>Marca: </label>
-                    <input
-                        type="text"
-                        autoFocus
-                        value={this.state.Marca}
-                        onChange={(e) => this.setState({ Marca: e.target.value })} />
-                    <br />
-                    <label>Número de Série: </label>
-                    <input
-                        type="text"
-                        value={this.state.NumeroSerie}
-                        onChange={(e) => this.setState({ NumeroSerie: e.target.value })} />
-                    <br />
-                    <label>Quantidade: </label>
-                    <input
-                        type="number"
-                        value={this.state.Quantidade}
-                        min="0"
-                        onChange={(e) => this.setState({ Quantidade: e.target.value })} />
-                    <br />
-                    <label>Data: </label>
-                    <Space direction="vertical" size={12}>
-                        <DatePicker
-                            
-                            onChange={(date, dateString) => this.setState({ Data: dateString })}
-                            value={this.state.data} />
-                    </Space>
-                    <br />
-                    <label>Tipo da Chave: </label>
-                    <select onChange={(e) => this.setState({ Tipo: e.target.value })}>
-                        <option value="Plana">Plana</option>
-                        <option value="Automotiva">Automotiva</option>
-                        <option value="Metálica">Metálica</option>
-                        <option value="Plástica">Plástica</option>
-                        <option value="PlaTransponderna">Transponder</option>
-                        <option value="Tetra">Tetra</option>
-                        <option value="Automotiva">Automotiva de aço</option>
-                        <option value="Gorje">Gorje</option>
-                        <option value="PlanaColorida">Plana Colorida</option>
-                        <option value="Especial">Especial</option>
-                        <option value="Zamak">Zamak sem canal</option>
-                        <option value="Cofre">Cofre</option>
-                        <option value="Tubular">Tubular</option>
-                        <option value="AutomotivaLogo">Automotiva logo</option>
-                        <option value="PlanaAlumínio">Plana de Alumínio</option>
-                    </select>
-                    <br />
-                    <button
-                        className="btn-Primary"
-                        type="submit">
-                        Cadastrar
-             </button>
-                </form>
+                <Form className="mt-2" layout="vertical" onFinish={submitForm}>
+                    <Row gutter={10}>
+                        <Col span={12}>
+                            <Form.Item
+                                label="Marca"
+                                name="Marca"
+                                rules={[{ required: true, message: messages.CampoObrigatorio }]}>
+                                <Input
+                                    type="text"
+                                    placeholder="Marca"
+                                    maxLength="50"
+                                    onChange={(e) => this.setState({ Marca: e.target.value })}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={4}>
+                            <Form.Item
+                                label="Número de Série"
+                                name="NúmeroSerie"
+                                rules={[
+                                    { required: true, message: messages.CampoObrigatorio }
+                                ]}>
+                                <Input
+                                    type="number"
+                                    placeholder="Número de Série"
+                                    min="0"
+                                    onChange={(e) => this.setState({ NumeroSerie: e.target.value })}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={4}>
+                            <Form.Item
+                                label="Quantidade"
+                                name="Quantidade"
+                                rules={[{ required: true, message: messages.CampoObrigatorio }]}>
+                                <Input
+                                    type="number"
+                                    placeholder="Quantidade"
+                                    min="0"
+                                    onChange={(e) => this.setState({ Quantidade: e.target.value })}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={4}>
+                            <Form.Item
+                                label="Data"
+                                name="Data"
+                                rules={[{ required: true, message: messages.CampoObrigatorio }]}>
+                                <DatePicker
+                                    format="DD/MM/YYYY"
+                                    onChange={(date, dateString) => this.setState({ Data: dateString })}
+                                    value={this.state.data} />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row gutter={10}>
+                        <Col span={6}>
+                            <Form.Item
+                                label="Tipo"
+                                name="Tipo"
+                                rules={[{ required: true, message: messages.CampoObrigatorio }]}>
+                                <Select defaultValue="Selecione" onChange={handleChange}>
+                                    <Option value="Plana">Plana</Option>
+                                    <Option value="PlanaColorida">Plana Colorida</Option>
+                                    <Option value="AutomotivaAco">Automotiva de Aço</Option>
+                                    <Option value="AutomotivaLogotipo">Automotiva Logotipo</Option>
+                                    <Option value="AutomotivaMetalica">Automotiva Metálica</Option>
+                                    <Option value="AutomotivaPlastica">Automotivas Plásticas</Option>
+                                    <Option value="Cofre">Cofre</Option>
+                                    <Option value="Transponder">Transponder</Option>
+                                    <Option value="Tetra">Tetra</Option>
+                                    <Option value="Gorje">Gorje</Option>
+                                    <Option value="Tubular">Tubular</Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={4}>
+                            <Image.PreviewGroup>
+                                {this.state.imgSrc && (
+                                    <Image
+                                        alt="Imagem da Chave"
+                                        preview={{ visible: false }}
+                                        style={{ border: '1px dashed #CCC' }}
+                                        src={this.state.imgSrc} />
+                                )}
+                            </Image.PreviewGroup>
+                        </Col>
+                    </Row>
+                    <div style={{ textAlign: 'right' }}>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            icon={<AiOutlinePlusCircle className="mr-3" />}>
+                            Cadastrar
+                    </Button>
+                    </div>
+                </Form>
             </div>
         );
     }

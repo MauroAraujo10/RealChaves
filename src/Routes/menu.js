@@ -1,13 +1,13 @@
 import React from 'react';
 import { Menu, Switch } from "antd";
 import { Rotas } from './rotas';
-import { 
+import {
     AiOutlineHome,
-    AiOutlineLineChart,  
+    AiOutlineLineChart,
     AiOutlineFork,
     AiOutlineInsertRowBelow,
     AiOutlinePlusCircle,
-    AiOutlinePlusSquare ,
+    AiOutlinePlusSquare,
     AiOutlineTool,
     AiOutlineSetting,
     AiOutlineDollar,
@@ -48,7 +48,7 @@ export default function Routes() {
             <Menu
                 mode="inline"
                 style={{
-                    width: '256px',
+                    width: '260px',
                     boxShadow: '5px 2px 3px rgb(0 0 0 / 12%), 0 1px 2px rgb(0 0 0 / 24%)'
                 }}
                 theme={theme}
@@ -65,11 +65,19 @@ export default function Routes() {
                         Cadastro
                     </Menu.Item>
                     <Menu.Item key="Chaves.Venda" onClick={(e) => HandleClickLink(e, Rotas.ChavesVenda)} icon={<AiOutlineDollar />}>
-                        Vendas
+                        Registro de Vendas
                     </Menu.Item>
-                    <Menu.Item key="Chaves.Historico" onClick={(e) => HandleClickLink(e, Rotas.ChavesHistorico)} icon={<AiOutlineFileDone />}>
-                        Histórico
-                    </Menu.Item>
+                    <SubMenu key="Estoque" icon={<AiOutlineFileDone />} title="Estoque">
+                        <Menu.Item key="Estoque.Atualizar" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoqueAtualizar)} >
+                            Atualizar Estoque
+                        </Menu.Item>
+                        <Menu.Item key="Estoque.Pedido" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoquePedido)} >
+                            Pedido de Chave
+                        </Menu.Item>
+                        <Menu.Item key="Estoque.Historico" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoqueHistorico)} >
+                            Histórico
+                        </Menu.Item>
+                    </SubMenu>
                 </SubMenu>
                 <SubMenu key="Alicates" icon={<AiOutlineFork />} title="Alicates">
                     <Menu.Item key="Alicates.Grid" onClick={(e) => HandleClickLink(e, Rotas.Alicates)} icon={<AiOutlineInsertRowBelow />}>
@@ -83,13 +91,13 @@ export default function Routes() {
                     </Menu.Item>
                 </SubMenu>
                 <SubMenu key="Servicos" icon={<AiOutlineTool />} title="Serviços">
-                    <Menu.Item key="4" onClick={(e) => HandleClickLink(e, Rotas.Alicates)} icon={<AiOutlineInsertRowBelow />}>
+                    <Menu.Item key="Servicos.Grid" onClick={(e) => HandleClickLink(e, Rotas.Servico)} icon={<AiOutlineInsertRowBelow />}>
                         Tabela
                     </Menu.Item>
-                    <Menu.Item key="5" onClick={(e) => HandleClickLink(e, Rotas.AlicatesNew)} icon={<AiOutlinePlusSquare />}>
+                    <Menu.Item key="Servicos.New" onClick={(e) => HandleClickLink(e, Rotas.ServicoNew)} icon={<AiOutlinePlusSquare />}>
                         Cadastro
                     </Menu.Item>
-                    <Menu.Item key="6" onClick={(e) => HandleClickLink(e, Routes.AlicatesHistorico)} icon={<AiOutlineFileDone />}>
+                    <Menu.Item key="Servicos.Historico" onClick={(e) => HandleClickLink(e, Routes.ServicoHistorico)} icon={<AiOutlineFileDone />}>
                         Histórico
                     </Menu.Item>
                 </SubMenu>

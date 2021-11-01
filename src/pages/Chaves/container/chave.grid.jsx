@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Table, Breadcrumb, Input, Space, Button } from 'antd';
+import { Table, Breadcrumb, Input, Space, Button, Tooltip } from 'antd';
 import { messages } from '../../../common/messages';
+import { toast } from "react-toastify";
 
 import ChavesEditModal from '../components/chaves.edit.modal';
 import ChavesVendaModal from '../components/chaves.venda.modal';
@@ -13,8 +14,10 @@ import service from '../../../service';
 import chaveService from '../service/chave.service';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { AiOutlineHome, AiFillDollarCircle } from "react-icons/ai";
+import { AiOutlineHome } from "react-icons/ai";
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+
+import { AiOutlineDollar } from 'react-icons/ai';
 
 class Grid extends Component {
     constructor(props) {
@@ -59,6 +62,7 @@ class Grid extends Component {
                         this.searchInput = node;
                     }}
                     placeholder={`Filtrar ${dataIndex}`}
+                    onFocus
                     onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                     onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
                     style={{ marginBottom: 8, display: 'block' }}
@@ -124,7 +128,7 @@ class Grid extends Component {
 
     excluirChave(id) {
         chaveService.delete(id).then(() => {
-            alert(messages.exclusaoSucesso());
+            toast.success(messages.exclusaoSucesso());
             this.setState({ modalExclusaoVisible: false });
         })
     }
@@ -132,45 +136,44 @@ class Grid extends Component {
     render() {
         const iconSize = 16;
         const columns = [
-            { title: 'Marca', dataIndex: 'Marca', key: 'Marca', ...this.getColumnSearchProps('Marca'), width: '20%' },
-            { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', ...this.getColumnSearchProps('NumeroSerie'), width: '10%' },
-            { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', ...this.getColumnSearchProps('Quantidade'), width: '10%' },
-            { title: 'Tipo', dataIndex: 'Tipo', key: 'Tipo', ...this.getColumnSearchProps('Tipo'), width: '15%' },
+            { title: 'Marca', dataIndex: 'Marca', key: 'Marca', ...this.getColumnSearchProps('Marca'), width: '30%' },
+            { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', ...this.getColumnSearchProps('NumeroSerie'), width: '15%' },
+            { title: 'Estoque', dataIndex: 'Quantidade', key: 'Quantidade', ...this.getColumnSearchProps('Quantidade'), width: '10%' },
+            { title: 'Tipo', dataIndex: 'Tipo', key: 'Tipo', ...this.getColumnSearchProps('Tipo'), width: '10%' },
             { title: 'Data de Cadastro', dataIndex: 'Data', key: 'Data', ...this.getColumnSearchProps('Data'), width: '15%' },
             {
                 title: 'Ações', width: '10%', render: (status, x) => (
                     <>
-                        <AiFillDollarCircle
-                            title="Venda de Chave"
-                            className="mr-3"
-                            style={{ color: '#008000' }}
-                            size={iconSize}
-                            onClick={() => { this.venda(x) }}
-                        />
-                        <FaEdit
-                            title="Edição de Chave"
-                            className="mr-3"
-                            style={{ color: '#0f4c5c' }}
-                            size={iconSize}
-                            onClick={() => this.edit(x)}
-                        />
-                        <FaTrashAlt
-                            title="Deletar Chave"
-                            style={{ color: '#FF0000' }}
-                            size={iconSize}
-                            onClick={() => this.delete(x.Id)}
-                        />
+                        <Tooltip title="Venda de Chave">
+                            <AiOutlineDollar
+                                className="mr-3 iconVendaChave"
+                                size={iconSize}
+                                onClick={() => { this.venda(x) }}
+                            />
+                        </Tooltip>
+                        <Tooltip title="Edição de Chave">
+                            <FaEdit
+                                className="mr-3"
+                                style={{ color: '#0f4c5c' }}
+                                size={iconSize}
+                                onClick={() => this.edit(x)}
+                            />
+                        </Tooltip>
+                        <Tooltip title="Deletar Chave">
+                            <FaTrashAlt
+                                style={{ color: '#FF0000' }}
+                                size={iconSize}
+                                onClick={() => this.delete(x.Id)}
+                            />
+                        </Tooltip>
                     </>
                 )
             }
         ];
 
         return (
-            <div style={{ margin: '30px', background: '#FFF', padding: '10px', borderRadius: '5px',
-            
-             }}>
-
-                <div style={{ textAlign: 'center' }}>
+            <div className="mt-2">
+                <div className="t-center">
                     <h1>Chaves cadastradas</h1>
                     <Breadcrumb>
                         <Breadcrumb.Item>
@@ -185,15 +188,17 @@ class Grid extends Component {
                     </Breadcrumb>
                 </div>
 
-                <TotalRegistros 
-                    numeroRegistros={this.state.chaves.length}/>
+                <div className="container">
+                    <TotalRegistros
+                        numeroRegistros={this.state.chaves.length} />
 
-                <Table
-                    className="Grid"
-                    bordered
-                    dataSource={this.state.chaves}
-                    columns={columns}>
-                </Table>
+                    <Table
+                        className="Grid"
+                        bordered
+                        dataSource={this.state.chaves}
+                        columns={columns}>
+                    </Table>
+                </div>
 
                 <ChavesEditModal
                     visible={this.state.modalEditVisible}

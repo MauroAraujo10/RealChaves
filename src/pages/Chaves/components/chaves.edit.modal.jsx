@@ -58,7 +58,7 @@ class ChavesEditModal extends Component {
 
     Validator(quantidadeVendida, data, valor) {
         if (quantidadeVendida <= 0){
-            alert(messages.valoInferior('Quantidade'));
+            alert(messages.ValorMinimo('Quantidade'));
             return false;
         }
 

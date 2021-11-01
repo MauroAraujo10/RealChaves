@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { messages } from '../../../common/messages';
 import { Table, Breadcrumb, Input, Space, Button } from 'antd';
-
+import TotalRegistros from '../../../common/components/TotalRegistros/TotalRegistros';
 
 import YesOrNoModal from '../../../common/yesOrNoModal';
 import service from '../../../service';
@@ -24,8 +24,8 @@ class servicosGrid extends Component {
         this.delete = this.delete.bind(this);
     }
 
-    async componentDidMount() {
-        await service.app.ref('Servicos').on('value', (snapshot) => {
+    componentDidMount() {
+        service.app.ref('Servicos').on('value', (snapshot) => {
 
             let servicos = [];
             snapshot.forEach((x) => {
@@ -111,9 +111,9 @@ class servicosGrid extends Component {
     render() {
         const iconSize = 16;
         const columns = [
-            { title: 'Serviço', dataIndex: 'Servico', key: 'Servico', ...this.getColumnSearchProps('Servico'), width: '50%' },
-            { title: 'Data', dataIndex: 'Data', key: 'Data', ...this.getColumnSearchProps('Data'), width: '15%' },
-            { title: 'Valor', dataIndex: 'Valor', key: 'Valor', ...this.getColumnSearchProps('Valor'), width: '15%' },
+            { title: 'Serviço', dataIndex: 'Servico', key: 'Servico', ...this.getColumnSearchProps('Servico'), width: '60%' },
+            { title: 'Data', dataIndex: 'Data', key: 'Data', ...this.getColumnSearchProps('Data'), width: '10%' },
+            { title: 'Valor', dataIndex: 'Valor', key: 'Valor', ...this.getColumnSearchProps('Valor'), width: '10%' },
             { title: 'Pago', dataIndex: 'Pago', key: 'Pago', ...this.getColumnSearchProps('Pago'), width: '10%' },
             {
                 title: 'Ações', width: '10%', render: (status, x) => (
@@ -153,15 +153,8 @@ class servicosGrid extends Component {
                     </Breadcrumb>
                 </div>
 
-                <div style={{ float: 'right' }}>
-                    <Link to="/Servicos/new" className="btn-Primary">
-                        <FaPlusCircle className="mr-3" />
-                        Cadastrar
-                    </Link>
-                    <h4 style={{ marginTop: '20px' }}>
-                        Número total de Registros: {<b>{this.state.servicos.length}</b>}
-                    </h4>
-                </div>
+                <TotalRegistros
+                    numeroRegistros={this.state.servicos.length} />
 
                 <Table
                     className='Grid'

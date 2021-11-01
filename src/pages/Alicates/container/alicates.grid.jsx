@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { messages } from '../../../common/messages';
 import { Table, Breadcrumb, Input, Space, Button } from 'antd';
+import { toast } from "react-toastify";
 
 import alicateService from '../service/alicates.service';
 import service from '../../../service';
@@ -112,22 +113,26 @@ class Grid extends Component {
         });
     }
 
-    async excluirAlicate(id) {
-        await alicateService.delete(id).then(() => {
-            alert(messages.exclusaoSucesso());
-            this.setState({ modalDeleteVisible: false });
-        })
+    excluirAlicate(id) {
+        alicateService.delete(id)
+            .then(() => {
+                toast.success(messages.exclusaoSucesso());
+                this.setState({ modalDeleteVisible: false });
+            })
+            .catch(() => {
+                toast.error(messages.exclusaoErro('Alicate'));
+            })
     }
 
     render() {
         const iconSize = 16;
         const columns = [
-            { title: 'Cliente', dataIndex: 'Cliente', key: 'Cliente', ...this.getColumnSearchProps('Cliente'), width: '40%' },
+            { title: 'Cliente', dataIndex: 'Cliente', key: 'Cliente', ...this.getColumnSearchProps('Cliente'), width: '30%' },
             { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', ...this.getColumnSearchProps('Quantidade'), width: '10%' },
-            { title: 'Marca', dataIndex: 'Marca', key: 'Marca', ...this.getColumnSearchProps('Marca'), width: '15%' },
+            { title: 'Marca', dataIndex: 'Marca', key: 'Marca', ...this.getColumnSearchProps('Marca'), width: '25%' },
             { title: 'Valor', dataIndex: 'Valor', key: 'Valor', ...this.getColumnSearchProps('Valor'), width: '7%' },
             { title: 'Pago', dataIndex: 'Pago', key: 'Pago', ...this.getColumnSearchProps('Pago'), width: '7%' },
-            { title: 'Data', dataIndex: 'Data', key: 'Data', ...this.getColumnSearchProps('Data'), width: '15%' },
+            { title: 'Data', dataIndex: 'Data', key: 'Data', ...this.getColumnSearchProps('Data'), width: '10%' },
             {
                 title: 'Ações', width: '10%', render: (status, x) => (
                     <>
@@ -150,8 +155,8 @@ class Grid extends Component {
         ]
 
         return (
-            <div style={{ margin: '30px' }}>
-                <div style={{ textAlign: 'center' }}>
+            <div className="mt-2">
+                <div className="t-center">
                     <h1>Alicates Cadastrados</h1>
                     <Breadcrumb>
                         <Breadcrumb.Item>
@@ -166,15 +171,17 @@ class Grid extends Component {
                     </Breadcrumb>
                 </div>
 
-                <TotalRegistros
-                numeroRegistros={this.state.alicates.length}/>
+                <div className="container">
+                    <TotalRegistros
+                        numeroRegistros={this.state.alicates.length} />
 
-                <Table
-                    className='Grid'
-                    bordered
-                    dataSource={this.state.alicates}
-                    columns={columns}>
-                </Table>
+                    <Table
+                        className='Grid'
+                        bordered
+                        dataSource={this.state.alicates}
+                        columns={columns}>
+                    </Table>
+                </div>
 
                 <AlicateEditModal
                     visible={this.state.modalEditVisible}
