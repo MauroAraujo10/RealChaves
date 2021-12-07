@@ -1,9 +1,10 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Form, Input, DatePicker, Select, Breadcrumb, Button, Image } from 'antd';
 import { Row, Col } from 'antd';
 import '../../../css/global.css';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
+import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
 import { messages } from '../../../common/messages';
@@ -41,7 +42,6 @@ class New extends Component {
         const { Option } = Select;
 
         const handleChange = (e) => {
-            debugger;
             switch (e) {
                 case 'Plana': this.setState({ imgSrc: Plana, }); break;
                 case 'PlanaColorida': this.setState({ imgSrc: PlanaColorida }); break;
@@ -54,6 +54,7 @@ class New extends Component {
                 case 'Tetra': this.setState({ imgSrc: Tetra }); break;
                 case 'Gorje': this.setState({ imgSrc: Gorje }); break;
                 case 'Tubular': this.setState({ imgSrc: Tubular }); break;
+                default: this.setState({ imgSrc: null }); break;
             }
             this.setState({ Tipo: e });
         }
@@ -70,17 +71,17 @@ class New extends Component {
 
         return (
             <div className="container">
-                <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+                <div className="t-center mb-2">
                     <h1> Cadastrar Chave</h1>
                     <Breadcrumb>
                         <Breadcrumb.Item>
-                            <Link to="/">
+                            <Link to={Rotas.Home}>
                                 <AiOutlineHome className="mr-2" />
                                 Início
                             </Link>
                         </Breadcrumb.Item>
                         <Breadcrumb.Item>
-                            <Link to="/Chaves">
+                            <Link to={Rotas.Chaves}>
                                 Chaves
                             </Link>
                         </Breadcrumb.Item>
@@ -182,7 +183,8 @@ class New extends Component {
                         <Button
                             type="primary"
                             htmlType="submit"
-                            icon={<AiOutlinePlusCircle className="mr-3" />}>
+                            icon={<AiOutlinePlusCircle className="mr-3" />}
+                        >
                             Cadastrar
                     </Button>
                     </div>

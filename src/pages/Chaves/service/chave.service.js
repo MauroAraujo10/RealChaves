@@ -1,6 +1,7 @@
 import service from '../../../service';
+import { Tables } from '../../../common/tables';
 
-const tableName = 'Chave';
+const tableName = Tables.Chave;
 
 const methods = {
 
@@ -19,8 +20,7 @@ const methods = {
             Marca: dto.Marca,
             NumeroSerie: Number(dto.NumeroSerie),
             Quantidade: Number(dto.Quantidade),
-            //Tipo: dto.Tipo == ,
-            Tipo: 'Plana',
+            Tipo: dto.Tipo,
             Data: dto.Data
         });
     },

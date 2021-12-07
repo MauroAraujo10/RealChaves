@@ -2,15 +2,18 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { messages } from '../../../common/messages';
 import { Table, Breadcrumb, Input, Space, Button } from 'antd';
-import TotalRegistros from '../../../common/components/TotalRegistros/TotalRegistros';
+import { Rotas } from '../../../Routes/rotas';
+import { toast } from "react-toastify";
 
-import YesOrNoModal from '../../../common/yesOrNoModal';
 import service from '../../../service';
 import servicosService from '../service/servicos.service';
 
+import TotalRegistros from '../../../common/components/TotalRegistros/TotalRegistros';
+import YesOrNoModal from '../../../common/yesOrNoModal';
+
 import { SearchOutlined } from '@ant-design/icons';
-import { AiOutlineHome } from "react-icons/ai";
-import { FaPlusCircle, FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { AiOutlineHome, AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
+import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 class servicosGrid extends Component {
     constructor(props) {
@@ -26,14 +29,23 @@ class servicosGrid extends Component {
 
     componentDidMount() {
         service.app.ref('Servicos').on('value', (snapshot) => {
-
             let servicos = [];
             snapshot.forEach((x) => {
                 servicos.push({
                     Id: x.key,
                     Data: x.val().Data,
                     Servico: x.val().Servico,
-                    Valor: x.val().Valor
+                    Valor: x.val().Valor,
+                    Pago: x.val().Pago ? 
+                        <AiOutlineCheckCircle 
+                            size={30} 
+                            style={{color: '#287233 '}}
+                        /> 
+                            : 
+                        <AiOutlineCloseCircle 
+                            size={30}
+                            style={{color: '#FF0000'}}
+                        />,
                 })
             })
             this.setState({ servicos });
@@ -99,13 +111,15 @@ class servicosGrid extends Component {
         });
     }
 
-    async excluirServico(id) {
-        await servicosService.delete(id).then(() => {
-            alert(messages.exclusaoSucesso());
-            this.setState({
-                modalDeleteVisible: false
-            });
-        })
+    excluirServico(id) {
+        servicosService.delete(id)
+            .then(() => {
+                toast.success(messages.exclusaoSucesso());
+                this.setState({ modalDeleteVisible: false });
+            })
+            .catch(() => {
+                toast.error(messages.exclusaoErro('Serviço'));
+            })
     }
 
     render() {
@@ -137,12 +151,12 @@ class servicosGrid extends Component {
         ]
 
         return (
-            <div style={{ margin: '30px' }}>
-                <div style={{ textAlign: 'center' }}>
+            <div className="mt-2">
+                <div className="t-center">
                     <h1>Serviços Cadastrados</h1>
                     <Breadcrumb>
                         <Breadcrumb.Item>
-                            <Link to="/">
+                            <Link to={Rotas.Home}>
                                 <AiOutlineHome className="mr-2" />
                                 Início
                             </Link>
@@ -153,15 +167,17 @@ class servicosGrid extends Component {
                     </Breadcrumb>
                 </div>
 
-                <TotalRegistros
-                    numeroRegistros={this.state.servicos.length} />
+                <div className="container">
+                    <TotalRegistros
+                        numeroRegistros={this.state.servicos.length} />
 
-                <Table
-                    className='Grid'
-                    bordered
-                    dataSource={this.state.servicos}
-                    columns={columns}>
-                </Table>
+                    <Table
+                        className='Grid'
+                        bordered
+                        dataSource={this.state.servicos}
+                        columns={columns}>
+                    </Table>
+                </div>
 
                 <YesOrNoModal
                     title={'Exclusão de Serviço'}

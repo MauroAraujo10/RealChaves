@@ -46,7 +46,7 @@ export default function Routes() {
                     <Route exact path={Rotas.AlicatesNew} component={AlicatesNew} />
                     <Route exact path={Rotas.AlicatesHistorico} component={AlicatesHistorico} />
 
-                    <Route exact path={Rotas.Servicos} component={ServicosGrid} />
+                    <Route exact path={Rotas.Servico} component={ServicosGrid} />
                     <Route exact path={Rotas.ServicoNew} component={ServicosNew} />
                     <Route exact path={Rotas.ServicoHistorico} component={ServicosHistorico} />
 

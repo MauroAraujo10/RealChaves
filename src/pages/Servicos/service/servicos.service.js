@@ -1,6 +1,7 @@
 import service from '../../../service';
+import { Tables } from '../../../common/tables';
 
-const tableName = 'Servicos';
+const tableName = Tables.Servicos;
 
 const methods = {
     async post(dto){
@@ -10,6 +11,7 @@ const methods = {
             Data: dto.Data,
             Servico: dto.Servico,
             Valor: dto.Valor,
+            Pago: dto.Pago
         });
     },
     async update(id, dto){
@@ -17,6 +19,7 @@ const methods = {
             Data: dto.Data,
             Servico: dto.Servico,
             Valor: dto.Valor,
+            Pago: dto.Pago
         });
     },
     async delete(id){

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Table, Breadcrumb, Input, Space, Button, Tooltip } from 'antd';
 import { messages } from '../../../common/messages';
+import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
 import ChavesEditModal from '../components/chaves.edit.modal';
@@ -177,7 +178,7 @@ class Grid extends Component {
                     <h1>Chaves cadastradas</h1>
                     <Breadcrumb>
                         <Breadcrumb.Item>
-                            <Link to="/">
+                            <Link to={Rotas.Home}>
                                 <AiOutlineHome className="mr-2" />
                                 Início
                             </Link>

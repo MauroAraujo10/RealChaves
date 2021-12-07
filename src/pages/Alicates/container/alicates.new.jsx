@@ -5,6 +5,7 @@ import { Row, Col } from 'antd';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { messages } from '../../../common/messages';
 import '../../../css/global.css';
+import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
 import service from '../service/alicates.service';
@@ -38,17 +39,17 @@ class AlicatesForm extends Component {
 
         return (
             <div className="container">
-                <div className="t-center" style={{ marginBottom: '10px' }}>
+                <div className="t-center mb-2">
                     <h1> Cadastrar Alicate </h1>
                     <Breadcrumb>
                         <Breadcrumb.Item>
-                            <Link to="/">
+                            <Link to={Rotas.Home}>
                                 <AiOutlineHome className="mr-2" />
                                 Início
                         </Link>
                         </Breadcrumb.Item>
                         <Breadcrumb.Item>
-                            <Link to="/Alicates">
+                            <Link to={Rotas.Alicates}>
                                 Alicates
                         </Link>
                         </Breadcrumb.Item>

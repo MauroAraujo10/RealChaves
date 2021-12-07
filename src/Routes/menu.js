@@ -86,7 +86,7 @@ export default function Routes() {
                     <Menu.Item key="Alicates.New" onClick={(e) => HandleClickLink(e, Rotas.AlicatesNew)} icon={<AiOutlinePlusSquare />}>
                         Cadastro
                     </Menu.Item>
-                    <Menu.Item key="Alicates.Historico" onClick={(e) => HandleClickLink(e, Routes.AlicatesHistorico)} icon={<AiOutlineFileDone />}>
+                    <Menu.Item key="Alicates.Historico" onClick={(e) => HandleClickLink(e, Rotas.AlicatesHistorico)} icon={<AiOutlineFileDone />}>
                         Histórico
                     </Menu.Item>
                 </SubMenu>
@@ -97,7 +97,7 @@ export default function Routes() {
                     <Menu.Item key="Servicos.New" onClick={(e) => HandleClickLink(e, Rotas.ServicoNew)} icon={<AiOutlinePlusSquare />}>
                         Cadastro
                     </Menu.Item>
-                    <Menu.Item key="Servicos.Historico" onClick={(e) => HandleClickLink(e, Routes.ServicoHistorico)} icon={<AiOutlineFileDone />}>
+                    <Menu.Item key="Servicos.Historico" onClick={(e) => HandleClickLink(e, Rotas.ServicoHistorico)} icon={<AiOutlineFileDone />}>
                         Histórico
                     </Menu.Item>
                 </SubMenu>
@@ -108,7 +108,7 @@ export default function Routes() {
                     <Menu.Item key="2" onClick={(e) => HandleClickLink(e, Rotas.AlicatesNew)}>
                         Alicates
                     </Menu.Item>
-                    <Menu.Item key="3" onClick={(e) => HandleClickLink(e, Routes.AlicatesHistorico)}>
+                    <Menu.Item key="3" onClick={(e) => HandleClickLink(e, Rotas.AlicatesHistorico)}>
                         Serviços
                     </Menu.Item>
                 </SubMenu>

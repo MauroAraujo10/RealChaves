@@ -19,13 +19,32 @@ code {
   background-color: #FFF;
   border-radius: 5px;
   margin: 30px;
-  text-align: center;
+  padding: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.container-estoque{
+  background-color: #FFF;
+  border-radius: 5px;
+  margin-bottom: 20px;
   padding: 10px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
 svg:hover{
   cursor: pointer;
+}
+
+.m-0{
+  margin: 0px;
+}
+
+.mb-1{
+  margin-bottom: 10px;
+}
+
+.mb-2{
+  margin-bottom: 20px;
 }
 
 .mt-2{
@@ -59,5 +78,26 @@ svg:hover{
 
 .iconVendaChave:hover{
   opacity: .5;
+}
+
+.imgFluid{
+  width: 100%;
+  height: auto;
+}
+
+.ant-drawer-title{
+  color: #FFF !important;
+}
+
+.ant-drawer-footer h2{
+  color: #FFF !important;
+}
+
+.anticon-close{
+  color: #FFF !important;
+}
+
+.color-white{
+  color: #FFF !important;
 }
 

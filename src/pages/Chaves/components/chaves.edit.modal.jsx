@@ -88,7 +88,8 @@ class ChavesEditModal extends Component {
             <Modal
                 visible={visible}
                 onCancel={onClose}
-                onOk={(e) => this.submitForm(e)}>
+                onOk={(e) => this.submitForm(e)}
+            >
                 <h2 style={{ textAlign: 'center' }}>Edição de Chave</h2>   
                 <form>
                     <label>Marca: </label>
@@ -111,6 +112,7 @@ class ChavesEditModal extends Component {
                     <br />
                     <label>Quantidade: </label>
                     <Input
+                        disabled
                         type="number"
                         value={this.state.Quantidade}
                         max={10}

@@ -10,6 +10,6 @@ export const Rotas  = {
     AlicatesNew: '/Alicates/Cadastro',
     AlicatesHistorico: '/Alicates/Historico',
     Servico: '/Servico',
-    ServicoNew: 'Servico/Cadastro',
+    ServicoNew: '/Servico/Cadastro',
     ServicoHistorico: '/Servico/Historico',
 }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { messages } from '../../../common/messages';
 import { Table, Breadcrumb, Input, Space, Button } from 'antd';
+import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
 import alicateService from '../service/alicates.service';
@@ -160,7 +161,7 @@ class Grid extends Component {
                     <h1>Alicates Cadastrados</h1>
                     <Breadcrumb>
                         <Breadcrumb.Item>
-                            <Link to="/">
+                            <Link to={Rotas.Home}>
                                 <AiOutlineHome className="mr-2" />
                                 Início
                             </Link>

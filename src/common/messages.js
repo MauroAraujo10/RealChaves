@@ -29,5 +29,4 @@ export const messages = {
     ValorMinimo: (valor) =>{
         return `Valor mínimo permitido é ${valor}`;
     },
-    
 };
