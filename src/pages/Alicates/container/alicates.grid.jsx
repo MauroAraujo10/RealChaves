@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { messages } from '../../../common/messages';
-import { Table, Breadcrumb, Input, Space, Button } from 'antd';
+import { Table, Breadcrumb, Input, Space, Button, Tooltip } from 'antd';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
@@ -13,8 +13,7 @@ import TotalRegistros from '../../../common/components/TotalRegistros/TotalRegis
 import YesOrNoModal from '../../../common/yesOrNoModal';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { AiOutlineHome } from "react-icons/ai";
-import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { AiOutlineHome, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
 class Grid extends Component {
     constructor(props) {
@@ -126,7 +125,7 @@ class Grid extends Component {
     }
 
     render() {
-        const iconSize = 16;
+        const iconSize = 20;
         const columns = [
             { title: 'Cliente', dataIndex: 'Cliente', key: 'Cliente', ...this.getColumnSearchProps('Cliente'), width: '30%' },
             { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', ...this.getColumnSearchProps('Quantidade'), width: '10%' },
@@ -137,19 +136,20 @@ class Grid extends Component {
             {
                 title: 'Ações', width: '10%', render: (status, x) => (
                     <>
-                        <FaEdit
-                            title="Edição de Alicate"
-                            className="mr-3"
-                            style={{ color: '#0f4c5c' }}
-                            size={iconSize}
-                            onClick={() => this.edit(x)}
-                        />
-                        <FaTrashAlt
-                            title="Deletar Alicate"
-                            style={{ color: '#FF0000' }}
-                            size={iconSize}
-                            onClick={() => this.delete(x.Id)}
-                        />
+                        <Tooltip title="Editar Alicate">
+                            <AiOutlineEdit
+                                className="mr-3 iconEdit"
+                                size={iconSize}
+                                onClick={() => this.edit(x)}
+                            />
+                        </Tooltip>
+                        <Tooltip title="Deletar Alicate">
+                            <AiOutlineDelete
+                                className="iconExcluir"
+                                size={iconSize}
+                                onClick={() => this.delete(x.Id)}
+                            />
+                        </Tooltip>
                     </>
                 )
             }

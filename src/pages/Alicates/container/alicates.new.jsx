@@ -4,7 +4,6 @@ import { Form, Input, DatePicker, Switch, Breadcrumb, Button } from 'antd';
 import { Row, Col } from 'antd';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { messages } from '../../../common/messages';
-import '../../../css/global.css';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 

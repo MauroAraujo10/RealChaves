@@ -1,7 +1,6 @@
 import service from '../../../service';
-import { Tables } from '../../../common/tables';
 
-const tableName = Tables.Servicos;
+const tableName = 'Servicos';
 
 const methods = {
     async post(dto){
@@ -14,10 +13,10 @@ const methods = {
             Pago: dto.Pago
         });
     },
-    async update(id, dto){
-        return await service.app.ref(tableName).child(id).set({
-            Data: dto.Data,
+    async update(dto){
+        return await service.app.ref(tableName).child(dto.Id).set({
             Servico: dto.Servico,
+            Data: dto.Data,
             Valor: dto.Valor,
             Pago: dto.Pago
         });

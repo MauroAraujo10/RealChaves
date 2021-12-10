@@ -76,8 +76,12 @@ svg:hover{
   color: #008000;
 }
 
-.iconVendaChave:hover{
-  opacity: .5;
+.iconEdit{
+  color: #0f4c5c;
+}
+
+.iconExcluir{
+  color: #FF0000;
 }
 
 .imgFluid{

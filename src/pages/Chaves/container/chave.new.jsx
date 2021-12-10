@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Form, Input, DatePicker, Select, Breadcrumb, Button, Image } from 'antd';
 import { Row, Col } from 'antd';
-import '../../../css/global.css';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
@@ -41,22 +40,26 @@ class New extends Component {
 
         const { Option } = Select;
 
-        const handleChange = (e) => {
-            switch (e) {
-                case 'Plana': this.setState({ imgSrc: Plana, }); break;
-                case 'PlanaColorida': this.setState({ imgSrc: PlanaColorida }); break;
-                case 'AutomotivaAco': this.setState({ imgSrc: AutomotivaAco }); break;
-                case 'AutomotivaLogotipo': this.setState({ imgSrc: AutomotivaLogotipo }); break;
-                case 'AutomotivaMetalica': this.setState({ imgSrc: AutomotivaMetalica }); break;
-                case 'AutomotivaPlastica': this.setState({ imgSrc: AutomotivaPlastica }); break;
-                case 'Cofre': this.setState({ imgSrc: Cofre }); break;
-                case 'Transponder': this.setState({ imgSrc: Transponder }); break;
-                case 'Tetra': this.setState({ imgSrc: Tetra }); break;
-                case 'Gorje': this.setState({ imgSrc: Gorje }); break;
-                case 'Tubular': this.setState({ imgSrc: Tubular }); break;
-                default: this.setState({ imgSrc: null }); break;
+        const handleChange = (tipo) => {
+            let img = '';
+            switch (tipo) {
+                case 'Plana': img = Plana; break;
+                case 'PlanaColorida': img = PlanaColorida; break;
+                case 'AutomotivaAco': img = AutomotivaAco; break;
+                case 'AutomotivaLogotipo': img = AutomotivaLogotipo; break;
+                case 'AutomotivaMetalica': img = AutomotivaMetalica; break;
+                case 'AutomotivaPlastica': img = AutomotivaPlastica; break;
+                case 'Cofre': img = Cofre; break;
+                case 'Transponder': img = Transponder; break;
+                case 'Tetra': img = Tetra; break;
+                case 'Gorje': img = Gorje; break;
+                case 'Tubular': img = Tubular; break;
+                default: img = null; break;
             }
-            this.setState({ Tipo: e });
+            this.setState({
+                Tipo: tipo,
+                imgSrc: img
+            });
         }
 
         const submitForm = (e) => {

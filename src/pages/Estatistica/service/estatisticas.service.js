@@ -1,7 +1,6 @@
 import service from '../../../service';
-import { Tables } from '../../../common/tables';
 
-const tableName = Tables.Vendas;
+const tableName = 'Vendas';
 
 const methods = {
     async postVenda(dto) {

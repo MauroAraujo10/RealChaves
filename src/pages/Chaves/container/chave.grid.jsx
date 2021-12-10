@@ -15,8 +15,7 @@ import service from '../../../service';
 import chaveService from '../service/chave.service';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { AiOutlineHome } from "react-icons/ai";
-import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { AiOutlineHome, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
 import { AiOutlineDollar } from 'react-icons/ai';
 
@@ -33,7 +32,6 @@ class Grid extends Component {
             dataCadastro: '',
         };
         this.edit = this.edit.bind(this);
-        this.venda = this.venda.bind(this);
         this.delete = this.delete.bind(this);
     }
 
@@ -114,12 +112,6 @@ class Grid extends Component {
         })
     }
 
-    venda(dto) {
-        this.setState({
-            modalVendaVisible: true
-        })
-    }
-
     delete(id) {
         this.setState({
             modalExclusaoVisible: true,
@@ -128,16 +120,20 @@ class Grid extends Component {
     }
 
     excluirChave(id) {
-        chaveService.delete(id).then(() => {
-            toast.success(messages.exclusaoSucesso());
-            this.setState({ modalExclusaoVisible: false });
-        })
+        chaveService.delete(id)
+            .then(() => {
+                toast.success(messages.exclusaoSucesso());
+                this.setState({ modalExclusaoVisible: false });
+            })
+            .catch(() => {
+                toast.error(messages.exclusaoErro());
+            })
     }
 
     render() {
-        const iconSize = 16;
+        const iconSize = 20;
         const columns = [
-            { title: 'Marca', dataIndex: 'Marca', key: 'Marca', ...this.getColumnSearchProps('Marca'), width: '30%' },
+            { title: 'Marca', dataIndex: 'Marca', key: 'Marca', ...this.getColumnSearchProps('Marca'), width: '25%' },
             { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', ...this.getColumnSearchProps('NumeroSerie'), width: '15%' },
             { title: 'Estoque', dataIndex: 'Quantidade', key: 'Quantidade', ...this.getColumnSearchProps('Quantidade'), width: '10%' },
             { title: 'Tipo', dataIndex: 'Tipo', key: 'Tipo', ...this.getColumnSearchProps('Tipo'), width: '10%' },
@@ -145,24 +141,23 @@ class Grid extends Component {
             {
                 title: 'Ações', width: '10%', render: (status, x) => (
                     <>
-                        <Tooltip title="Venda de Chave">
+                        <Tooltip title="Vender">
                             <AiOutlineDollar
                                 className="mr-3 iconVendaChave"
                                 size={iconSize}
-                                onClick={() => { this.venda(x) }}
+                                onClick={() => { this.setState({ modalVendaVisible: true }) }}
                             />
                         </Tooltip>
-                        <Tooltip title="Edição de Chave">
-                            <FaEdit
-                                className="mr-3"
-                                style={{ color: '#0f4c5c' }}
+                        <Tooltip title="Editar">
+                            <AiOutlineEdit
+                                className="mr-3 iconEdit"
                                 size={iconSize}
                                 onClick={() => this.edit(x)}
                             />
                         </Tooltip>
-                        <Tooltip title="Deletar Chave">
-                            <FaTrashAlt
-                                style={{ color: '#FF0000' }}
+                        <Tooltip title="Deletar">
+                            <AiOutlineDelete
+                                className="iconExcluir"
                                 size={iconSize}
                                 onClick={() => this.delete(x.Id)}
                             />

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { messages } from '../../../common/messages';
-import { Table, Breadcrumb, Input, Space, Button } from 'antd';
+import { Table, Breadcrumb, Input, Space, Button, Tooltip } from 'antd';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
@@ -9,22 +9,22 @@ import service from '../../../service';
 import servicosService from '../service/servicos.service';
 
 import TotalRegistros from '../../../common/components/TotalRegistros/TotalRegistros';
+import ServicosEditModal from '../components/servicos.edit.modal';
 import YesOrNoModal from '../../../common/yesOrNoModal';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { AiOutlineHome, AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
-import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { AiOutlineHome, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
 class servicosGrid extends Component {
     constructor(props) {
         super(props);
         this.state = {
             servicos: [],
+            servicoSelecionado: [],
+            modalEditServicoVisible: false,
             modalDeleteVisible: false,
             idServico: undefined
         };
-        this.edit = this.edit.bind(this);
-        this.delete = this.delete.bind(this);
     }
 
     componentDidMount() {
@@ -36,16 +36,7 @@ class servicosGrid extends Component {
                     Data: x.val().Data,
                     Servico: x.val().Servico,
                     Valor: x.val().Valor,
-                    Pago: x.val().Pago ? 
-                        <AiOutlineCheckCircle 
-                            size={30} 
-                            style={{color: '#287233 '}}
-                        /> 
-                            : 
-                        <AiOutlineCloseCircle 
-                            size={30}
-                            style={{color: '#FF0000'}}
-                        />,
+                    Pago: x.val().Pago ? 'Sim' : 'Não'
                 })
             })
             this.setState({ servicos });
@@ -100,8 +91,14 @@ class servicosGrid extends Component {
         this.setState({ searchText: '' });
     };
 
-    edit(id) {
-        this.props.history.replace(`/Servicos/edit/${id}`);
+    edit(dto) {
+        let dataSplit = dto.Data.split('/');
+        dto.dataCadastro = `${dataSplit[1]}/${dataSplit[0]}/${dataSplit[2]}`;
+
+        this.setState({
+            modalEditServicoVisible: true,
+            servicoSelecionado: dto
+        });
     }
 
     delete(id) {
@@ -123,7 +120,7 @@ class servicosGrid extends Component {
     }
 
     render() {
-        const iconSize = 16;
+        const iconSize = 20;
         const columns = [
             { title: 'Serviço', dataIndex: 'Servico', key: 'Servico', ...this.getColumnSearchProps('Servico'), width: '60%' },
             { title: 'Data', dataIndex: 'Data', key: 'Data', ...this.getColumnSearchProps('Data'), width: '10%' },
@@ -132,19 +129,20 @@ class servicosGrid extends Component {
             {
                 title: 'Ações', width: '10%', render: (status, x) => (
                     <>
-                        <FaEdit
-                            title="Edição de Alicate"
-                            className="mr-3"
-                            style={{ color: '#0f4c5c' }}
-                            size={iconSize}
-                            onClick={() => this.edit(x)}
-                        />
-                        <FaTrashAlt
-                            title="Deletar Alicate"
-                            style={{ color: '#FF0000' }}
-                            size={iconSize}
-                            onClick={() => this.delete(x.Id)}
-                        />
+                        <Tooltip title="Editar Serviço">
+                            <AiOutlineEdit
+                                className="mr-3 iconEdit"
+                                size={iconSize}
+                                onClick={() => this.edit(x)}
+                            />
+                        </Tooltip>
+                        <Tooltip title="Deletar Serviço">
+                            <AiOutlineDelete
+                                className="iconExcluir"
+                                size={iconSize}
+                                onClick={() => this.delete(x)}
+                            />
+                        </Tooltip>
                     </>
                 )
             }
@@ -178,6 +176,12 @@ class servicosGrid extends Component {
                         columns={columns}>
                     </Table>
                 </div>
+
+                <ServicosEditModal
+                    visible={this.state.modalEditServicoVisible}
+                    onClose={() => this.setState({ modalEditServicoVisible: false })}
+                    servicoSelecionado={this.state.servicoSelecionado}
+                />
 
                 <YesOrNoModal
                     title={'Exclusão de Serviço'}

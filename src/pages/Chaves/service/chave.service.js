@@ -1,7 +1,6 @@
 import service from '../../../service';
-import { Tables } from '../../../common/tables';
 
-const tableName = Tables.Chave;
+const tableName = 'Chave';
 
 const methods = {
 
@@ -25,9 +24,7 @@ const methods = {
         });
     },
     async getById(id) {
-
         await service.app.ref(tableName).child(id).once('value', (snapshot) => {
-
             var teste = {
                 Marca: snapshot.val().Marca,
                 NumeroSerie: snapshot.val().NumeroSerie,

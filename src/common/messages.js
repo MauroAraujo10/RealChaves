@@ -8,6 +8,9 @@ export const messages = {
     EditadoSucesso: (produto) => {
         return `${produto} editado(a) com sucesso !`;
     },
+    EditadoErro: (produto) => {
+        return `Erro ao editar este(a) ${produto}!`;
+    },
     exclusaoSucesso: () => {
         return `Registro excluído com sucesso !`;
     },

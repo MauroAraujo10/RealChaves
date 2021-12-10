@@ -4,7 +4,6 @@ import { Form, Input, DatePicker, Switch, Breadcrumb, Button } from 'antd';
 import { Row, Col } from 'antd';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { messages } from '../../../common/messages';
-import '../../../css/global.css';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
@@ -34,6 +33,7 @@ class ServicosNew extends Component {
                     toast.error(messages.cadastradoErro('Serviço'));
                 });
         }
+
         return (
             <div className="container">
                 <div className="t-center mb-2">
@@ -57,8 +57,12 @@ class ServicosNew extends Component {
                         </Breadcrumb.Item>
                     </Breadcrumb>
                 </div>
-                <Form layout="vertical" onFinish={submitForm}>
-                    <Row gutter={10}>
+
+                <Form
+                    layout="vertical"
+                    onFinish={submitForm}
+                >
+                    <Row gutter={8}>
                         <Col span={24}>
                             <Form.Item
                                 name="Descricao"
@@ -68,11 +72,13 @@ class ServicosNew extends Component {
                                 <Input.TextArea
                                     showCount
                                     maxLength={200}
-                                    onChange={(e) => this.setState({ Servico: e.target.value })} />
+                                    onChange={(e) => this.setState({ Servico: e.target.value })}
+                                />
                             </Form.Item>
                         </Col>
                     </Row>
-                    <Row gutter={16}>
+
+                    <Row gutter={12}>
                         <Col span={4}>
                             <Form.Item
                                 label="Data"
@@ -84,7 +90,7 @@ class ServicosNew extends Component {
                                     value={this.state.data} />
                             </Form.Item>
                         </Col>
-                        <Col span={4}>
+                        <Col span={3}>
                             <Form.Item
                                 label="Valor"
                                 name="Valor"
@@ -109,13 +115,14 @@ class ServicosNew extends Component {
                             </Form.Item>
                         </Col>
                     </Row>
+
                     <div style={{ textAlign: 'right' }}>
                         <Button
                             type="primary"
                             htmlType="submit"
                             icon={<AiOutlinePlusCircle className="mr-3" />}>
                             Cadastrar
-                    </Button>
+                        </Button>
                     </div>
                 </Form>
             </div>
