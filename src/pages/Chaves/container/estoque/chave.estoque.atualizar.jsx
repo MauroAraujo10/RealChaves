@@ -31,10 +31,10 @@ class Atualizar extends Component {
     this.state = {
       chaves: [],
       chavesEstoque: [],
-      drawerVisible: false,
-      modalPedidoVisible: false,
       quantidadeTotal: 0,
-      preco: ''
+      preco: '',
+      modalPedidoVisible: false,
+      drawerVisible: false,
     };
   }
 
@@ -44,7 +44,7 @@ class Atualizar extends Component {
       snapshot.forEach((x) => {
         chaves.push({
           Id: x.key,
-          key: x.key,
+          Key: x.key,
           Marca: x.val().Marca,
           NumeroSerie: x.val().NumeroSerie,
           Quantidade: x.val().Quantidade,
@@ -106,9 +106,9 @@ class Atualizar extends Component {
   };
 
   handleAddEstoque(chave) {
-    const { Id, Key, Marca, NumeroSerie, Quantidade, Tipo } = chave;
-    const chaves = this.state.chavesEstoque;
-    const chaveInvalida = chaves.find(x => x.Id === chave.Id);
+    const { Id, Key, Marca, Data, NumeroSerie, Quantidade, Tipo } = chave;
+    const chavesEstoque = this.state.chavesEstoque;
+    const chaveInvalida = chavesEstoque.find(x => x.Id === chave.Id);
     let imgSrc;
 
     if (chaveInvalida) {
@@ -131,10 +131,11 @@ class Atualizar extends Component {
       default: imgSrc = null; break;
     }
 
-    chaves.push({
+    chavesEstoque.push({
       Id,
       Key,
       Marca,
+      Data,
       NumeroSerie,
       Quantidade,
       QuantidadeSolicitada: 0,
@@ -143,7 +144,7 @@ class Atualizar extends Component {
     });
 
     this.setState({
-      chavesEstoque: chaves,
+      chavesEstoque,
       drawerVisible: true
     });
   }

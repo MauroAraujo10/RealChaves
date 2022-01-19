@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 
 import { Modal, Button } from 'antd';
-import { withRouter } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { messages } from '../../../common/messages';
+import { toast } from 'react-toastify';
+
 import moment from 'moment';
 import estoqueService from '../service/estoque.service';
 
@@ -13,8 +14,6 @@ class ChavesEstoquePedidoModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            quantidadeTotal: 0,
-            downloadLink: ''
         };
     }
 
@@ -30,22 +29,23 @@ class ChavesEstoquePedidoModal extends Component {
     }
 
     submitForm() {
-        const { chavesEstoque, preco } = this.props;
+        const { preco, quantidadeTotal } = this.props;
+        const { chavesEstoque } = this.props;
 
         const dto = {
-            chavesEstoque,
-            quantidadeTotal: this.state.quantidadeTotal,
-            preco
-        }
-
+            ChavesEstoque: chavesEstoque,
+            QuantidadeTotal: quantidadeTotal,
+            Preco: preco
+        };
         estoqueService.post(dto)
-        .then(() => {
-            toast.success(messages.cadastradoSucesso('Atualização de estoque'));
-            this.props.onClose();
-        })
-        .catch(() => {
-            toast.success(messages.cadastradoErro('Atualização de estoque'));
-        });
+            .then(() => {
+                toast.success(messages.cadastradoSucesso('Atualização de estoque'));
+                this.props.chavesEstoque.splice(0, this.props.chavesEstoque.length)
+                this.props.onClose();
+            })
+            .catch(() => {
+                toast.error(messages.cadastradoErro('Atualização de estoque'));
+            });
     }
 
     render() {
@@ -92,21 +92,29 @@ class ChavesEstoquePedidoModal extends Component {
                             );
                         })
                     }
-                    <ul style={{
-                        textAlign: 'right',
-                        listStyleType: 'none'
-                    }}>
+                    <ul
+                        key='ul'
+                        style={{
+                            textAlign: 'right',
+                            listStyleType: 'none'
+                        }}>
                         <li>
-                            Quantidade Total:&nbsp;
-                            <strong>{quantidadeTotal}</strong>
+                            Quantidade Total:
+                            <strong className="ml-2">
+                                {quantidadeTotal}
+                            </strong>
                         </li>
                         <li>
-                            Valor Final R$: &nbsp;
-                            <strong>{preco}</strong>
+                            Valor Final R$:
+                            <strong className="ml-2">
+                                {preco}
+                            </strong>
                         </li>
                         <li>
-                            Data: &nbsp;
-                            <strong>{moment().format('DD/MM/yyyy')}</strong>
+                            Data:
+                            <strong className="ml-2">
+                                {moment().format('DD/MM/yyyy')}
+                            </strong>
                         </li>
                     </ul>
                 </Modal>

@@ -59,6 +59,14 @@ svg:hover{
   margin-right: 10px;
 }
 
+.ml-2{
+  margin-left: 5px;
+}
+
+.ml-3{
+  margin-left: 10px;
+}
+
 .f-right{
   float: right
 }
@@ -103,5 +111,13 @@ svg:hover{
 
 .color-white{
   color: #FFF !important;
+}
+
+.ordenacaoLista{
+  border-radius: 20%;
+  background: #004878;
+  padding: 5px;
+  color: #FFF;
+  margin-right: 5px;
 }
 

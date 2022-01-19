@@ -20,23 +20,6 @@ class Firebase {
 
         this.app = app.database();
     }
-
-    GetChaves = async() => {
-        await app.database().ref('Chave').once('value', (snapshot) => {
-
-            let chaves = [];
-            snapshot.forEach((x) => {
-                chaves.push({
-                    Id: x.key,
-                    Marca: x.val().Marca,
-                    NumeroSerie: x.val().NumeroSerie,
-                    Quantidade: x.val().Quantidade,
-                    Tipo: x.val().Tipo
-                })
-            })
-            return chaves;
-        });
-    }
 }
 
 export default new Firebase();

@@ -6,16 +6,17 @@ import service from '../../../../service';
 import TotalRegistros from '../../../../common/components/TotalRegistros/TotalRegistros';
 import ChavesEstoqueVisualizarModal from '../../components/chaves.estoque.visualizar.modal';
 
-import { Table, Breadcrumb, Input, Space, Button, Tooltip, Image, Drawer, Form } from 'antd';
-import { Row, Col, Badge } from 'antd';
+import { Table, Breadcrumb, Input, Space, Button, Tooltip } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-import { AiOutlineHome, AiOutlineEye, AiOutlineDoubleLeft, AiOutlinePlus, AiOutlineMinus, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineEye } from "react-icons/ai";
 
 class EstoqueHistorico extends Component {
     constructor(props) {
         super(props);
         this.state = {
             estoqueHistorico: [],
+            chavesEstoque: [],
+            idEstoque: undefined,
             visualizarModal: false
         }
     }
@@ -28,7 +29,8 @@ class EstoqueHistorico extends Component {
                     Id: x.key,
                     Data: x.val().Data,
                     Quantidade: x.val().Quantidade,
-                    Valor: x.val().Valor
+                    Valor: x.val().Valor,
+                    Chaves: x.val().Chaves
                 })
             })
             this.setState({ estoqueHistorico: estoqueHistorico });
@@ -84,19 +86,33 @@ class EstoqueHistorico extends Component {
         this.setState({ searchText: '' });
     };
 
-    handleVisualizar(id){
+    handleVisualizar(id) {
+        let chavesEstoque = [];
+        service.app.ref('Estoque').child(id).child('Chaves').on('value', (snapshot) => {
+            snapshot.forEach((x) => {
+                chavesEstoque.push({
+                    Id: x.key,
+                    Marca: x.val().Marca,
+                    NumeroSerie: x.val().NumeroSerie,
+                    Quantidade: x.val().Quantidade,
+                    QuantidadeSolicitada: x.val().QuantidadeSolicitada,
+                    Tipo: x.val().Tipo,
+                })
+            })
+        })
         this.setState({
-            visualizarModal: true
+            visualizarModal: true,
+            idEstoque: id,
+            chavesEstoque
         });
     }
 
     render() {
         const { Item } = Breadcrumb;
-        const ButtonGroup = Button.Group;
 
         const columns = [
             { title: 'Data', dataIndex: 'Data', key: 'Data', ...this.getColumnSearchProps('Data'), width: '20%' },
-            { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', ...this.getColumnSearchProps('Quantidade'), width: '10%' },
+            { title: 'Quantidade Pedida', dataIndex: 'Quantidade', key: 'Quantidade', ...this.getColumnSearchProps('Quantidade'), width: '10%' },
             { title: 'Valor (R$)', dataIndex: 'Valor', key: 'Valor', ...this.getColumnSearchProps('Valor'), width: '10%' },
             {
                 title: 'Ações', width: '5%', render: (status, x) => (
@@ -149,8 +165,10 @@ class EstoqueHistorico extends Component {
 
                 <ChavesEstoqueVisualizarModal
                     title={'Detalhes do pedido'}
+                    idEstoque={this.state.idEstoque}
+                    chavesEstoque={this.state.chavesEstoque}
                     visible={this.state.visualizarModal}
-                    onClose={() => this.setState({visualizarModal: false})}
+                    onClose={() => this.setState({ visualizarModal: false })}
                 />
             </>
         );
