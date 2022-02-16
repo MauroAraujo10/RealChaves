@@ -1,5 +1,5 @@
 import service from '../../../service';
-import tabelas from '../../../common/tabelas';
+import tabelas from '../../../common/Messages/tabelas';
 import moment from 'moment';
 
 const methods = {

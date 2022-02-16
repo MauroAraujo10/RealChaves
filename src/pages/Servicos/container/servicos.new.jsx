@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Form, Input, DatePicker, Switch, Breadcrumb } from 'antd';
 import { Row, Col } from 'antd';
-import { messages } from '../../../common/messages';
+import { messages } from '../../../common/Messages/messages';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 

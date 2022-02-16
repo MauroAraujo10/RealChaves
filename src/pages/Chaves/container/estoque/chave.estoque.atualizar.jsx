@@ -3,7 +3,7 @@ import { Table, Breadcrumb, Input, Space, Button, Tooltip, Image, Drawer, Form }
 import { Row, Col, Badge } from 'antd';
 import { Link, withRouter } from 'react-router-dom';
 import { Rotas } from '../../../../Routes/rotas';
-import { messages } from '../../../../common/messages';
+import { messages } from '../../../../common/Messages/messages';
 
 import service from '../../../../service';
 import ChavesEstoquePedidoModal from '../../components/chaves.estoque.pedido.modal';

@@ -5,7 +5,7 @@ import { Row, Col } from 'antd';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
-import { messages } from '../../../common/messages';
+import { messages } from '../../../common/Messages/messages';
 import service from '../service/chave.service';
 import { AiOutlineHome } from "react-icons/ai";
 

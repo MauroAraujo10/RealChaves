@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Table, Breadcrumb, Input, Space, Button, Tooltip } from 'antd';
-import { messages } from '../../../common/messages';
+import { messages } from '../../../common/Messages/messages';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
 import ChavesEditModal from '../components/chaves.edit.modal';
 import ChavesVendaModal from '../components/chaves.venda.modal';
+import ChavesDescarteModal from '../components/chaves.descarte.modal';
 import YesOrNoModal from '../../../common/yesOrNoModal';
 
 import TotalRegistros from '../../../common/components/TotalRegistros/TotalRegistros';
@@ -15,7 +16,7 @@ import service from '../../../service';
 import chaveService from '../service/chave.service';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { AiOutlineHome, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineDownSquare, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
 import { AiOutlineDollar } from 'react-icons/ai';
 
@@ -26,6 +27,7 @@ class Grid extends Component {
             chaves: [],
             modalEditVisible: false,
             modalVendaVisible: false,
+            modalDescarteVisible: false,
             modalExclusaoVisible: false,
             idExclusao: undefined,
             chaveSelecionada: [],
@@ -148,6 +150,13 @@ class Grid extends Component {
                                 onClick={() => { this.setState({ modalVendaVisible: true }) }}
                             />
                         </Tooltip>
+                        <Tooltip title="Descartar Chave">
+                            <AiOutlineDownSquare
+                                className="mr-3 iconDescarte"
+                                size={iconSize}
+                                onClick={() => {this.setState({modalDescarteVisible: true})}}
+                            />
+                        </Tooltip>
                         <Tooltip title="Editar">
                             <AiOutlineEdit
                                 className="mr-3 iconEdit"
@@ -205,6 +214,10 @@ class Grid extends Component {
                     visible={this.state.modalVendaVisible}
                     chaveSelecionada={this.state.chaveSelecionada}
                     onClose={() => this.setState({ modalVendaVisible: false })}
+                />
+                <ChavesDescarteModal
+                    visible={this.state.modalDescarteVisible}
+                    onClose={() => this.setState({ modalDescarteVisible: false })}
                 />
                 <YesOrNoModal
                     title={'Exclusão de Chave'}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { messages } from '../../../common/messages';
+import { messages } from '../../../common/Messages/messages';
 import { Modal, Form, Input, DatePicker, Button } from 'antd';
 import { Row, Col } from 'antd';
 import { BiSave } from "react-icons/bi";

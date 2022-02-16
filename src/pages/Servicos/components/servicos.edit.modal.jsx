@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom';
 import { Modal, Form, Input, DatePicker, Space, Switch } from 'antd';
 import { Row, Col } from 'antd';
-import { messages } from '../../../common/messages';
+import { messages } from '../../../common/Messages/messages';
 import { toast } from "react-toastify";
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 

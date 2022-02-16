@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Form, Input, DatePicker, Space, Select, Image } from 'antd';
 import { Row, Col } from 'antd';
-import { messages } from '../../../common/messages';
+import { messages } from '../../../common/Messages/messages';
 import { toast } from "react-toastify";
 
 import service from '../service/chave.service';
