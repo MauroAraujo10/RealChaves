@@ -1,12 +1,11 @@
 import service from '../../../service';
-
-const tableName = 'Vendas';
+import tabelas from '../../../common/tabelas';
 
 const methods = {
     async postVenda(dto) {
         let id = Date.now();
 
-        await service.app.ref(tableName).child(id).set({
+        await service.app.ref(tabelas.Vendas).child(id).set({
             Data: dto.Data,
             IdProduto: dto.IdProduto,
             Produto: dto.Produto,

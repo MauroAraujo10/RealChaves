@@ -12,4 +12,7 @@ export const Rotas  = {
     Servico: '/Servico',
     ServicoNew: '/Servico/Cadastro',
     ServicoHistorico: '/Servico/Historico',
+    EstatisticasChave: '/Estatistica/Chaves',
+    EstatisticasAlicates: '/Estatistica/Alicates',
+    EstatisticasServicos: '/Estatistica/Servicos',
 }

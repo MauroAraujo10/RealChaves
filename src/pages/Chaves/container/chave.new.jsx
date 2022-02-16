@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Form, Input, DatePicker, Select, Breadcrumb, Button, Image } from 'antd';
 import { Row, Col } from 'antd';
-import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
 import { messages } from '../../../common/messages';
 import service from '../service/chave.service';
 import { AiOutlineHome } from "react-icons/ai";
+
+import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
 import Plana from '../assets/Plana.jpg';
 import PlanaColorida from '../assets/PlanaColorida.jpg';
@@ -62,14 +63,14 @@ class New extends Component {
             });
         }
 
-        const submitForm = (e) => {
-            service.post(this.state)
-                .then(() => {
-                    toast.success(messages.cadastradoSucesso('Chave'));
-                })
-                .catch(() => {
-                    toast.error(messages.cadastradoErro('Chave'));
-                });
+        const submitForm = () => {
+             service.post(this.state)
+                 .then(() => {
+                     toast.success(messages.cadastradoSucesso('Chave'));
+                 })
+                 .catch(() => {
+                     toast.error(messages.cadastradoErro('Chave'));
+                 });
         }
 
         return (
@@ -94,8 +95,8 @@ class New extends Component {
                     </Breadcrumb>
                 </div>
 
-                <Form className="mt-2" layout="vertical" onFinish={submitForm}>
-                    <Row gutter={10}>
+                <Form layout="vertical" onFinish={submitForm}>
+                    <Row gutter={10} className="mt-2">
                         <Col span={12}>
                             <Form.Item
                                 label="Marca"
@@ -182,15 +183,9 @@ class New extends Component {
                             </Image.PreviewGroup>
                         </Col>
                     </Row>
-                    <div style={{ textAlign: 'right' }}>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            icon={<AiOutlinePlusCircle className="mr-3" />}
-                        >
-                            Cadastrar
-                    </Button>
-                    </div>
+
+                    <BotaoCadastrar />
+
                 </Form>
             </div>
         );

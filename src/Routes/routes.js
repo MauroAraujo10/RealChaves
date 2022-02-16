@@ -22,9 +22,9 @@ import ServicosGrid from '../pages/Servicos/container/servicos.grid';
 import ServicosNew from '../pages/Servicos/container/servicos.new';
 import ServicosHistorico from '../pages/Servicos/container/servicos.historico';
 
-// import Estatisticas from '../Estatistica/container/page1';
-// import EstatisticasVendas from '../Estatistica/container/Vendas';
-// import EstatisticasLucros from '../Estatistica/container/Lucros';
+import EstatisticasChaves from '../pages/Estatistica/Chaves';
+import EstatisticasAlicates from '../pages/Estatistica/Alicates';
+import EstatisticasServicos from '../pages/Estatistica/Servicos';
 
 export default function Routes() {
     return (
@@ -49,6 +49,10 @@ export default function Routes() {
                     <Route exact path={Rotas.Servico} component={ServicosGrid} />
                     <Route exact path={Rotas.ServicoNew} component={ServicosNew} />
                     <Route exact path={Rotas.ServicoHistorico} component={ServicosHistorico} />
+
+                    <Route exact path={Rotas.EstatisticasChave} component={EstatisticasChaves} />
+                    <Route exact path={Rotas.EstatisticasAlicates} component={EstatisticasAlicates} />
+                    <Route exact path={Rotas.EstatisticasServicos} component={EstatisticasServicos} />
 
                     <Route path="*" component={Erro} />
                 </Switch>

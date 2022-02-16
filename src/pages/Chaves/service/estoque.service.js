@@ -1,15 +1,13 @@
 import service from '../../../service';
+import tabelas from '../../../common/tabelas';
 import moment from 'moment';
-
-const tableNameEstoque = 'Estoque';
-const tableNameChave = 'Chave';
 
 const methods = {
 
     async post(dto) {
         let id = Date.now();
 
-        await service.app.ref(tableNameEstoque).child(id).set({
+        await service.app.ref(tabelas.Estoque).child(id).set({
             Data: moment().format('DD/MM/yyyy'),
             Valor: dto.Preco,
             Quantidade: dto.QuantidadeTotal,
@@ -17,7 +15,7 @@ const methods = {
         });
 
         dto.ChavesEstoque.forEach(x => {
-            service.app.ref(tableNameChave).child(x.Id).set({
+            service.app.ref(tabelas.Chave).child(x.Id).set({
                 Data: x.Data,
                 Marca: x.Marca,
                 NumeroSerie: x.NumeroSerie,

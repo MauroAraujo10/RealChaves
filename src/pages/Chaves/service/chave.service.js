@@ -1,12 +1,11 @@
 import service from '../../../service';
-
-const tableName = 'Chave';
+import tabelas from '../../../common/tabelas';
 
 const methods = {
 
     async post(dto) {
         let id = Date.now();
-        return await service.app.ref(tableName).child(id).set({
+        return await service.app.ref(tabelas.Chave).child(id).set({
             Marca: dto.Marca,
             NumeroSerie: Number(dto.NumeroSerie),
             Quantidade: Number(dto.Quantidade),
@@ -15,7 +14,7 @@ const methods = {
         });
     },
     async update(dto) {
-        return await service.app.ref(tableName).child(dto.Id).set({
+        return await service.app.ref(tabelas.Chave).child(dto.Id).set({
             Marca: dto.Marca,
             NumeroSerie: Number(dto.NumeroSerie),
             Quantidade: Number(dto.Quantidade),
@@ -24,7 +23,7 @@ const methods = {
         });
     },
     async getById(id) {
-        await service.app.ref(tableName).child(id).once('value', (snapshot) => {
+        await service.app.ref(tabelas.Chave).child(id).once('value', (snapshot) => {
             var teste = {
                 Marca: snapshot.val().Marca,
                 NumeroSerie: snapshot.val().NumeroSerie,
@@ -36,7 +35,7 @@ const methods = {
         });
     },
     async delete(id) {
-        await service.app.ref(tableName).child(id).remove();
+        await service.app.ref(tabelas.Chave).child(id).remove();
     }
 };
 

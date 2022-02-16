@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Form, Input, DatePicker, Switch, Breadcrumb, Button } from 'antd';
+import { Form, Input, DatePicker, Switch, Breadcrumb } from 'antd';
 import { Row, Col } from 'antd';
-import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { messages } from '../../../common/messages';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
 import service from '../service/servicos.service';
+import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
 import { AiOutlineHome } from "react-icons/ai";
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
@@ -116,14 +116,8 @@ class ServicosNew extends Component {
                         </Col>
                     </Row>
 
-                    <div style={{ textAlign: 'right' }}>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            icon={<AiOutlinePlusCircle className="mr-3" />}>
-                            Cadastrar
-                        </Button>
-                    </div>
+                    <BotaoCadastrar />
+
                 </Form>
             </div>
         );

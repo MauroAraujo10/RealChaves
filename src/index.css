@@ -80,6 +80,10 @@ svg:hover{
   text-align: center;
 }
 
+.t-right{
+  text-align: right;
+}
+
 .iconVendaChave{
   color: #008000;
 }

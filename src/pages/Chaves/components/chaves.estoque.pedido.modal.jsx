@@ -19,7 +19,7 @@ class ChavesEstoquePedidoModal extends Component {
 
     HandlePrint() {
         const element = document.createElement('a');
-        const teste = document.getElementById('modal-revisaoEstoque');
+        // const teste = document.getElementById('modal-revisaoEstoque');
         const data = new Blob(['list'], { type: 'text/plain;charset-utf-8' });
         element.href = URL.createObjectURL(data);
         let date = moment().format('DD-MM-yyyy');

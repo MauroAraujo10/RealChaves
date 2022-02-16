@@ -102,13 +102,13 @@ export default function Routes() {
                     </Menu.Item>
                 </SubMenu>
                 <SubMenu key="Estatisticas" icon={<AiOutlineLineChart />} title="Estatisticas">
-                    <Menu.Item key="1" onClick={(e) => HandleClickLink(e, Rotas.Alicates)}>
+                    <Menu.Item key="1" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasChave)}>
                         Chaves
                     </Menu.Item>
-                    <Menu.Item key="2" onClick={(e) => HandleClickLink(e, Rotas.AlicatesNew)}>
+                    <Menu.Item key="2" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasAlicates)}>
                         Alicates
                     </Menu.Item>
-                    <Menu.Item key="3" onClick={(e) => HandleClickLink(e, Rotas.AlicatesHistorico)}>
+                    <Menu.Item key="3" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasServicos)}>
                         Serviços
                     </Menu.Item>
                 </SubMenu>

@@ -1,12 +1,11 @@
 import service from '../../../service';
-
-const tableName = 'Alicates';
+import tabelas from '../../../common/tabelas';
 
 const methods = {
     async post(dto){
         let id = Date.now();
 
-        return await service.app.ref(tableName).child(id).set({
+        return await service.app.ref(tabelas.Alicates).child(id).set({
             Marca: dto.Marca,
             Cliente: dto.Cliente,
             Quantidade: Number(dto.Quantidade),
@@ -16,7 +15,7 @@ const methods = {
         });
     },
     async update(dto){
-        return await service.app.ref(tableName).child(dto.Id).set({
+        return await service.app.ref(tabelas.Alicates).child(dto.Id).set({
             Marca: dto.Marca,
             Cliente: dto.Cliente,
             Quantidade: Number(dto.Quantidade),
@@ -26,7 +25,7 @@ const methods = {
         });
     },
     async delete(id){
-        await service.app.ref(tableName).child(id).remove();
+        await service.app.ref(tabelas.Alicates).child(id).remove();
     }
 };
 

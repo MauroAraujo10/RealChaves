@@ -8,6 +8,7 @@ import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
 import service from '../service/alicates.service';
+import BotaoCadastar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
 import { AiOutlineHome } from "react-icons/ai";
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
@@ -139,14 +140,8 @@ class AlicatesForm extends Component {
                             </Form.Item>
                         </Col>
                     </Row>
-                    <div style={{ textAlign: 'right' }}>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            icon={<AiOutlinePlusCircle className="mr-3" />}>
-                            Cadastrar
-                    </Button>
-                    </div>
+
+                    <BotaoCadastar />
                 </Form>
             </div>
         );

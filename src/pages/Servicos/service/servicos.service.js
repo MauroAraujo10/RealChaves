@@ -1,12 +1,11 @@
 import service from '../../../service';
-
-const tableName = 'Servicos';
+import tabelas from '../../../common/tabelas';
 
 const methods = {
     async post(dto){
         let id = Date.now();
 
-        return await service.app.ref(tableName).child(id).set({
+        return await service.app.ref(tabelas.Servicos).child(id).set({
             Data: dto.Data,
             Servico: dto.Servico,
             Valor: dto.Valor,
@@ -14,7 +13,7 @@ const methods = {
         });
     },
     async update(dto){
-        return await service.app.ref(tableName).child(dto.Id).set({
+        return await service.app.ref(tabelas.Servicos).child(dto.Id).set({
             Servico: dto.Servico,
             Data: dto.Data,
             Valor: dto.Valor,
@@ -22,7 +21,7 @@ const methods = {
         });
     },
     async delete(id){
-        await service.app.ref(tableName).child(id).remove();
+        await service.app.ref(tabelas.Servicos).child(id).remove();
     }
 };
 
