@@ -11,8 +11,10 @@ import {
     AiOutlineTool,
     AiOutlineSetting,
     AiOutlineDollar,
-    AiOutlineFileDone
+    AiOutlineFileDone,
+    AiOutlineDownSquare
 } from 'react-icons/ai';
+
 import { VscKey } from "react-icons/vsc";
 
 import { useState } from "react";
@@ -64,8 +66,11 @@ export default function Routes() {
                     <Menu.Item key="Chaves.New" onClick={(e) => HandleClickLink(e, Rotas.ChavesNew)} icon={<AiOutlinePlusCircle />}>
                         Cadastro
                     </Menu.Item>
-                    <Menu.Item key="Chaves.Venda" onClick={(e) => HandleClickLink(e, Rotas.ChavesVenda)} icon={<AiOutlineDollar />}>
-                        Registro de Vendas
+                    <Menu.Item key="Chaves.Copia" onClick={(e) => HandleClickLink(e, Rotas.ChavesCopia)} icon={<AiOutlineDollar />}>
+                        Cópias de Chaves
+                    </Menu.Item>
+                    <Menu.Item key="Chaves.Descarte" onClick={(e) => HandleClickLink(e, Rotas.ChavesDescarte)} icon={<AiOutlineDownSquare />}>
+                        Descarte de Chaves
                     </Menu.Item>
                     <SubMenu key="Estoque" icon={<AiOutlineFileDone />} title="Estoque">
                         <Menu.Item key="Estoque.Atualizar" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoqueAtualizar)} >

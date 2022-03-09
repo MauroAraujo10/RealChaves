@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 import { Modal } from 'antd';
+import { BiSave } from "react-icons/bi";
 
 class YesOrNoModal extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        };
-    }
 
     render() {
         const { title, text, visible, onClose, onOk } = this.props;
@@ -17,7 +12,14 @@ class YesOrNoModal extends Component {
                 title={title}
                 visible={visible}
                 onCancel={onClose}
-                onOk={onOk}>
+                onOk={onOk}
+                okText={
+                    <>
+                        <BiSave className="mr-2" size={16} />
+                        Salvar
+                    </>
+                }
+            >
                 <p>{text}</p>
             </Modal>
         );

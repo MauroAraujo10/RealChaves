@@ -4,4 +4,5 @@ export default{
     Servicos: 'Servicos',
     Vendas: 'Vendas',
     Estoque: 'Estoque',
+    Descarte: 'Descarte'
 }

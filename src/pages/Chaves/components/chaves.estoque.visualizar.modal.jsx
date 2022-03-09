@@ -11,7 +11,8 @@ class ChavesEstoqueVisualizar extends Component {
         }
 
         const { title, visible, onClose } = this.props;
-        const { chavesEstoque, quantidadeTotal, preco } = this.props;
+        // const { quantidadeTotal, preco } = this.props;
+        const { chavesEstoque } = this.props;
 
         return (
             <Modal

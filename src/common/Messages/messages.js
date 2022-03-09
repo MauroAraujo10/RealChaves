@@ -20,8 +20,11 @@ export const messages = {
     excluirRegistro: (valor) => {
         return `Deseja realmente excluir este ${valor} ?`
     },
-    quantidadeIncorreta: ()=> {
+    quantidadeIncorreta: () => {
         return 'Não foi possivel realizar a venda, pois a quantidade vendida é maior que o estoque';
+    },
+    estoqueIncorreto: () => {
+        return 'Não foi possivel realizar esta operação, pois a quantidade descartada é maior que o estoque';
     },
     CampoVazio: (valor) =>{
         return `Campo ${valor} não pode estar vazio !`

@@ -5,6 +5,7 @@ import { messages } from '../../../common/Messages/messages';
 import { toast } from "react-toastify";
 
 import service from '../service/chave.service';
+import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 import moment from 'moment';
 
 import Plana from '../assets/Plana.jpg';
@@ -85,7 +86,7 @@ class ChavesEditModal extends Component {
             <Modal
                 visible={visible}
                 onCancel={onClose}
-                onOk={submitForm}
+                footer={null}
                 destroyOnClose
             >
                 <h2 className="t-center">
@@ -95,6 +96,7 @@ class ChavesEditModal extends Component {
                 <Form
                     initialValues={chaveSelecionada}
                     layout="vertical"
+                    onFinish={submitForm}
                 >
                     <Row>
                         <Col span={24}>
@@ -216,6 +218,10 @@ class ChavesEditModal extends Component {
                         </Col>
                     </Row>
 
+                    <BotaoCadastrar
+                        possuiCancelar
+                        funcaoCancelar={onClose}
+                    />
                 </Form>
             </Modal>
         );

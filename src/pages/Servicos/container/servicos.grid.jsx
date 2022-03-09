@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 
 import service from '../../../service';
 import servicosService from '../service/servicos.service';
+import tabelas from '../../../common/Messages/tabelas';
 
 import TotalRegistros from '../../../common/components/TotalRegistros/TotalRegistros';
 import ServicosEditModal from '../components/servicos.edit.modal';
@@ -28,7 +29,7 @@ class servicosGrid extends Component {
     }
 
     componentDidMount() {
-        service.app.ref('Servicos').on('value', (snapshot) => {
+        service.app.ref(tabelas.Servicos).on('value', (snapshot) => {
             let servicos = [];
             snapshot.forEach((x) => {
                 servicos.push({

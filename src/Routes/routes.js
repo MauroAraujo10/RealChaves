@@ -8,7 +8,8 @@ import Erro from '../pages/Erro';
 
 import ChavesGrid from '../pages/Chaves/container/chave.grid';
 import ChavesNew from '../pages/Chaves/container/chave.new';
-import ChavesVenda from '../pages/Chaves/container/chave.venda';
+import ChavesCopia from '../pages/Chaves/container/chave.venda';
+import ChavesDescarte from '../pages/Chaves/container/chave.descarte';
 
 import ChaveEstoqueAtualizar from '../pages/Chaves/container/estoque/chave.estoque.atualizar';
 import ChaveEstoquePedido from '../pages/Chaves/container/estoque/chave.estoque.pedido';
@@ -36,7 +37,8 @@ export default function Routes() {
 
                     <Route exact path={Rotas.Chaves} component={ChavesGrid} />
                     <Route exact path={Rotas.ChavesNew} component={ChavesNew} />
-                    <Route exact path={Rotas.ChavesVenda} component={ChavesVenda} />
+                    <Route exact path={Rotas.ChavesCopia} component={ChavesCopia} />
+                    <Route exact path={Rotas.ChavesDescarte} component={ChavesDescarte} />
 
                     <Route exact path={Rotas.ChavesEstoqueAtualizar} component={ChaveEstoqueAtualizar} />
                     <Route exact path={Rotas.ChavesEstoquePedido} component={ChaveEstoquePedido} />

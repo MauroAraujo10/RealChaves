@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Form, Input, DatePicker, Switch, Breadcrumb, Button } from 'antd';
+import { Form, Input, DatePicker, Switch, Breadcrumb } from 'antd';
 import { Row, Col } from 'antd';
 import { messages } from '../../../common/Messages/messages';
 import { Rotas } from '../../../Routes/rotas';
@@ -140,7 +140,7 @@ class AlicatesForm extends Component {
                         </Col>
                     </Row>
 
-                    <BotaoCadastar />
+                    <BotaoCadastar/>
                 </Form>
             </div>
         );

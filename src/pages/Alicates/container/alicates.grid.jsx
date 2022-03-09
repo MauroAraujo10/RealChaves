@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 
 import alicateService from '../service/alicates.service';
 import service from '../../../service';
+import tabelas from '../../../common/Messages/tabelas';
 
 import AlicateEditModal from '../components/alicates.edit.modal';
 import TotalRegistros from '../../../common/components/TotalRegistros/TotalRegistros';
@@ -30,7 +31,7 @@ class Grid extends Component {
     }
 
     componentDidMount() {
-        service.app.ref('Alicates').on('value', (snapshot) => {
+        service.app.ref(tabelas.Alicates).on('value', (snapshot) => {
             let alicate = [];
             snapshot.forEach((x) => {
                 alicate.push({

@@ -5,6 +5,7 @@ import { Rotas } from '../../../../Routes/rotas';
 import service from '../../../../service';
 import TotalRegistros from '../../../../common/components/TotalRegistros/TotalRegistros';
 import ChavesEstoqueVisualizarModal from '../../components/chaves.estoque.visualizar.modal';
+import tabelas from '../../../../common/Messages/tabelas';
 
 import { Table, Breadcrumb, Input, Space, Button, Tooltip } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
@@ -22,7 +23,7 @@ class EstoqueHistorico extends Component {
     }
 
     componentDidMount() {
-        service.app.ref('Estoque').on('value', (snapshot) => {
+        service.app.ref(tabelas.Estoque).on('value', (snapshot) => {
             let estoqueHistorico = [];
             snapshot.forEach((x) => {
                 estoqueHistorico.push({
@@ -88,7 +89,7 @@ class EstoqueHistorico extends Component {
 
     handleVisualizar(id) {
         let chavesEstoque = [];
-        service.app.ref('Estoque').child(id).child('Chaves').on('value', (snapshot) => {
+        service.app.ref(tabelas.Estoque).child(id).child('Chaves').on('value', (snapshot) => {
             snapshot.forEach((x) => {
                 chavesEstoque.push({
                     Id: x.key,
@@ -117,7 +118,7 @@ class EstoqueHistorico extends Component {
             {
                 title: 'Ações', width: '5%', render: (status, x) => (
                     <>
-                        <Tooltip title="Visualizar Pedido">
+                        <Tooltip title="Visualizar">
                             <AiOutlineEye
                                 size={20}
                                 onClick={() => this.handleVisualizar(x.Id)}
@@ -153,7 +154,8 @@ class EstoqueHistorico extends Component {
                 <div className="container">
 
                     <TotalRegistros
-                        numeroRegistros={this.state.estoqueHistorico.length} />
+                        numeroRegistros={this.state.estoqueHistorico.length} 
+                    />
 
                     <Table
                         className="Grid"

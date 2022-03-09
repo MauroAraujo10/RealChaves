@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Form, DatePicker, Breadcrumb, Button } from 'antd';
 import { Row, Col } from 'antd'
-import { ResponsiveContainer, BarChart, Bar, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import { Rotas } from '../../../Routes/rotas';
 import service from '../../../service';
+import tabelas from '../../../common/Messages/tabelas';
 import { AiOutlineHome, AiOutlineFileSearch } from "react-icons/ai";
 
 class EstatisticaChaves extends Component {
@@ -19,7 +20,7 @@ class EstatisticaChaves extends Component {
     }
 
     componentDidMount() {
-        service.app.ref('Vendas').on('value', (snapshot) => {
+        service.app.ref(tabelas.Vendas).on('value', (snapshot) => {
             let data = [];
             let dataOriginal = [];
 

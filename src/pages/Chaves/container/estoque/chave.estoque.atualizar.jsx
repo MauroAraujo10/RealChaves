@@ -8,6 +8,7 @@ import { messages } from '../../../../common/Messages/messages';
 import service from '../../../../service';
 import ChavesEstoquePedidoModal from '../../components/chaves.estoque.pedido.modal';
 import TotalRegistros from '../../../../common/components/TotalRegistros/TotalRegistros';
+import tabelas from '../../../../common/Messages/tabelas';
 
 import { SearchOutlined } from '@ant-design/icons';
 import { AiOutlineHome, AiOutlineShoppingCart, AiOutlineDoubleLeft, AiOutlinePlus, AiOutlineMinus, AiOutlineDelete } from "react-icons/ai";
@@ -39,7 +40,7 @@ class Atualizar extends Component {
   }
 
   componentDidMount() {
-    service.app.ref('Chave').on('value', (snapshot) => {
+    service.app.ref(tabelas.Chave).on('value', (snapshot) => {
       let chaves = [];
       snapshot.forEach((x) => {
         chaves.push({

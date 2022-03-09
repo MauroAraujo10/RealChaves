@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
+import tabelas from '../../../common/Messages/tabelas';
 import service from '../../../service'
 import serviceVendas from '../service/estatisticas.service';
 
@@ -13,7 +14,7 @@ class Vendas extends Component {
 
     componentDidMount = async () => {
         console.log(service);
-        await service.app.ref('Vendas').once('value', (snapshot) => {
+        await service.app.ref(tabelas.Vendas).once('value', (snapshot) => {
 
             let vendas = [];
             snapshot.forEach((x) => {

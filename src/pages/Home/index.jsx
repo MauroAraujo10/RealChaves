@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Row, Col } from 'antd';
 import moment from 'moment';
+import tabelas from '../../common/Messages/tabelas';
 
 import service from '../../service';
 import { FcFaq, FcKindle, FcSupport } from "react-icons/fc";
@@ -20,7 +21,7 @@ const Home = () => {
     }, []);
 
     function getChaves() {
-        service.app.ref('Vendas').once('value', (snapshot) => {
+        service.app.ref(tabelas.Vendas).once('value', (snapshot) => {
             let numeroChavesVendidasHoje = 0;
             snapshot.forEach((x) => {
                 if (x.val().Data === dataAtual)
@@ -31,7 +32,7 @@ const Home = () => {
     }
 
     function getAlicates() {
-        service.app.ref('Alicates').once('value', (snapshot) => {
+        service.app.ref(tabelas.Alicates).once('value', (snapshot) => {
             let numeroAlicatesAmoladosHoje = 0;
             snapshot.forEach((x) => {
                 if (x.val().Data === dataAtual)
@@ -42,7 +43,7 @@ const Home = () => {
     }
 
     function getServicos() {
-        service.app.ref('Servicos').once('value', (snapshot) => {
+        service.app.ref(tabelas.Servicos).once('value', (snapshot) => {
             let numeroServicosRealizadosHoje = 0;
             snapshot.forEach((x) => {
                 if (x.val().Data === dataAtual)

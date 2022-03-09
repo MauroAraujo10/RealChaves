@@ -14,6 +14,7 @@ import TotalRegistros from '../../../common/components/TotalRegistros/TotalRegis
 
 import service from '../../../service';
 import chaveService from '../service/chave.service';
+import tabelas from '../../../common/Messages/tabelas';
 
 import { SearchOutlined } from '@ant-design/icons';
 import { AiOutlineHome, AiOutlineDownSquare, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
@@ -29,16 +30,15 @@ class Grid extends Component {
             modalVendaVisible: false,
             modalDescarteVisible: false,
             modalExclusaoVisible: false,
-            idExclusao: undefined,
+            idSelecionado: undefined,
             chaveSelecionada: [],
             dataCadastro: '',
         };
-        this.edit = this.edit.bind(this);
-        this.delete = this.delete.bind(this);
+        this.funcaoAbrirModal = this.funcaoAbrirModal.bind(this);
     }
 
     componentDidMount() {
-        service.app.ref('Chave').on('value', (snapshot) => {
+        service.app.ref(tabelas.Chave).on('value', (snapshot) => {
             let chaves = [];
             snapshot.forEach((x) => {
                 chaves.push({
@@ -63,7 +63,6 @@ class Grid extends Component {
                         this.searchInput = node;
                     }}
                     placeholder={`Filtrar ${dataIndex}`}
-                    onFocus
                     onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                     onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
                     style={{ marginBottom: 8, display: 'block' }}
@@ -104,32 +103,41 @@ class Grid extends Component {
         this.setState({ searchText: '' });
     };
 
-    edit(dto) {
-        let dataSplit = dto.Data.split('/');
-        dto.dataCadastro = `${dataSplit[1]}/${dataSplit[0]}/${dataSplit[2]}`;
-
-        this.setState({
-            modalEditVisible: true,
-            chaveSelecionada: dto
-        })
-    }
-
-    delete(id) {
-        this.setState({
-            modalExclusaoVisible: true,
-            idExclusao: id
-        });
-    }
-
-    excluirChave(id) {
+    deleteChave(id) {
         chaveService.delete(id)
             .then(() => {
                 toast.success(messages.exclusaoSucesso());
-                this.setState({ modalExclusaoVisible: false });
+                this.setState({ modalExclusaoVisible: false, idSelecionado: undefined });
             })
             .catch(() => {
                 toast.error(messages.exclusaoErro());
             })
+    }
+
+    funcaoAbrirModal(dto, funcionalidade) {
+        switch (funcionalidade) {
+            case 'Copia':
+                this.setState({ modalVendaVisible: true, chaveSelecionada: dto })
+                break;
+
+            case 'Descarte':
+                this.setState({ modalDescarteVisible: true, chaveSelecionada: dto })
+                break;
+
+            case 'Editar':
+                let dataSplit = dto.Data.split('/');
+                dto.dataCadastro = `${dataSplit[1]}/${dataSplit[0]}/${dataSplit[2]}`;
+
+                this.setState({ modalEditVisible: true, chaveSelecionada: dto })
+                break;
+
+            case 'Exclusao':
+                this.setState({ modalExclusaoVisible: true, idSelecionado: Number(dto.Id) })
+                break;
+
+            default:
+                break;
+        }
     }
 
     render() {
@@ -141,34 +149,34 @@ class Grid extends Component {
             { title: 'Tipo', dataIndex: 'Tipo', key: 'Tipo', ...this.getColumnSearchProps('Tipo'), width: '10%' },
             { title: 'Data de Cadastro', dataIndex: 'Data', key: 'Data', ...this.getColumnSearchProps('Data'), width: '15%' },
             {
-                title: 'Ações', width: '10%', render: (status, x) => (
+                title: 'Ações', width: '10%', render: (status, dto) => (
                     <>
                         <Tooltip title="Vender">
                             <AiOutlineDollar
                                 className="mr-3 iconVendaChave"
                                 size={iconSize}
-                                onClick={() => { this.setState({ modalVendaVisible: true }) }}
+                                onClick={() => { this.funcaoAbrirModal(dto, 'Copia') }}
                             />
                         </Tooltip>
-                        <Tooltip title="Descartar Chave">
+                        <Tooltip title="Descartar">
                             <AiOutlineDownSquare
                                 className="mr-3 iconDescarte"
                                 size={iconSize}
-                                onClick={() => {this.setState({modalDescarteVisible: true})}}
+                                onClick={() => { this.funcaoAbrirModal(dto, 'Descarte') }}
                             />
                         </Tooltip>
                         <Tooltip title="Editar">
                             <AiOutlineEdit
                                 className="mr-3 iconEdit"
                                 size={iconSize}
-                                onClick={() => this.edit(x)}
+                                onClick={() => { this.funcaoAbrirModal(dto, 'Editar') }}
                             />
                         </Tooltip>
                         <Tooltip title="Deletar">
                             <AiOutlineDelete
                                 className="iconExcluir"
                                 size={iconSize}
-                                onClick={() => this.delete(x.Id)}
+                                onClick={() => { this.funcaoAbrirModal(dto, 'Exclusao') }}
                             />
                         </Tooltip>
                     </>
@@ -217,6 +225,7 @@ class Grid extends Component {
                 />
                 <ChavesDescarteModal
                     visible={this.state.modalDescarteVisible}
+                    chaveSelecionada={this.state.chaveSelecionada}
                     onClose={() => this.setState({ modalDescarteVisible: false })}
                 />
                 <YesOrNoModal
@@ -224,7 +233,7 @@ class Grid extends Component {
                     text={'Deseja realmente excluir esta chave ?'}
                     visible={this.state.modalExclusaoVisible}
                     onClose={() => this.setState({ modalExclusaoVisible: false })}
-                    onOk={() => this.excluirChave(this.state.idExclusao)}
+                    onOk={() => this.deleteChave(this.state.idSelecionado)}
                 />
             </div >
         );
