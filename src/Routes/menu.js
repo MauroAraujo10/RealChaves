@@ -46,90 +46,88 @@ export default function Routes() {
     };
 
     return (
-        <>
-            <Menu
-                mode="inline"
-                style={{
-                    width: '260px',
-                    boxShadow: '5px 2px 3px rgb(0 0 0 / 12%), 0 1px 2px rgb(0 0 0 / 24%)'
-                }}
-                theme={theme}
-                openKeys={openKeys}
-                onOpenChange={onOpenChange}>
-                <Menu.Item key="Home" onClick={(e) => HandleClickLink(e, Rotas.Home)} icon={<AiOutlineHome />}>
-                    Início
+        <Menu
+            mode="inline"
+            style={{
+                width: '260px',
+                boxShadow: '5px 2px 3px rgb(0 0 0 / 12%), 0 1px 2px rgb(0 0 0 / 24%)'
+            }}
+            theme={theme}
+            openKeys={openKeys}
+            onOpenChange={onOpenChange}>
+            <Menu.Item key="Home" onClick={(e) => HandleClickLink(e, Rotas.Home)} icon={<AiOutlineHome />}>
+                Início
                 </Menu.Item>
-                <SubMenu key="Chaves" icon={<VscKey />} title="Chaves">
-                    <Menu.Item key="Chaves.Grid" onClick={(e) => HandleClickLink(e, Rotas.Chaves)} icon={<AiOutlineInsertRowBelow />}>
-                        Tabela
+            <SubMenu key="Chaves" icon={<VscKey />} title="Chaves">
+                <Menu.Item key="Chaves.Grid" onClick={(e) => HandleClickLink(e, Rotas.Chaves)} icon={<AiOutlineInsertRowBelow />}>
+                    Tabela
                     </Menu.Item>
-                    <Menu.Item key="Chaves.New" onClick={(e) => HandleClickLink(e, Rotas.ChavesNew)} icon={<AiOutlinePlusCircle />}>
-                        Cadastro
+                <Menu.Item key="Chaves.New" onClick={(e) => HandleClickLink(e, Rotas.ChavesNew)} icon={<AiOutlinePlusCircle />}>
+                    Cadastro
                     </Menu.Item>
-                    <Menu.Item key="Chaves.Copia" onClick={(e) => HandleClickLink(e, Rotas.ChavesCopia)} icon={<AiOutlineDollar />}>
-                        Cópias de Chaves
+                <Menu.Item key="Chaves.Copia" onClick={(e) => HandleClickLink(e, Rotas.ChavesCopia)} icon={<AiOutlineDollar />}>
+                    Cópias de Chaves
                     </Menu.Item>
-                    <Menu.Item key="Chaves.Descarte" onClick={(e) => HandleClickLink(e, Rotas.ChavesDescarte)} icon={<AiOutlineDownSquare />}>
-                        Descarte de Chaves
+                <Menu.Item key="Chaves.Descarte" onClick={(e) => HandleClickLink(e, Rotas.ChavesDescarte)} icon={<AiOutlineDownSquare />}>
+                    Descarte de Chaves
                     </Menu.Item>
-                    <SubMenu key="Estoque" icon={<AiOutlineFileDone />} title="Estoque">
-                        <Menu.Item key="Estoque.Atualizar" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoqueAtualizar)} >
-                            Atualizar Estoque
+                <SubMenu key="Estoque" icon={<AiOutlineFileDone />} title="Estoque">
+                    <Menu.Item key="Estoque.Atualizar" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoqueAtualizar)} >
+                        Atualizar Estoque
                         </Menu.Item>
-                        <Menu.Item key="Estoque.Pedido" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoquePedido)} >
-                            Pedido de Chave
+                    <Menu.Item key="Estoque.Pedido" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoquePedido)} >
+                        Pedido de Chave
                         </Menu.Item>
-                        <Menu.Item key="Estoque.Historico" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoqueHistorico)} >
-                            Histórico
-                        </Menu.Item>
-                    </SubMenu>
-                </SubMenu>
-                <SubMenu key="Alicates" icon={<AiOutlineFork />} title="Alicates">
-                    <Menu.Item key="Alicates.Grid" onClick={(e) => HandleClickLink(e, Rotas.Alicates)} icon={<AiOutlineInsertRowBelow />}>
-                        Tabela
-                    </Menu.Item>
-                    <Menu.Item key="Alicates.New" onClick={(e) => HandleClickLink(e, Rotas.AlicatesNew)} icon={<AiOutlinePlusSquare />}>
-                        Cadastro
-                    </Menu.Item>
-                    <Menu.Item key="Alicates.Historico" onClick={(e) => HandleClickLink(e, Rotas.AlicatesHistorico)} icon={<AiOutlineFileDone />}>
+                    <Menu.Item key="Estoque.Historico" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoqueHistorico)} >
                         Histórico
-                    </Menu.Item>
+                        </Menu.Item>
                 </SubMenu>
-                <SubMenu key="Servicos" icon={<AiOutlineTool />} title="Serviços">
-                    <Menu.Item key="Servicos.Grid" onClick={(e) => HandleClickLink(e, Rotas.Servico)} icon={<AiOutlineInsertRowBelow />}>
-                        Tabela
+            </SubMenu>
+            <SubMenu key="Alicates" icon={<AiOutlineFork />} title="Alicates">
+                <Menu.Item key="Alicates.Grid" onClick={(e) => HandleClickLink(e, Rotas.Alicates)} icon={<AiOutlineInsertRowBelow />}>
+                    Tabela
                     </Menu.Item>
-                    <Menu.Item key="Servicos.New" onClick={(e) => HandleClickLink(e, Rotas.ServicoNew)} icon={<AiOutlinePlusSquare />}>
-                        Cadastro
+                <Menu.Item key="Alicates.New" onClick={(e) => HandleClickLink(e, Rotas.AlicatesNew)} icon={<AiOutlinePlusSquare />}>
+                    Cadastro
                     </Menu.Item>
-                    <Menu.Item key="Servicos.Historico" onClick={(e) => HandleClickLink(e, Rotas.ServicoHistorico)} icon={<AiOutlineFileDone />}>
-                        Histórico
+                <Menu.Item key="Alicates.Historico" onClick={(e) => HandleClickLink(e, Rotas.AlicatesHistorico)} icon={<AiOutlineFileDone />}>
+                    Histórico de Vendas
                     </Menu.Item>
-                </SubMenu>
-                <SubMenu key="Estatisticas" icon={<AiOutlineLineChart />} title="Estatisticas">
-                    <Menu.Item key="1" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasChave)}>
-                        Chaves
+            </SubMenu>
+            <SubMenu key="Servicos" icon={<AiOutlineTool />} title="Serviços">
+                <Menu.Item key="Servicos.Grid" onClick={(e) => HandleClickLink(e, Rotas.Servico)} icon={<AiOutlineInsertRowBelow />}>
+                    Tabela
                     </Menu.Item>
-                    <Menu.Item key="2" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasAlicates)}>
-                        Alicates
+                <Menu.Item key="Servicos.New" onClick={(e) => HandleClickLink(e, Rotas.ServicoNew)} icon={<AiOutlinePlusSquare />}>
+                    Cadastro
                     </Menu.Item>
-                    <Menu.Item key="3" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasServicos)}>
-                        Serviços
+                <Menu.Item key="Servicos.Historico" onClick={(e) => HandleClickLink(e, Rotas.ServicoHistorico)} icon={<AiOutlineFileDone />}>
+                    Histórico de Vendas
                     </Menu.Item>
-                </SubMenu>
-                <SubMenu key="Configuracoes" icon={<AiOutlineSetting />} title={"Configurações"}>
-                    <Menu.Item key="Theme">
-                        Tema
+            </SubMenu>
+            <SubMenu key="Estatisticas" icon={<AiOutlineLineChart />} title="Estatisticas">
+                <Menu.Item key="1" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasChave)}>
+                    Chaves
+                    </Menu.Item>
+                <Menu.Item key="2" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasAlicates)}>
+                    Alicates
+                    </Menu.Item>
+                <Menu.Item key="3" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasServicos)}>
+                    Serviços
+                    </Menu.Item>
+            </SubMenu>
+            <SubMenu key="Configuracoes" icon={<AiOutlineSetting />} title={"Configurações"}>
+                <Menu.Item key="Theme">
+                    Tema
                         <div className="f-right">
-                            <Switch
-                                checkedChildren="Dark"
-                                unCheckedChildren="Light"
-                                onChange={changeTheme}>
-                            </Switch>
-                        </div>
-                    </Menu.Item>
-                </SubMenu>
-            </Menu>
-        </>
+                        <Switch
+                            checkedChildren="Dark"
+                            unCheckedChildren="Light"
+                            onChange={changeTheme}>
+                        </Switch>
+                    </div>
+                </Menu.Item>
+            </SubMenu>
+        </Menu>
     );
 }

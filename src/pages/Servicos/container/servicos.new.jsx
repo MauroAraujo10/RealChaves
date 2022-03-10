@@ -28,6 +28,7 @@ class ServicosNew extends Component {
             service.post(this.state)
                 .then(() => {
                     toast.success(messages.cadastradoSucesso('Serviço'));
+                    this.props.history.replace(Rotas.Servico);
                 })
                 .catch(() => {
                     toast.error(messages.cadastradoErro('Serviço'));

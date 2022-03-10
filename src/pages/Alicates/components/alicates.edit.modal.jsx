@@ -41,7 +41,6 @@ class AlicatesEditModal extends Component {
             service.update(dto)
                 .then(() => {
                     toast.success(messages.EditadoSucesso('Alicate'));
-                    this.setState({ Pago: undefined })
                     this.props.onClose();
                 })
                 .catch(() => {
@@ -131,7 +130,8 @@ class AlicatesEditModal extends Component {
                                     type="number"
                                     min={0}
                                     max={1000}
-                                    onChange={(e) => this.setState({ Valor: e.target.value })}
+                                    step="0.10"
+                                    onChange={(e) => this.setState({ Valor: parseFloat(e.target.value) })}
                                 />
                             </Form.Item>
                         </Col>

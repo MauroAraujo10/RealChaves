@@ -14,7 +14,7 @@ import ServicosEditModal from '../components/servicos.edit.modal';
 import YesOrNoModal from '../../../common/yesOrNoModal';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { AiOutlineHome, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineDollar, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
 class servicosGrid extends Component {
     constructor(props) {
@@ -26,6 +26,7 @@ class servicosGrid extends Component {
             modalDeleteVisible: false,
             idServico: undefined
         };
+        this.funcaoAbrirModal = this.funcaoAbrirModal.bind(this);
     }
 
     componentDidMount() {
@@ -92,21 +93,26 @@ class servicosGrid extends Component {
         this.setState({ searchText: '' });
     };
 
-    edit(dto) {
-        let dataSplit = dto.Data.split('/');
-        dto.dataCadastro = `${dataSplit[1]}/${dataSplit[0]}/${dataSplit[2]}`;
+    funcaoAbrirModal(dto, funcionalidade) {
+        switch (funcionalidade) {
 
-        this.setState({
-            modalEditServicoVisible: true,
-            servicoSelecionado: dto
-        });
-    }
+            case 'Vender':
+                break;
 
-    delete(id) {
-        this.setState({
-            modalDeleteVisible: true,
-            idServico: id
-        });
+            case 'Editar':
+                let dataSplit = dto.Data.split('/');
+                dto.dataCadastro = `${dataSplit[1]}/${dataSplit[0]}/${dataSplit[2]}`;
+
+                this.setState({ modalEditServicoVisible: true, servicoSelecionado: dto });
+                break;
+
+            case 'Deletar':
+                this.setState({ modalDeleteVisible: true, idServico: dto.Id });
+                break;
+
+            default:
+                break;
+        }
     }
 
     excluirServico(id) {
@@ -124,24 +130,31 @@ class servicosGrid extends Component {
         const iconSize = 20;
         const columns = [
             { title: 'Serviço', dataIndex: 'Servico', key: 'Servico', ...this.getColumnSearchProps('Servico'), width: '60%' },
-            { title: 'Data', dataIndex: 'Data', key: 'Data', ...this.getColumnSearchProps('Data'), width: '10%' },
-            { title: 'Valor', dataIndex: 'Valor', key: 'Valor', ...this.getColumnSearchProps('Valor'), width: '10%' },
+            { title: 'Data do Serviço', dataIndex: 'Data', key: 'Data', ...this.getColumnSearchProps('Data'), width: '10%' },
+            { title: 'Valor (R$)', dataIndex: 'Valor', key: 'Valor', ...this.getColumnSearchProps('Valor'), width: '10%' },
             { title: 'Pago', dataIndex: 'Pago', key: 'Pago', ...this.getColumnSearchProps('Pago'), width: '10%' },
             {
-                title: 'Ações', width: '10%', render: (status, x) => (
+                title: 'Ações', width: '10%', render: (status, dto) => (
                     <>
-                        <Tooltip title="Editar Serviço">
+                        <Tooltip title="Vender">
+                            <AiOutlineDollar
+                                className="mr-3 iconVendaChave"
+                                size={iconSize}
+                                onClick={() => { this.funcaoAbrirModal(dto, 'Vender') }}
+                            />
+                        </Tooltip>
+                        <Tooltip title="Editar">
                             <AiOutlineEdit
                                 className="mr-3 iconEdit"
                                 size={iconSize}
-                                onClick={() => this.edit(x)}
+                                onClick={() => { this.funcaoAbrirModal(dto, 'Editar') }}
                             />
                         </Tooltip>
-                        <Tooltip title="Deletar Serviço">
+                        <Tooltip title="Deletar">
                             <AiOutlineDelete
                                 className="iconExcluir"
                                 size={iconSize}
-                                onClick={() => this.delete(x)}
+                                onClick={() => { this.funcaoAbrirModal(dto, 'Deletar') }}
                             />
                         </Tooltip>
                     </>

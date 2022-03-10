@@ -8,7 +8,7 @@ import Erro from '../pages/Erro';
 
 import ChavesGrid from '../pages/Chaves/container/chave.grid';
 import ChavesNew from '../pages/Chaves/container/chave.new';
-import ChavesCopia from '../pages/Chaves/container/chave.venda';
+import ChavesCopia from '../pages/Chaves/container/chave.copia';
 import ChavesDescarte from '../pages/Chaves/container/chave.descarte';
 
 import ChaveEstoqueAtualizar from '../pages/Chaves/container/estoque/chave.estoque.atualizar';

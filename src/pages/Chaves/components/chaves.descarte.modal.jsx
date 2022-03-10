@@ -17,7 +17,6 @@ class ChavesDescarteModal extends Component {
             IdChave: undefined,
             Motivo: Descarte.Quebrou,
             QuantidadeDescartada: 0,
-            Motivo: undefined,
         };
         this.submitForm = this.submitForm.bind(this);
     }

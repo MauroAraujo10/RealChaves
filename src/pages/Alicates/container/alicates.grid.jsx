@@ -14,7 +14,7 @@ import TotalRegistros from '../../../common/components/TotalRegistros/TotalRegis
 import YesOrNoModal from '../../../common/yesOrNoModal';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { AiOutlineHome, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineEdit, AiOutlineDelete, AiOutlineDollar } from "react-icons/ai";
 
 class Grid extends Component {
     constructor(props) {
@@ -26,8 +26,7 @@ class Grid extends Component {
             modalDeleteVisible: false,
             modalEditVisible: false
         };
-        this.edit = this.edit.bind(this);
-        this.delete = this.delete.bind(this);
+        this.funcaoAbrirModal = this.funcaoAbrirModal.bind(this);
     }
 
     componentDidMount() {
@@ -97,21 +96,25 @@ class Grid extends Component {
         this.setState({ searchText: '' });
     };
 
-    edit(dto) {
-        let dataSplit = dto.Data.split('/');
-        dto.dataCadastro = `${dataSplit[1]}/${dataSplit[0]}/${dataSplit[2]}`;
+    funcaoAbrirModal(dto, funcionalidade) {
+        switch (funcionalidade) {
 
-        this.setState({
-            modalEditVisible: true,
-            alicateSelecionado: dto
-        });
-    }
+            case 'Vender':
+                break;
 
-    delete(id) {
-        this.setState({
-            modalDeleteVisible: true,
-            idAlicate: id
-        });
+            case 'Editar':
+                let dataSplit = dto.Data.split('/');
+                dto.dataCadastro = `${dataSplit[1]}/${dataSplit[0]}/${dataSplit[2]}`;
+
+                this.setState({ modalEditVisible: true, alicateSelecionado: dto });
+                break;
+
+            case 'Deletar':
+                this.setState({ modalDeleteVisible: true, idAlicate: dto.Id });
+                break;
+            default:
+                break;
+        }
     }
 
     excluirAlicate(id) {
@@ -135,20 +138,27 @@ class Grid extends Component {
             { title: 'Pago', dataIndex: 'Pago', key: 'Pago', ...this.getColumnSearchProps('Pago'), width: '7%' },
             { title: 'Data', dataIndex: 'Data', key: 'Data', ...this.getColumnSearchProps('Data'), width: '10%' },
             {
-                title: 'Ações', width: '10%', render: (status, x) => (
+                title: 'Ações', width: '10%', render: (status, dto) => (
                     <>
-                        <Tooltip title="Editar Alicate">
+                        <Tooltip title="Vender">
+                            <AiOutlineDollar
+                                className="mr-3 iconVendaChave"
+                                size={iconSize}
+                                onClick={() => { this.funcaoAbrirModal(dto, 'Copia') }}
+                            />
+                        </Tooltip>
+                        <Tooltip title="Editar">
                             <AiOutlineEdit
                                 className="mr-3 iconEdit"
                                 size={iconSize}
-                                onClick={() => this.edit(x)}
+                                onClick={() => this.funcaoAbrirModal(dto, 'Editar')}
                             />
                         </Tooltip>
-                        <Tooltip title="Deletar Alicate">
+                        <Tooltip title="Deletar">
                             <AiOutlineDelete
                                 className="iconExcluir"
                                 size={iconSize}
-                                onClick={() => this.delete(x.Id)}
+                                onClick={() => this.funcaoAbrirModal(dto, 'Deletar')}
                             />
                         </Tooltip>
                     </>

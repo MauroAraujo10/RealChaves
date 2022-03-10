@@ -38,7 +38,6 @@ class New extends Component {
     }
 
     render() {
-
         const { Option } = Select;
 
         const handleChange = (tipo) => {
@@ -67,6 +66,7 @@ class New extends Component {
             service.post(this.state)
                 .then(() => {
                     toast.success(messages.cadastradoSucesso('Chave'));
+                    this.props.history.replace(Rotas.Chaves);
                 })
                 .catch(() => {
                     toast.error(messages.cadastradoErro('Chave'));

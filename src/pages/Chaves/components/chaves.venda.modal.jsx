@@ -27,21 +27,20 @@ class modalVendaVisible extends Component {
         let novaQuantidade = this.props.chaveSelecionada.Quantidade - this.state.QuantidadeDeCopias;
 
         if (novaQuantidade < 0) {
-            toast.error(messages.quantidadeIncorreta());
+            toast.error(messages.estoqueIncorreto());
             return;
         }
 
-        copiaService.post(this.state, 'Chave')
+        copiaService.post(this.state)
             .then(() => {
-
                 this.props.chaveSelecionada.Quantidade = novaQuantidade;
                 chaveService.update(this.props.chaveSelecionada);
-                toast.success(messages.cadastradoSucesso('Venda'));
+                toast.success(messages.cadastradoSucesso('Cópia de Chave'));
 
                 this.props.onClose();
             })
             .catch(() => {
-                toast.error(messages.cadastradoErro('Venda'))
+                toast.error(messages.cadastradoErro('Cópia de Chave'))
             });
     }
 
@@ -83,6 +82,7 @@ class modalVendaVisible extends Component {
                             >
                                 <Input
                                     type="number"
+                                    placeholder="quantidade"
                                     min="0"
                                     onChange={(e) => this.setState({ QuantidadeDeCopias: Number(e.target.value) })}
                                 />
@@ -96,6 +96,7 @@ class modalVendaVisible extends Component {
                             >
                                 <Input
                                     type="number"
+                                    placeholder="Valor"
                                     min="0"
                                     step="0.10"
                                     onChange={(e) => this.setState({ Valor: parseFloat(e.target.value) })}

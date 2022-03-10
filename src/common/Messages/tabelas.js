@@ -3,6 +3,7 @@ export default{
     Alicates: 'Alicates',
     Servicos: 'Servicos',
     Vendas: 'Vendas',
+    CopiasChave: 'CopiasChave',
     Estoque: 'Estoque',
     Descarte: 'Descarte'
 }

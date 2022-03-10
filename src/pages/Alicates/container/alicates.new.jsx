@@ -30,6 +30,7 @@ class AlicatesForm extends Component {
             service.post(this.state)
                 .then(() => {
                     toast.success(messages.cadastradoSucesso('Alicate'));
+                    this.props.history.replace(Rotas.Alicates);
                 })
                 .catch(() => {
                     toast.error(messages.cadastradoErro('Alicate'));

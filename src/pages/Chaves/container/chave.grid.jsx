@@ -17,9 +17,7 @@ import chaveService from '../service/chave.service';
 import tabelas from '../../../common/Messages/tabelas';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { AiOutlineHome, AiOutlineDownSquare, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
-
-import { AiOutlineDollar } from 'react-icons/ai';
+import { AiOutlineHome, AiOutlineSnippets, AiOutlineDownSquare, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
 class Grid extends Component {
     constructor(props) {
@@ -151,8 +149,8 @@ class Grid extends Component {
             {
                 title: 'Ações', width: '10%', render: (status, dto) => (
                     <>
-                        <Tooltip title="Vender">
-                            <AiOutlineDollar
+                        <Tooltip title="Cópia de Chave">
+                            <AiOutlineSnippets
                                 className="mr-3 iconVendaChave"
                                 size={iconSize}
                                 onClick={() => { this.funcaoAbrirModal(dto, 'Copia') }}

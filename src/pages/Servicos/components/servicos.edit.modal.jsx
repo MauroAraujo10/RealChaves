@@ -72,7 +72,8 @@ class ServicoEditModal extends Component {
                                 <Input.TextArea
                                     showCount
                                     maxLength={200}
-                                    onChange={(e) => this.setState({ Servico: e.target.value })} 
+                                    rows={5}
+                                    onChange={(e) => this.setState({ Servico: e.target.value })}
                                 />
                             </Form.Item>
                         </Col>
@@ -104,7 +105,8 @@ class ServicoEditModal extends Component {
                                     type="number"
                                     min={0}
                                     max={1000}
-                                    onChange={(e) => this.setState({ Valor: e.target.value })}
+                                    step="0.10"
+                                    onChange={(e) => this.setState({ Valor: parseFloat(e.target.value) })}
                                 />
                             </Form.Item>
                         </Col>
