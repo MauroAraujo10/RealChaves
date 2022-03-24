@@ -12,7 +12,8 @@ import {
     AiOutlineSetting,
     AiOutlineDollar,
     AiOutlineFileDone,
-    AiOutlineDownSquare
+    AiOutlineDownSquare,
+    AiOutlineRead
 } from 'react-icons/ai';
 
 import { VscKey } from "react-icons/vsc";
@@ -83,26 +84,42 @@ export default function Routes() {
                         </Menu.Item>
                 </SubMenu>
             </SubMenu>
-            <SubMenu key="Alicates" icon={<AiOutlineFork />} title="Alicates">
-                <Menu.Item key="Alicates.Grid" onClick={(e) => HandleClickLink(e, Rotas.Alicates)} icon={<AiOutlineInsertRowBelow />}>
-                    Tabela
+
+            <SubMenu key="Amolacao" title="Amolação">
+                <Menu.Item key="Amolacao.Cadastro" onClick={(e) => HandleClickLink(e, Rotas.AmolacaoCadastro)}>
+                    Cadastro de Produto
                     </Menu.Item>
-                <Menu.Item key="Alicates.New" onClick={(e) => HandleClickLink(e, Rotas.AlicatesNew)} icon={<AiOutlinePlusSquare />}>
-                    Cadastro
-                    </Menu.Item>
-                <Menu.Item key="Alicates.Historico" onClick={(e) => HandleClickLink(e, Rotas.AlicatesHistorico)} icon={<AiOutlineFileDone />}>
-                    Histórico de Vendas
+                <Menu.Item key="Amolacao.Estoque" onClick={(e) => HandleClickLink(e, Rotas.AmolacaoEstoque)}>
+                    Estoque
                     </Menu.Item>
             </SubMenu>
+
+            <SubMenu key="Alicates" icon={<AiOutlineFork />} title="Alicates">
+                <SubMenu key="Alicates.Amolacao" icon={<AiOutlineFork />} title="Amolação">
+                    <Menu.Item key="Amolacao.Cadastro" onClick={(e) => HandleClickLink(e, Rotas.AlicatesAmolacaoCadastro)} >
+                        Cadastro
+                </Menu.Item>
+                    <Menu.Item key="Amolacao.Estoque" onClick={(e) => HandleClickLink(e, Rotas.AlicatesAmolacaoEstoque)} >
+                        Estoque
+                </Menu.Item>
+                </SubMenu>
+                
+                <SubMenu key="AlicatesVendaTabela" icon={<AiOutlineDollar />} title="Venda">
+                    <Menu.Item key="AlicatesVenda.Grid" onClick={(e) => HandleClickLink(e, Rotas.AlicatesVendaTabela)} >
+                        Tabela
+                    </Menu.Item>
+                </SubMenu>
+            </SubMenu>
+
+
+
+
             <SubMenu key="Servicos" icon={<AiOutlineTool />} title="Serviços">
                 <Menu.Item key="Servicos.Grid" onClick={(e) => HandleClickLink(e, Rotas.Servico)} icon={<AiOutlineInsertRowBelow />}>
                     Tabela
                     </Menu.Item>
                 <Menu.Item key="Servicos.New" onClick={(e) => HandleClickLink(e, Rotas.ServicoNew)} icon={<AiOutlinePlusSquare />}>
                     Cadastro
-                    </Menu.Item>
-                <Menu.Item key="Servicos.Historico" onClick={(e) => HandleClickLink(e, Rotas.ServicoHistorico)} icon={<AiOutlineFileDone />}>
-                    Histórico de Vendas
                     </Menu.Item>
             </SubMenu>
             <SubMenu key="Estatisticas" icon={<AiOutlineLineChart />} title="Estatisticas">
@@ -116,6 +133,20 @@ export default function Routes() {
                     Serviços
                     </Menu.Item>
             </SubMenu>
+
+            <SubMenu key="Relatorios" icon={<AiOutlineRead />} title="Relatórios">
+                <SubMenu key="RelatorioChave" title="Chave">
+                    <Menu.Item> Cópias</Menu.Item>
+                    <Menu.Item>Descarte</Menu.Item>
+                </SubMenu>
+                <SubMenu key="RelatorioAlicates" title="Alicates">
+                    <Menu.Item key="Amolacao.Historico" onClick={(e) => HandleClickLink(e, Rotas.RelatorioAlicateAmolacao)} >
+                        Amolação
+                </Menu.Item>
+                </SubMenu>
+
+            </SubMenu>
+
             <SubMenu key="Configuracoes" icon={<AiOutlineSetting />} title={"Configurações"}>
                 <Menu.Item key="Theme">
                     Tema
@@ -128,6 +159,6 @@ export default function Routes() {
                     </div>
                 </Menu.Item>
             </SubMenu>
-        </Menu>
+        </Menu >
     );
 }

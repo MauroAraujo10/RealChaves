@@ -1,28 +1,30 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { messages } from '../../../common/Messages/messages';
+import { messages } from '../../../../common/Messages/messages';
 import { Table, Breadcrumb, Input, Space, Button, Tooltip } from 'antd';
-import { Rotas } from '../../../Routes/rotas';
+import { Rotas } from '../../../../Routes/rotas'
 import { toast } from "react-toastify";
 
-import alicateService from '../service/alicates.service';
-import service from '../../../service';
-import tabelas from '../../../common/Messages/tabelas';
+import alicateService from '../../service/alicates.service';
+import service from '../../../../service';
+import tabelas from '../../../../common/Messages/tabelas';
 
-import AlicateEditModal from '../components/alicates.edit.modal';
-import TotalRegistros from '../../../common/components/TotalRegistros/TotalRegistros';
-import YesOrNoModal from '../../../common/yesOrNoModal';
+import AlicateBaixaModal from '../../components/alicates.baixa.modal';
+import AlicateEditModal from '../../components/alicates.edit.modal';
+import TotalRegistros from '../../../../common/components/TotalRegistros/TotalRegistros';
+import YesOrNoModal from '../../../../common/yesOrNoModal';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { AiOutlineHome, AiOutlineEdit, AiOutlineDelete, AiOutlineDollar } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineEdit, AiOutlineDelete, AiOutlineDownSquare } from "react-icons/ai";
 
-class Grid extends Component {
+class AlicateAmolacaoGrid extends Component {
     constructor(props) {
         super(props);
         this.state = {
             alicates: [],
             alicateSelecionado: [],
             idAlicate: undefined,
+            modalBaixaVisible: false,
             modalDeleteVisible: false,
             modalEditVisible: false
         };
@@ -38,6 +40,7 @@ class Grid extends Component {
                     key: x.key,
                     Marca: x.val().Marca,
                     Cliente: x.val().Cliente,
+                    Telefone: x.val().Telefone,
                     Quantidade: x.val().Quantidade,
                     Valor: x.val().Valor,
                     Pago: x.val().Pago ? 'Sim' : 'Não',
@@ -99,7 +102,8 @@ class Grid extends Component {
     funcaoAbrirModal(dto, funcionalidade) {
         switch (funcionalidade) {
 
-            case 'Vender':
+            case 'Baixa':
+                this.setState({modalBaixaVisible: true, alicateSelecionado: dto})
                 break;
 
             case 'Editar':
@@ -140,11 +144,11 @@ class Grid extends Component {
             {
                 title: 'Ações', width: '10%', render: (status, dto) => (
                     <>
-                        <Tooltip title="Vender">
-                            <AiOutlineDollar
-                                className="mr-3 iconVendaChave"
+                        <Tooltip title="Baixa">
+                            <AiOutlineDownSquare
+                                className="mr-3 iconDescarte"
                                 size={iconSize}
-                                onClick={() => { this.funcaoAbrirModal(dto, 'Copia') }}
+                                onClick={() => { this.funcaoAbrirModal(dto, 'Baixa') }}
                             />
                         </Tooltip>
                         <Tooltip title="Editar">
@@ -169,7 +173,7 @@ class Grid extends Component {
         return (
             <div className="mt-2">
                 <div className="t-center">
-                    <h1>Alicates Cadastrados</h1>
+                    <h1>Alicates em Estoque</h1>
                     <Breadcrumb>
                         <Breadcrumb.Item>
                             <Link to={Rotas.Home}>
@@ -178,7 +182,10 @@ class Grid extends Component {
                             </Link>
                         </Breadcrumb.Item>
                         <Breadcrumb.Item>
-                            Alicates
+                            Amolação
+                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>
+                            Estoque
                         </Breadcrumb.Item>
                     </Breadcrumb>
                 </div>
@@ -194,6 +201,12 @@ class Grid extends Component {
                         columns={columns}>
                     </Table>
                 </div>
+
+                <AlicateBaixaModal
+                    visible={this.state.modalBaixaVisible}
+                    onClose={() => this.setState({ modalBaixaVisible: false })}
+                    alicateSelecionado={this.state.alicateSelecionado}
+                />
 
                 <AlicateEditModal
                     visible={this.state.modalEditVisible}
@@ -213,4 +226,4 @@ class Grid extends Component {
     }
 }
 
-export default withRouter(Grid);
+export default withRouter(AlicateAmolacaoGrid);

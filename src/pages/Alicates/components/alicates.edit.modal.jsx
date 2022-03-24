@@ -15,12 +15,20 @@ class AlicatesEditModal extends Component {
         super(props);
         this.state = {
             Cliente: undefined,
+            Telefone: undefined,
             Marca: undefined,
             Quantidade: undefined,
             Valor: undefined,
             Data: undefined,
             Pago: undefined
         };
+        this.onChangeSwitchPago = this.onChangeSwitchPago.bind(this);
+    }
+
+    onChangeSwitchPago(value) {
+        this.setState({
+            Pago: value
+        })
     }
 
     render() {
@@ -30,6 +38,7 @@ class AlicatesEditModal extends Component {
         const submitForm = () => {
             const dto = {
                 Id: alicateSelecionado.Id,
+                Telefone: this.state.Telefone ?? alicateSelecionado.Telefone,
                 Cliente: this.state.Cliente ?? alicateSelecionado.Cliente,
                 Marca: this.state.Marca ?? alicateSelecionado.Marca,
                 Quantidade: this.state.Quantidade ?? alicateSelecionado.Quantidade,
@@ -64,20 +73,31 @@ class AlicatesEditModal extends Component {
                     layout="vertical"
                 >
 
-                    <Row>
-                        <Col span={24}>
+                    <Row gutter={12}>
+                        <Col span={18}>
                             <Form.Item
                                 name="Cliente"
                                 label="Cliente"
-                                rules={[
-                                    { required: true, message: messages.campoObrigatorio }
-                                ]}
+                                rules={[{ required: true, message: messages.campoObrigatorio }]}
                             >
                                 <Input
                                     type="text"
                                     autoFocus
                                     maxLength={50}
                                     onChange={(e) => this.setState({ Cliente: e.target.value })}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                            <Form.Item
+                                name="Telefone"
+                                label="Telefone"
+                                rules={[{ required: false, message: messages.campoObrigatorio }]}
+                            >
+                                <Input
+                                    type="text"
+                                    maxLength={15}
+                                    onChange={(e) => this.setState({ Telefone: e.target.value })}
                                 />
                             </Form.Item>
                         </Col>
@@ -120,6 +140,7 @@ class AlicatesEditModal extends Component {
                         </Col>
                         <Col span={6}>
                             <Form.Item
+                                id="Valor"
                                 name="Valor"
                                 label="Valor"
                                 rules={[
@@ -160,7 +181,7 @@ class AlicatesEditModal extends Component {
                                             :
                                             this.state.Pago
                                     }
-                                    onChange={(value) => this.setState({ Pago: value })}
+                                    onChange={(value) => this.onChangeSwitchPago(value)}
                                     checkedChildren={<CheckOutlined />}
                                     unCheckedChildren={<CloseOutlined />}
                                 />

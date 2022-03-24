@@ -2,27 +2,34 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Form, Input, DatePicker, Switch, Breadcrumb } from 'antd';
 import { Row, Col } from 'antd';
-import { messages } from '../../../common/Messages/messages';
-import { Rotas } from '../../../Routes/rotas';
+import { messages } from '../../../../common/Messages/messages';
+import { Rotas } from '../../../../Routes/rotas';
 import { toast } from "react-toastify";
 
-import service from '../service/alicates.service';
-import BotaoCadastar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
+import service from '../../service/alicates.service';
+import BotaoCadastar from '../../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
 import { AiOutlineHome } from "react-icons/ai";
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 
-class AlicatesForm extends Component {
+class AlicatesAmolacaoNew extends Component {
     constructor(props) {
         super(props);
         this.state = {
             Marca: '',
             Cliente: '',
+            Telefone: '',
             Quantidade: '',
             Valor: '',
             Data: '',
             Pago: false
         };
+        this.onChangePagoSwith = this.onChangePagoSwith.bind(this);
+    }
+
+    onChangePagoSwith(value) {
+        this.setState({ Pago: value, })
+        //ESSA FUNçÂO TEM QUE RESETAR O VALOR PAGO
     }
 
     render() {
@@ -46,24 +53,16 @@ class AlicatesForm extends Component {
                             <Link to={Rotas.Home}>
                                 <AiOutlineHome className="mr-2" />
                                 Início
-                        </Link>
+                            </Link>
                         </Breadcrumb.Item>
-                        <Breadcrumb.Item>
-                            <Link to={Rotas.Alicates}>
-                                Alicates
-                        </Link>
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item>
-                            <Link>
-                                Cadastrar Alicate
-                        </Link>
-                        </Breadcrumb.Item>
+                        <Breadcrumb.Item>Amolação</Breadcrumb.Item>
+                        <Breadcrumb.Item>Cadastro</Breadcrumb.Item>
                     </Breadcrumb>
                 </div>
 
                 <Form layout="vertical" onFinish={submitForm}>
                     <Row gutter={10}>
-                        <Col span={12}>
+                        <Col span={8}>
                             <Form.Item
                                 label="Cliente"
                                 name="Cliente"
@@ -76,7 +75,19 @@ class AlicatesForm extends Component {
                                 />
                             </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col span={4}>
+                            <Form.Item
+                                label="Telefone"
+                                name="Telefone">
+                                <Input
+                                    type="text"
+                                    placeholder="Telefone"
+                                    maxLength="15"
+                                    onChange={(e) => this.setState({ Telefone: e.target.value })}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={6}>
                             <Form.Item
                                 label="Marca"
                                 name="Marca"
@@ -89,6 +100,8 @@ class AlicatesForm extends Component {
                                 />
                             </Form.Item>
                         </Col>
+                    </Row>
+                    <Row gutter={10}>
                         <Col span={4}>
                             <Form.Item
                                 label="Data"
@@ -100,8 +113,6 @@ class AlicatesForm extends Component {
                                     value={this.state.data} />
                             </Form.Item>
                         </Col>
-                    </Row>
-                    <Row gutter={10}>
                         <Col span={4}>
                             <Form.Item
                                 label="Quantidade"
@@ -109,43 +120,45 @@ class AlicatesForm extends Component {
                                 rules={[{ required: true, message: messages.CampoObrigatorio }]}>
                                 <Input
                                     type="number"
-                                    placeholder="Quantidade"
-                                    min={0}
+                                    placeholder="0"
+                                    min={1}
                                     onChange={(e) => this.setState({ Quantidade: e.target.value })}
                                 />
                             </Form.Item>
                         </Col>
-                        <Col span={4}>
-                            <Form.Item
-                                label="Valor"
-                                name="Valor"
-                                rules={[{ required: true, message: messages.CampoObrigatorio }]}>
-                                <Input
-                                    type="number"
-                                    placeholder="Valor"
-                                    min={0}
-                                    onChange={(e) => this.setState({ Valor: e.target.value })}
-                                />
-                            </Form.Item>
-                        </Col>
-                        <Col span={1}>
+                        <Col span={2}>
                             <Form.Item
                                 label="Pago"
                                 name="Pago">
                                 <Switch
-                                    onChange={(value) => this.setState({ Pago: value })}
+                                    onChange={(value) => this.onChangePagoSwith(value)}
                                     checkedChildren={<CheckOutlined />}
                                     unCheckedChildren={<CloseOutlined />}
                                 />
                             </Form.Item>
                         </Col>
+                        <Col span={4}>
+                            {this.state.Pago &&
+                                <Form.Item
+                                    label="Valor pago"
+                                    name="Valor"
+                                    rules={[{ required: true, message: messages.CampoObrigatorio }]}>
+                                    <Input
+                                        type="number"
+                                        placeholder="Valor"
+                                        min={0}
+                                        step="0.10"
+                                        onChange={(e) => this.setState({ Valor: parseFloat(e.target.value) })}
+                                    />
+                                </Form.Item>
+                            }
+                        </Col>
                     </Row>
-
-                    <BotaoCadastar/>
+                    <BotaoCadastar />
                 </Form>
             </div>
         );
     }
 }
 
-export default withRouter(AlicatesForm);
+export default withRouter(AlicatesAmolacaoNew);

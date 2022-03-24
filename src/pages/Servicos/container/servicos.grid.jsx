@@ -96,9 +96,6 @@ class servicosGrid extends Component {
     funcaoAbrirModal(dto, funcionalidade) {
         switch (funcionalidade) {
 
-            case 'Vender':
-                break;
-
             case 'Editar':
                 let dataSplit = dto.Data.split('/');
                 dto.dataCadastro = `${dataSplit[1]}/${dataSplit[0]}/${dataSplit[2]}`;
@@ -136,13 +133,6 @@ class servicosGrid extends Component {
             {
                 title: 'Ações', width: '10%', render: (status, dto) => (
                     <>
-                        <Tooltip title="Vender">
-                            <AiOutlineDollar
-                                className="mr-3 iconVendaChave"
-                                size={iconSize}
-                                onClick={() => { this.funcaoAbrirModal(dto, 'Vender') }}
-                            />
-                        </Tooltip>
                         <Tooltip title="Editar">
                             <AiOutlineEdit
                                 className="mr-3 iconEdit"

@@ -33,7 +33,6 @@ class ChavesDescarteModal extends Component {
 
         await descarteService.post(this.state)
             .then(() => {
-
                 this.props.chaveSelecionada.Quantidade = novaQuantidade
                 chaveService.update(this.props.chaveSelecionada);
                 toast.success(messages.cadastradoSucesso('Descarte'));
