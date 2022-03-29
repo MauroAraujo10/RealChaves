@@ -31,6 +31,13 @@ code {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
+.tituloModal{
+  background: #eceff1;
+  padding: 10px;
+  margin-bottom: 1px solid #999;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
 svg:hover{
   cursor: pointer;
 }
@@ -51,8 +58,12 @@ svg:hover{
   margin-top: 20px;
 }
 
+.mr-1{
+  margin-right: 10px;
+}
+
 .mr-2{
-  margin-right: 5px;
+  margin-right: 20px;
 }
 
 .f-right{
@@ -104,6 +115,14 @@ svg:hover{
 .anticon-close{
   color: #FFF !important;
 }
+
+/* .anticon{
+  color: #000 !important;
+}
+
+.anticon :hover{
+  color: #888 !important;
+} */
 
 .color-white{
   color: #FFF !important;

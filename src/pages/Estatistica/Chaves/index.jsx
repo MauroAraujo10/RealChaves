@@ -50,7 +50,7 @@ class EstatisticaChaves extends Component {
                         <Breadcrumb>
                             <Breadcrumb.Item>
                                 <Link to={Rotas.Home}>
-                                    <AiOutlineHome className="mr-2" />
+                                    <AiOutlineHome className="mr-1" />
                                     Início
                                 </Link>
                             </Breadcrumb.Item>
@@ -70,7 +70,7 @@ class EstatisticaChaves extends Component {
                                 name="DataInicio"
                             >
                                 <DatePicker
-                                    className="mr-2"
+                                    className="mr-1"
                                     format="DD/MM/YYYY"
                                     onChange={(date, dateString) => this.setState({ DataInicio: date })}
                                     value={this.state.DataInicio}
@@ -93,7 +93,7 @@ class EstatisticaChaves extends Component {
 
                         <Col span={3}>
                             <Button type="success">
-                                <AiOutlineFileSearch className="mr-2" size={16} />
+                                <AiOutlineFileSearch className="mr-1" size={16} />
                                 Pesquisar
                             </Button>
                         </Col>

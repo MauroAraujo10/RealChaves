@@ -3,8 +3,9 @@ import { Row, Col } from 'antd';
 import { Modal, Form, Radio, DatePicker, Space, Input } from 'antd';
 import { messages } from '../../../common/Messages/messages';
 import { toast } from "react-toastify";
-
 import { Descarte } from '../../../common/Messages/descarte'
+
+import TituloModal from '../../../common/components/TituloModal/TituloModal';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
 import descarteService from '../service/descarte.service';
@@ -54,12 +55,10 @@ class ChavesDescarteModal extends Component {
                 footer={null}
                 destroyOnClose
             >
-                <div className="t-center">
-                    <h2 className="m-0">Descarte de Chave</h2>
-                    <h5 style={{ color: 'gray' }}>Selecione o motivo pelo qual esta chave deve ser descartada</h5>
-                    <hr />
-                    <br />
-                </div>
+                <TituloModal
+                    titulo={'Descarte de Chave'}
+                    subTitulo={'Selecione o motivo pelo qual esta chave deve ser descartada'}
+                />
 
                 <Form onFinish={this.submitForm}>
                     <Row gutter={6}>

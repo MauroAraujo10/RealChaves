@@ -15,7 +15,7 @@ class YesOrNoModal extends Component {
                 onOk={onOk}
                 okText={
                     <>
-                        <BiSave className="mr-2" size={16} />
+                        <BiSave className="mr-1" size={16} />
                         Salvar
                     </>
                 }

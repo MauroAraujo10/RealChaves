@@ -136,7 +136,7 @@ class EstoqueHistorico extends Component {
                     <Breadcrumb>
                         <Item>
                             <Link to={Rotas.Home}>
-                                <AiOutlineHome className="mr-2" />
+                                <AiOutlineHome className="mr-1" />
                                 Início
                             </Link>
                         </Item>

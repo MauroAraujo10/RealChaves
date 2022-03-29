@@ -29,15 +29,6 @@ const methods = {
     async delete(id) {
         await service.app.ref(tabelas.Alicates).child(id).remove();
     },
-    async postAmolacao(dto) {
-        let id = Date.now();
-        return await service.app.ref(tabelas.AmolacaoAlicate).child(id).set({
-            IdAlicate: dto.IdAlicate,
-            DataEntrega: dto.DataEntrega,
-            Quantidade: dto.Quantidade,
-            Valor: dto.Valor
-        })
-    }
 };
 
 export default methods;

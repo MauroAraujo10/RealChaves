@@ -109,7 +109,7 @@ class ChaveDescarte extends Component {
                     <Breadcrumb>
                         <Breadcrumb.Item>
                             <Link to={Rotas.Home}>
-                                <AiOutlineHome className="mr-2" />
+                                <AiOutlineHome className="mr-1" />
                                 Início
                             </Link>
                         </Breadcrumb.Item>

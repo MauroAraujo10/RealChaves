@@ -5,9 +5,9 @@ import { messages } from '../../../common/Messages/messages';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
-import ChavesEditModal from '../components/chaves.edit.modal';
-import ChavesVendaModal from '../components/chaves.venda.modal';
+import ChavesVendaModal from '../components/chave.copia.modal';
 import ChavesDescarteModal from '../components/chaves.descarte.modal';
+import ChavesEditModal from '../components/chaves.edit.modal';
 import YesOrNoModal from '../../../common/yesOrNoModal';
 
 import TotalRegistros from '../../../common/components/TotalRegistros/TotalRegistros';
@@ -148,24 +148,25 @@ class Grid extends Component {
             { title: 'Data de Cadastro', dataIndex: 'Data', key: 'Data', ...this.getColumnSearchProps('Data'), width: '15%' },
             {
                 title: 'Ações', width: '10%', render: (status, dto) => (
-                    <>
+                    <div style={{ display: 'flex' }}>
+
                         <Tooltip title="Cópia de Chave">
                             <AiOutlineSnippets
-                                className="mr-3 iconVendaChave"
+                                className="mr-2 iconVendaChave"
                                 size={iconSize}
                                 onClick={() => { this.funcaoAbrirModal(dto, 'Copia') }}
                             />
                         </Tooltip>
                         <Tooltip title="Descartar">
                             <AiOutlineDownSquare
-                                className="mr-3 iconDescarte"
+                                className="mr-2 iconDescarte"
                                 size={iconSize}
                                 onClick={() => { this.funcaoAbrirModal(dto, 'Descarte') }}
                             />
                         </Tooltip>
                         <Tooltip title="Editar">
                             <AiOutlineEdit
-                                className="mr-3 iconEdit"
+                                className="mr-2 iconEdit"
                                 size={iconSize}
                                 onClick={() => { this.funcaoAbrirModal(dto, 'Editar') }}
                             />
@@ -177,7 +178,7 @@ class Grid extends Component {
                                 onClick={() => { this.funcaoAbrirModal(dto, 'Exclusao') }}
                             />
                         </Tooltip>
-                    </>
+                    </div>
                 )
             }
         ];
@@ -189,7 +190,7 @@ class Grid extends Component {
                     <Breadcrumb>
                         <Breadcrumb.Item>
                             <Link to={Rotas.Home}>
-                                <AiOutlineHome className="mr-2" />
+                                <AiOutlineHome className="mr-1" />
                                 Início
                             </Link>
                         </Breadcrumb.Item>

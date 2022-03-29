@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { messages } from '../../../common/Messages/messages';
 import { Modal, Form, Input, DatePicker } from 'antd';
 import { Row, Col } from 'antd';
-import BotaoCadastar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 import { toast } from 'react-toastify';
+
+import TituloModal from '../../../common/components/TituloModal/TituloModal';
+import BotaoCadastar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
 import copiaService from '../service/venda.service';
 import chaveService from '../service/chave.service';
 
-class modalVendaVisible extends Component {
+class ChaveCopiaModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,8 +23,6 @@ class modalVendaVisible extends Component {
     }
 
     async submitForm() {
-        debugger;
-
         this.setState({ IdProduto: this.props?.chaveSelecionada?.Id });
         let novaQuantidade = this.props.chaveSelecionada.Quantidade - this.state.QuantidadeDeCopias;
 
@@ -54,11 +54,12 @@ class modalVendaVisible extends Component {
                 destroyOnClose
                 footer={null}
             >
-                <h2 className="t-center">
-                    Cópia de Chave
-                </h2>
 
-                <Form onFinish={this.submitForm}>
+                <TituloModal titulo={'Cópia de Chave'} />
+
+                <Form 
+                    layout={'vertical'}
+                    onFinish={this.submitForm}>
                     <Row>
                         <Form.Item
                             label="Data da Cópia"
@@ -117,4 +118,4 @@ class modalVendaVisible extends Component {
     }
 }
 
-export default modalVendaVisible;
+export default ChaveCopiaModal;

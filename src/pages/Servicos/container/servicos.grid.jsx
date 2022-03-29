@@ -132,10 +132,10 @@ class servicosGrid extends Component {
             { title: 'Pago', dataIndex: 'Pago', key: 'Pago', ...this.getColumnSearchProps('Pago'), width: '10%' },
             {
                 title: 'Ações', width: '10%', render: (status, dto) => (
-                    <>
+                    <div style={{display: 'flex'}}>
                         <Tooltip title="Editar">
                             <AiOutlineEdit
-                                className="mr-3 iconEdit"
+                                className="mr-2 iconEdit"
                                 size={iconSize}
                                 onClick={() => { this.funcaoAbrirModal(dto, 'Editar') }}
                             />
@@ -147,7 +147,7 @@ class servicosGrid extends Component {
                                 onClick={() => { this.funcaoAbrirModal(dto, 'Deletar') }}
                             />
                         </Tooltip>
-                    </>
+                    </div>
                 )
             }
         ]
@@ -159,7 +159,7 @@ class servicosGrid extends Component {
                     <Breadcrumb>
                         <Breadcrumb.Item>
                             <Link to={Rotas.Home}>
-                                <AiOutlineHome className="mr-2" />
+                                <AiOutlineHome className="mr-1" />
                                 Início
                             </Link>
                         </Breadcrumb.Item>

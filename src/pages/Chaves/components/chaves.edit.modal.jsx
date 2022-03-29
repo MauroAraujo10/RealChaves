@@ -5,6 +5,7 @@ import { messages } from '../../../common/Messages/messages';
 import { toast } from "react-toastify";
 
 import service from '../service/chave.service';
+import TituloModal from '../../../common/components/TituloModal/TituloModal';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 import moment from 'moment';
 
@@ -89,9 +90,7 @@ class ChavesEditModal extends Component {
                 footer={null}
                 destroyOnClose
             >
-                <h2 className="t-center">
-                    Edição de Chave
-                </h2>
+                <TituloModal titulo={'Edição de Chave'} />
 
                 <Form
                     initialValues={chaveSelecionada}
@@ -198,20 +197,20 @@ class ChavesEditModal extends Component {
                                     preview={{ visible: false }}
                                     style={{ border: '1px dashed #CCC' }}
                                     src={
-                                        !this.state.ImgSrc ?    
+                                        !this.state.ImgSrc ?
                                             chaveSelecionada.Tipo === 'Plana' ? Plana :
-                                            chaveSelecionada.Tipo === 'PlanaColorida' ? PlanaColorida : 
-                                            chaveSelecionada.Tipo === 'AutomotivaAco' ? AutomotivaAco : 
-                                            chaveSelecionada.Tipo === 'AutomotivaLogotipo' ? AutomotivaLogotipo : 
-                                            chaveSelecionada.Tipo === 'AutomotivaMetalica' ? AutomotivaMetalica : 
-                                            chaveSelecionada.Tipo === 'AutomotivaPlastica' ? AutomotivaPlastica : 
-                                            chaveSelecionada.Tipo === 'Cofre' ? Cofre : 
-                                            chaveSelecionada.Tipo === 'Transponder' ? Transponder : 
-                                            chaveSelecionada.Tipo === 'Tetra' ? Tetra : 
-                                            chaveSelecionada.Tipo === 'Gorje' ? Gorje : 
-                                            chaveSelecionada.Tipo === 'Tubular' ? Tubular : ''
-                                        :
-                                        this.state.ImgSrc
+                                                chaveSelecionada.Tipo === 'PlanaColorida' ? PlanaColorida :
+                                                    chaveSelecionada.Tipo === 'AutomotivaAco' ? AutomotivaAco :
+                                                        chaveSelecionada.Tipo === 'AutomotivaLogotipo' ? AutomotivaLogotipo :
+                                                            chaveSelecionada.Tipo === 'AutomotivaMetalica' ? AutomotivaMetalica :
+                                                                chaveSelecionada.Tipo === 'AutomotivaPlastica' ? AutomotivaPlastica :
+                                                                    chaveSelecionada.Tipo === 'Cofre' ? Cofre :
+                                                                        chaveSelecionada.Tipo === 'Transponder' ? Transponder :
+                                                                            chaveSelecionada.Tipo === 'Tetra' ? Tetra :
+                                                                                chaveSelecionada.Tipo === 'Gorje' ? Gorje :
+                                                                                    chaveSelecionada.Tipo === 'Tubular' ? Tubular : ''
+                                            :
+                                            this.state.ImgSrc
                                     }
                                 />
                             </Image.PreviewGroup>

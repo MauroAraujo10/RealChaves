@@ -10,7 +10,7 @@ class BotaoCadastrar extends Component {
         return (
             <div className="t-right">
                 {possuiCancelar &&
-                    <Button className="mr-2" onClick={funcaoCancelar}>
+                    <Button className="mr-1" onClick={funcaoCancelar}>
                         Cancelar
                     </Button>
                 }
@@ -18,7 +18,7 @@ class BotaoCadastrar extends Component {
                     type="primary"
                     htmlType="submit"
                 >
-                    <BiSave className="mr-2" size={16} />
+                    <BiSave className="mr-1" size={16} />
                     Salvar
                 </Button>
             </div>

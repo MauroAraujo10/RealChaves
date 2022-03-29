@@ -8,6 +8,7 @@ import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 
 import moment from 'moment';
 import service from '../service/servicos.service';
+import TituloModal from '../../../common/components/TituloModal/TituloModal';
 
 class ServicoEditModal extends Component {
     constructor(props) {
@@ -51,17 +52,14 @@ class ServicoEditModal extends Component {
                 onOk={submitForm}
                 destroyOnClose
             >
-
-                <h2 className="t-center">
-                    Edição de Serviço
-                </h2>
+                <TituloModal titulo={'Edição de Serviço'} />
 
                 <Form
                     initialValues={servicoSelecionado}
                     layout="vertical"
                 >
                     <Row>
-                        <Col span={24}>
+                        <Col md={24} xs={24}>
                             <Form.Item
                                 name="Servico"
                                 label="Serviço"
@@ -79,8 +77,8 @@ class ServicoEditModal extends Component {
                         </Col>
                     </Row>
 
-                    <Row gutter={8}>
-                        <Col span={8}>
+                    <Row gutter={12}>
+                        <Col md={8} xs={8}>
                             <Form.Item
                                 name="Data"
                                 label="Data de Cadastro"
@@ -93,7 +91,7 @@ class ServicoEditModal extends Component {
                                 </Space>
                             </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col md={8} xs={8}>
                             <Form.Item
                                 name="Valor"
                                 label="Valor"
@@ -110,7 +108,7 @@ class ServicoEditModal extends Component {
                                 />
                             </Form.Item>
                         </Col>
-                        <Col span={4}>
+                        <Col md={4} xs={8}>
                             <Form.Item
                                 name="Pago"
                                 label="Pago"

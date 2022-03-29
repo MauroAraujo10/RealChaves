@@ -1,10 +1,10 @@
-export default{
+export default {
     Chave: 'Chave',
-    Alicates: 'Alicates',
-    AmolacaoAlicate: 'AmolacaoAlicate',
+     EstoqueProduto: 'EstoqueProduto',
     Servicos: 'Servicos',
     Vendas: 'Vendas',
     CopiasChave: 'CopiasChave',
     Estoque: 'Estoque',
-    Descarte: 'Descarte'
+    Descarte: 'Descarte',
+    RelatorioAmolacao: 'RelatorioAmolacao'
 }

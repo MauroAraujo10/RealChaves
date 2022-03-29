@@ -85,34 +85,14 @@ export default function Routes() {
                 </SubMenu>
             </SubMenu>
 
-            <SubMenu key="Amolacao" title="Amolação">
-                <Menu.Item key="Amolacao.Cadastro" onClick={(e) => HandleClickLink(e, Rotas.AmolacaoCadastro)}>
+            <SubMenu key="Amolacao" icon={<AiOutlineFork />} title="Amolação">
+                <Menu.Item key="Amolacao.Cadastro" onClick={(e) => HandleClickLink(e, Rotas.AmolacaoCadastro)} icon={<AiOutlinePlusCircle />}>
                     Cadastro de Produto
                     </Menu.Item>
-                <Menu.Item key="Amolacao.Estoque" onClick={(e) => HandleClickLink(e, Rotas.AmolacaoEstoque)}>
+                <Menu.Item key="Amolacao.Estoque" onClick={(e) => HandleClickLink(e, Rotas.AmolacaoEstoque)} icon={<AiOutlineInsertRowBelow />}>
                     Estoque
                     </Menu.Item>
             </SubMenu>
-
-            <SubMenu key="Alicates" icon={<AiOutlineFork />} title="Alicates">
-                <SubMenu key="Alicates.Amolacao" icon={<AiOutlineFork />} title="Amolação">
-                    <Menu.Item key="Amolacao.Cadastro" onClick={(e) => HandleClickLink(e, Rotas.AlicatesAmolacaoCadastro)} >
-                        Cadastro
-                </Menu.Item>
-                    <Menu.Item key="Amolacao.Estoque" onClick={(e) => HandleClickLink(e, Rotas.AlicatesAmolacaoEstoque)} >
-                        Estoque
-                </Menu.Item>
-                </SubMenu>
-                
-                <SubMenu key="AlicatesVendaTabela" icon={<AiOutlineDollar />} title="Venda">
-                    <Menu.Item key="AlicatesVenda.Grid" onClick={(e) => HandleClickLink(e, Rotas.AlicatesVendaTabela)} >
-                        Tabela
-                    </Menu.Item>
-                </SubMenu>
-            </SubMenu>
-
-
-
 
             <SubMenu key="Servicos" icon={<AiOutlineTool />} title="Serviços">
                 <Menu.Item key="Servicos.Grid" onClick={(e) => HandleClickLink(e, Rotas.Servico)} icon={<AiOutlineInsertRowBelow />}>
