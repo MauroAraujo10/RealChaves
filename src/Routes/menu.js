@@ -10,9 +10,7 @@ import {
     AiOutlinePlusSquare,
     AiOutlineTool,
     AiOutlineSetting,
-    AiOutlineDollar,
     AiOutlineFileDone,
-    AiOutlineDownSquare,
     AiOutlineRead
 } from 'react-icons/ai';
 
@@ -25,18 +23,13 @@ export default function Routes() {
     const history = useHistory();
     const [theme, setTheme] = useState('light');
 
-    function HandleClickLink(e, route) {
-        history.push(route);
-    }
-
-    function changeTheme(value) {
-        setTheme(value ? 'dark' : 'light')
-    }
-
     const { SubMenu } = Menu;
     const rootSubmenuKeys = ['sub1', 'sub2', 'sub4'];
     const [openKeys, setOpenKeys] = React.useState(['sub1']);
 
+    function HandleClickLink(e, route) {
+        history.push(route);
+    }
     const onOpenChange = keys => {
         const latestOpenKey = keys.find(key => openKeys.indexOf(key) === -1);
         if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
@@ -45,6 +38,14 @@ export default function Routes() {
             setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
         }
     };
+
+    function changeTheme(value) {
+        setTheme(value ? 'dark' : 'light')
+    }
+
+    function changePagination(value) {
+
+    }
 
     return (
         <Menu
@@ -62,16 +63,10 @@ export default function Routes() {
             <SubMenu key="Chaves" icon={<VscKey />} title="Chaves">
                 <Menu.Item key="Chaves.Grid" onClick={(e) => HandleClickLink(e, Rotas.Chaves)} icon={<AiOutlineInsertRowBelow />}>
                     Tabela
-                    </Menu.Item>
-                <Menu.Item key="Chaves.New" onClick={(e) => HandleClickLink(e, Rotas.ChavesNew)} icon={<AiOutlinePlusCircle />}>
+                </Menu.Item>
+                <Menu.Item key="Chaves.Cadastro" onClick={(e) => HandleClickLink(e, Rotas.ChavesCadastro)} icon={<AiOutlinePlusCircle />}>
                     Cadastro
-                    </Menu.Item>
-                <Menu.Item key="Chaves.Copia" onClick={(e) => HandleClickLink(e, Rotas.ChavesCopia)} icon={<AiOutlineDollar />}>
-                    Cópias de Chaves
-                    </Menu.Item>
-                <Menu.Item key="Chaves.Descarte" onClick={(e) => HandleClickLink(e, Rotas.ChavesDescarte)} icon={<AiOutlineDownSquare />}>
-                    Descarte de Chaves
-                    </Menu.Item>
+                </Menu.Item>
                 <SubMenu key="Estoque" icon={<AiOutlineFileDone />} title="Estoque">
                     <Menu.Item key="Estoque.Atualizar" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoqueAtualizar)} >
                         Atualizar Estoque
@@ -81,17 +76,17 @@ export default function Routes() {
                         </Menu.Item>
                     <Menu.Item key="Estoque.Historico" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoqueHistorico)} >
                         Histórico
-                        </Menu.Item>
+                    </Menu.Item>
                 </SubMenu>
             </SubMenu>
 
             <SubMenu key="Amolacao" icon={<AiOutlineFork />} title="Amolação">
-                <Menu.Item key="Amolacao.Cadastro" onClick={(e) => HandleClickLink(e, Rotas.AmolacaoCadastro)} icon={<AiOutlinePlusCircle />}>
-                    Cadastro de Produto
-                    </Menu.Item>
                 <Menu.Item key="Amolacao.Estoque" onClick={(e) => HandleClickLink(e, Rotas.AmolacaoEstoque)} icon={<AiOutlineInsertRowBelow />}>
                     Estoque
-                    </Menu.Item>
+                </Menu.Item>
+                <Menu.Item key="Amolacao.Cadastro" onClick={(e) => HandleClickLink(e, Rotas.AmolacaoCadastro)} icon={<AiOutlinePlusCircle />}>
+                    Cadastro de Produto
+                </Menu.Item>
             </SubMenu>
 
             <SubMenu key="Servicos" icon={<AiOutlineTool />} title="Serviços">
@@ -114,18 +109,9 @@ export default function Routes() {
                     </Menu.Item>
             </SubMenu>
 
-            <SubMenu key="Relatorios" icon={<AiOutlineRead />} title="Relatórios">
-                <SubMenu key="RelatorioChave" title="Chave">
-                    <Menu.Item> Cópias</Menu.Item>
-                    <Menu.Item>Descarte</Menu.Item>
-                </SubMenu>
-                <SubMenu key="RelatorioAlicates" title="Alicates">
-                    <Menu.Item key="Amolacao.Historico" onClick={(e) => HandleClickLink(e, Rotas.RelatorioAlicateAmolacao)} >
-                        Amolação
-                </Menu.Item>
-                </SubMenu>
-
-            </SubMenu>
+            <Menu.Item key="Relatorio" onClick={(e) => HandleClickLink(e, Rotas.Relatorios)} icon={<AiOutlineRead />}>
+                Relatórios
+            </Menu.Item>
 
             <SubMenu key="Configuracoes" icon={<AiOutlineSetting />} title={"Configurações"}>
                 <Menu.Item key="Theme">
@@ -135,6 +121,16 @@ export default function Routes() {
                             checkedChildren="Dark"
                             unCheckedChildren="Light"
                             onChange={changeTheme}>
+                        </Switch>
+                    </div>
+                </Menu.Item>
+                <Menu.Item>
+                    Paginação
+                    <div className="f-right">
+                        <Switch
+                            checkedChildren="Sim"
+                            unCheckedChildren="Não"
+                            onChange={changePagination}>
                         </Switch>
                     </div>
                 </Menu.Item>

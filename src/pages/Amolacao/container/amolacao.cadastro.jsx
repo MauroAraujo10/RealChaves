@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { useHistory } from "react-router-dom";
-import { Link, withRouter } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Form, Input, Select, DatePicker, Switch, Breadcrumb } from 'antd';
 import { Row, Col } from 'antd';
 import { messages } from '../../../common/Messages/messages';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
-import Service from '../service/amolacao.service';
+import amolacaoService from '../service/amolacao.service';
 import BotaoCadastar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
 import { AiOutlineHome, AiOutlineFork, AiOutlineScissor } from "react-icons/ai";
@@ -34,7 +33,7 @@ const AmolacaoCadastro = () => {
             Valor: pago ? parseFloat(form.Valor) : 0
         }
 
-        Service.postProduto(dto)
+        amolacaoService.postProduto(dto)
             .then(() => {
                 toast.success(messages.cadastradoSucesso('Produto'));
                 history.push(Rotas.AmolacaoEstoque);
@@ -177,4 +176,4 @@ const AmolacaoCadastro = () => {
     )
 }
 
-export default withRouter(AmolacaoCadastro);
+export default AmolacaoCadastro;

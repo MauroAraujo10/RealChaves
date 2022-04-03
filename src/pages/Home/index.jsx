@@ -8,7 +8,6 @@ import service from '../../service';
 import { FcFaq, FcKindle, FcSupport } from "react-icons/fc";
 
 const Home = () => {
-
     const [chavesVendidasHoje, setChavesVendidasHoje] = useState(0);
     const [alicatesAmoladoHoje, setAlicatesAmoladoHoje] = useState(0);
     const [servicosRealizadosHoje, setServicosRealizadosHoje] = useState(0);
@@ -18,10 +17,11 @@ const Home = () => {
         getChaves();
         getAlicates();
         getServicos();
+        
     }, []);
 
     function getChaves() {
-        service.app.ref(tabelas.Vendas).once('value', (snapshot) => {
+        service.app.ref(tabelas.CopiasChave).once('value', (snapshot) => {
             let numeroChavesVendidasHoje = 0;
             snapshot.forEach((x) => {
                 if (x.val().Data === dataAtual)
@@ -32,7 +32,7 @@ const Home = () => {
     }
 
     function getAlicates() {
-        service.app.ref(tabelas.Alicates).once('value', (snapshot) => {
+        service.app.ref(tabelas.EstoqueProduto).once('value', (snapshot) => {
             let numeroAlicatesAmoladosHoje = 0;
             snapshot.forEach((x) => {
                 if (x.val().Data === dataAtual)
@@ -56,11 +56,7 @@ const Home = () => {
     return (
         <>
             <Row className="mt-2">
-
-                <Col
-                    span={7}
-                    className="container homeCard t-center"
-                >
+                <Col span={7} className="container homeCard t-center">
                     <div>
                         <FcFaq size={40} className="circle-icon" />
                     </div>
@@ -68,24 +64,17 @@ const Home = () => {
                     <h4 style={{ color: 'gray' }}>Número de chaves que foram vendidas hoje</h4>
                 </Col>
 
-                <Col
-                    span={7}
-                    className="container homeCard t-center"
-                >
+                <Col span={7} className="container homeCard t-center" >
                     <FcKindle size={40} />
                     <h1>Alicates amolados: {alicatesAmoladoHoje}</h1>
                     <h4 style={{ color: 'gray' }}>Número de Alicates que foram amolados hoje</h4>
                 </Col>
 
-                <Col
-                    span={7}
-                    className="container homeCard t-center"
-                >
+                <Col span={7} className="container homeCard t-center" >
                     <FcSupport size={40} />
                     <h1>Serviços Realizados: {servicosRealizadosHoje}</h1>
                     <h4 style={{ color: 'gray' }}>Número de serviços que foram reaizados hoje</h4>
                 </Col>
-
             </Row>
         </>
     );

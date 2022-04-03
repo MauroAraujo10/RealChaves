@@ -28,7 +28,8 @@ const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
             Data: data,
             Quantidade: Number(form.Quantidade),
             Pago: pago === undefined ? (produtoSelecionado?.Pago === 'Sim') : pago,
-            Valor: pago === undefined ? parseFloat(produtoSelecionado?.Valor) : 0,
+            Valor: pago === undefined ? parseFloat(produtoSelecionado?.Valor) : 0, 
+            // PRECISA FAZER OUTRO TESTE COM O VALOR 
         };
 
         service.updateProduto(dto)
@@ -53,8 +54,8 @@ const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
 
             <Form
                 initialValues={produtoSelecionado}
-                onFinish={submitForm}
                 layout="vertical"
+                onFinish={submitForm}
             >
                 <Row gutter={12}>
                     <Col md={18} xs={24}>
@@ -124,7 +125,7 @@ const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
                 <Row gutter={12}>
                     <Col md={8} xs={24}>
                         <Form.Item
-                            name="DataCadastro"
+                            name="Data"
                             label="Data de Cadastro"
                             rules={[{ required: true, message: messages.campoObrigatorio }]}
                         >
@@ -132,10 +133,9 @@ const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
                                 <DatePicker
                                     format={'DD/MM/YYYY'}
                                     onChange={(date, dateString) => setData(dateString)}
-                                    defaultValue={moment(produtoSelecionado?.dataCadastro)}
+                                    defaultValue={moment(produtoSelecionado.Data, 'DD/MM/YYYY')}
                                 />
                             </Space>
-
                         </Form.Item>
                     </Col>
                     <Col md={5} xs={24}>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { messages } from '../../../common/Messages/messages';
 import { Modal, Form, Input, DatePicker } from 'antd';
 import { Row, Col } from 'antd';
@@ -7,115 +7,106 @@ import { toast } from 'react-toastify';
 import TituloModal from '../../../common/components/TituloModal/TituloModal';
 import BotaoCadastar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
-import copiaService from '../service/venda.service';
 import chaveService from '../service/chave.service';
 
-class ChaveCopiaModal extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            IdProduto: undefined,
-            Data: undefined,
-            QuantidadeDeCopias: 0,
-            Valor: undefined,
-        };
-        this.submitForm = this.submitForm.bind(this);
-    }
+const ChaveCopiaModal = ({ visible, onClose, chaveSelecionada }) => {
+    const [data, setData] = useState('');
 
-    async submitForm() {
-        this.setState({ IdProduto: this.props?.chaveSelecionada?.Id });
-        let novaQuantidade = this.props.chaveSelecionada.Quantidade - this.state.QuantidadeDeCopias;
+    const submitForm = (form) => {
+        let novaQuantidade = chaveSelecionada?.Quantidade - Number(form.Quantidade);
 
         if (novaQuantidade < 0) {
             toast.error(messages.estoqueIncorreto());
             return;
         }
 
-        copiaService.post(this.state)
-            .then(() => {
-                this.props.chaveSelecionada.Quantidade = novaQuantidade;
-                chaveService.update(this.props.chaveSelecionada);
-                toast.success(messages.cadastradoSucesso('Cópia de Chave'));
+        const dto = {
+            IdChave: chaveSelecionada?.Id,
+            Data: data,
+            Quantidade: Number(form.Quantidade),
+            Valor: parseFloat(form.Valor)
+        };
 
-                this.props.onClose();
+        chaveService.postCopiaChave(dto)
+            .then(() => {
+                chaveSelecionada.Quantidade = novaQuantidade;
+                chaveService.update(chaveSelecionada);
+                toast.success(messages.cadastradoSucesso('Cópia de Chave'));
+                onClose();
+
             })
             .catch(() => {
-                toast.error(messages.cadastradoErro('Cópia de Chave'))
-            });
+                toast.error(messages.cadastradoErro('Cópia de Chave'));
+            })
     }
 
-    render() {
-        const { visible, onClose } = this.props;
+    return (
+        <Modal
+            visible={visible}
+            onCancel={onClose}
+            destroyOnClose
+            footer={null}
+        >
 
-        return (
-            <Modal
-                visible={visible}
-                onCancel={onClose}
-                destroyOnClose
-                footer={null}
-            >
+            <TituloModal titulo={'Cópia de Chave'} />
 
-                <TituloModal titulo={'Cópia de Chave'} />
-
-                <Form 
-                    layout={'vertical'}
-                    onFinish={this.submitForm}>
-                    <Row>
+            <Form layout={'vertical'} onFinish={submitForm}>
+                <Row>
+                    <Col md={8} xs={24}>
                         <Form.Item
-                            label="Data da Cópia"
+                            label="Data"
                             name="Data"
                             rules={[{ required: true, message: messages.CampoObrigatorio }]}
                         >
                             <DatePicker
                                 format="DD/MM/YYYY"
-                                onChange={(date, dateString) => this.setState({ Data: dateString })}
-                                value={this.state.data}
+                                onChange={(date, dateString) => setData(dateString)}
                             />
                         </Form.Item>
-                    </Row>
+                    </Col>
+                </Row>
 
-                    <Row gutter={10} className="mb-2">
-                        <Col span={12}>
-                            <Form.Item
-                                label="Quantidade de Cópias"
-                                name="Quantidade"
-                                rules={[{ required: true, message: messages.CampoObrigatorio }]}
-                            >
-                                <Input
-                                    type="number"
-                                    placeholder="quantidade"
-                                    min="0"
-                                    onChange={(e) => this.setState({ QuantidadeDeCopias: Number(e.target.value) })}
-                                />
-                            </Form.Item>
-                        </Col>
-                        <Col span={10}>
-                            <Form.Item
-                                label="Valor"
-                                name="Valor"
-                                rules={[{ required: true, message: messages.CampoObrigatorio }]}
-                            >
-                                <Input
-                                    type="number"
-                                    placeholder="Valor"
-                                    min="0"
-                                    step="0.10"
-                                    onChange={(e) => this.setState({ Valor: parseFloat(e.target.value) })}
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Row>
+                <Row gutter={10}>
+                    <Col md={8} xs={12}>
+                        <Form.Item
+                            label="Quantidade"
+                            name="Quantidade"
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
+                        >
+                            <Input
+                                type="number"
+                                placeholder="0"
+                                min={1}
+                                max={20}
+                            />
+                        </Form.Item>
+                    </Col>
+                    <Col md={5} xs={12}>
+                        <Form.Item
+                            label="Valor"
+                            name="Valor"
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
+                        >
+                            <Input
+                                type="number"
+                                placeholder="0,00"
+                                min={0}
+                                max={1000}
+                                step="0.10"
+                            />
+                        </Form.Item>
+                    </Col>
+                </Row>
 
-                    <BotaoCadastar
-                        possuiCancelar
-                        funcaoCancelar={onClose}
-                    />
+                <BotaoCadastar
+                    possuiCancelar
+                    funcaoCancelar={onClose}
+                />
 
-                </Form>
+            </Form>
 
-            </Modal>
-        );
-    }
+        </Modal >
+    );
 }
 
 export default ChaveCopiaModal;

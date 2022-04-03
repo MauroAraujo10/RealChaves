@@ -8,7 +8,7 @@ import { messages } from '../../../common/Messages/messages';
 import service from '../../../service';
 import serviceAmolacao from '../service/amolacao.service';
 import tabelas from '../../../common/Messages/tabelas';
-import Grid from '../../../common/components/Grid/index';
+import Grid from '../../../common/components/Grid/Grid';
 
 import BaixaModal from '../components/amolacao.baixa.modal';
 import EditModal from '../components/amolacao.edit.modal';
@@ -21,7 +21,7 @@ class AmolacaoEstoque extends Component {
         super(props);
         this.state = {
             produtos: [],
-            produtoSelecionado: undefined,
+            produtoSelecionado: [],
             modalVisualizarVisible: false,
             modalBaixarVisible: false,
             modalEditarVisible: false,
@@ -36,7 +36,7 @@ class AmolacaoEstoque extends Component {
             snapshot.forEach((x) => {
                 produtos.push({
                     Id: x.key,
-                    Key: x.key,
+                    key: x.key,
                     Cliente: x.val().Cliente,
                     Telefone: x.val().Telefone,
                     Produto: x.val().Produto,
@@ -53,15 +53,11 @@ class AmolacaoEstoque extends Component {
 
     funcaoAbrirModal(dto, funcionalidade) {
         switch (funcionalidade) {
-
             case 'Baixa':
                 this.setState({ modalBaixarVisible: true, produtoSelecionado: dto })
                 break;
 
             case 'Editar':
-                let dataSplit = dto.Data.split('/');
-                dto.dataCadastro = `${dataSplit[1]}/${dataSplit[0]}/${dataSplit[2]}`;
-
                 this.setState({ modalEditarVisible: true, produtoSelecionado: dto });
                 break;
 
@@ -96,7 +92,7 @@ class AmolacaoEstoque extends Component {
             { title: 'Pago', dataIndex: 'Pago', key: 'Pago', width: '10%' },
             {
                 title: 'Ações', width: '10%', render: (status, dto) => (
-                    <div style={{display: 'flex'}}>
+                    <div style={{ display: 'flex' }}>
                         <Tooltip title="Visualizar">
                             <AiOutlineEye
                                 className="mr-2"

@@ -1,9 +1,7 @@
-export const Rotas  = {
+export const Rotas = {
     Home: '/',
     Chaves: '/Chaves',
-    ChavesNew: '/Chaves/Cadastro',
-    ChavesCopia: '/Chaves/Copias',
-    ChavesDescarte: '/Chaves/Descarte',
+    ChavesCadastro: '/Chaves/Cadastro',
     ChavesEstoqueAtualizar: '/Chaves/Estoque/Atualizar',
     ChavesEstoquePedido: '/Chaves/Estoque/Pedido',
     ChavesEstoqueHistorico: '/Chaves/Estoque/Historico',
@@ -11,9 +9,7 @@ export const Rotas  = {
     AmolacaoEstoque: '/Amolacao/Estoque',
     Servico: '/Servico',
     ServicoNew: '/Servico/Cadastro',
-    RelatorioChaveCopia: '',
-    RelatorioChaveDescarte: '',
-    RelatorioAlicateAmolacao: '/Relatorios/Amolacao/Alicate',
+    Relatorios: '/Relatorios',
     EstatisticasChave: '/Estatistica/Chaves',
     EstatisticasAlicates: '/Estatistica/Alicates',
     EstatisticasServicos: '/Estatistica/Servicos',

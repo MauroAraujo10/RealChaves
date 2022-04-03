@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
 import { Modal, Form, Input, DatePicker, Space, Switch } from 'antd';
 import { Row, Col } from 'antd';
 import { messages } from '../../../common/Messages/messages';
@@ -9,131 +8,126 @@ import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import service from '../service/servicos.service';
 import TituloModal from '../../../common/components/TituloModal/TituloModal';
+import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
-class ServicoEditModal extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            Servico: undefined,
-            Data: undefined,
-            Valor: undefined,
-            Pago: undefined
+const ServicoEditModal = ({ visible, onClose, servicoSelecionado }) => {
+    const valorRef = React.useRef(servicoSelecionado);
+    const [data, setData] = useState('');
+    const [pago, setPago] = useState(false);
+
+    const submitForm = (form) => {
+        const dto = {
+            Id: servicoSelecionado.Id,
+            Servico: form.Servico,
+            Data: data ? data : servicoSelecionado.Data,
+            Pago: pago === undefined ? (servicoSelecionado.Pago === 'Sim') : pago,
+            Valor: pago === undefined ? parseFloat(servicoSelecionado.Valor) : 0,
+            //CONFERIR VALOR
         };
+
+        service.update(dto)
+            .then(() => {
+                toast.success(messages.EditadoSucesso('Serviço'));
+                onClose();
+            })
+            .catch(() => {
+                toast.error(messages.EditadoErro('Serviço'));
+            })
     }
 
-    render() {
-        const { visible, onClose } = this.props;
-        const { servicoSelecionado } = this.props;
+    const change = (value) => {
+        setPago(value);
+        console.log(valorRef)
+    }
 
-        const submitForm = () => {
-            const dto = {
-                Id: servicoSelecionado.Id,
-                Servico: this.state.Servico ?? servicoSelecionado.Servico,
-                Data: this.state.Data ?? servicoSelecionado.Data,
-                Valor: this.state.Valor ?? servicoSelecionado.Valor,
-                Pago: this.state.Pago ?? servicoSelecionado.Pago
-            };
+    const closeModal = () => {
+        setData('');
+        setPago(false);
+    }
 
-            service.update(dto)
-                .then(() => {
-                    toast.success(messages.EditadoSucesso('Serviço'));
-                    this.setState({ Pago: undefined })
-                    this.props.onClose();
-                })
-                .catch(() => {
-                    toast.error(messages.EditadoErro('Serviço'));
-                })
-        }
+    return (
+        <Modal
+            visible={visible}
+            onCancel={onClose}
+            footer={null}
+            destroyOnClose
+            afterClose={closeModal}
+        >
+            <TituloModal titulo={'Edição de Serviço'} />
 
-        return (
-            <Modal
-                visible={visible}
-                onCancel={onClose}
-                onOk={submitForm}
-                destroyOnClose
+            <Form
+                initialValues={servicoSelecionado}
+                layout="vertical"
+                onFinish={submitForm}
             >
-                <TituloModal titulo={'Edição de Serviço'} />
-
-                <Form
-                    initialValues={servicoSelecionado}
-                    layout="vertical"
-                >
-                    <Row>
-                        <Col md={24} xs={24}>
-                            <Form.Item
-                                name="Servico"
-                                label="Serviço"
-                                rules={[
-                                    { required: true, message: messages.campoObrigatorio }
-                                ]}
-                            >
-                                <Input.TextArea
-                                    showCount
-                                    maxLength={200}
-                                    rows={5}
-                                    onChange={(e) => this.setState({ Servico: e.target.value })}
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-
-                    <Row gutter={12}>
-                        <Col md={8} xs={8}>
-                            <Form.Item
-                                name="Data"
-                                label="Data de Cadastro"
-                            >
-                                <Space direction="vertical">
-                                    <DatePicker
-                                        format={'DD/MM/YYYY'}
-                                        onChange={(date, dateString) => this.setState({ Data: dateString })}
-                                        defaultValue={moment(servicoSelecionado.dataCadastro)} />
-                                </Space>
-                            </Form.Item>
-                        </Col>
-                        <Col md={8} xs={8}>
-                            <Form.Item
-                                name="Valor"
-                                label="Valor"
-                                rules={[
-                                    { required: true, message: messages.campoObrigatorio }
-                                ]}
-                            >
-                                <Input
-                                    type="number"
-                                    min={0}
-                                    max={1000}
-                                    step="0.10"
-                                    onChange={(e) => this.setState({ Valor: parseFloat(e.target.value) })}
-                                />
-                            </Form.Item>
-                        </Col>
-                        <Col md={4} xs={8}>
-                            <Form.Item
-                                name="Pago"
-                                label="Pago"
-                            >
-                                <Switch
-                                    checked={
-                                        this.state.Pago === undefined ?
-                                            servicoSelecionado.Pago === 'Sim'
-                                            :
-                                            this.state.Pago
-                                    }
-                                    onChange={(value) => this.setState({ Pago: value })}
-                                    checkedChildren={<CheckOutlined />}
-                                    unCheckedChildren={<CloseOutlined />}
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-
-                </Form>
-
-            </Modal>
-        )
-    }
+                <Row>
+                    <Col md={24} xs={24}>
+                        <Form.Item
+                            name="Servico"
+                            label="Serviço"
+                            rules={[
+                                { required: true, message: messages.campoObrigatorio }
+                            ]}
+                        >
+                            <Input.TextArea
+                                showCount
+                                maxLength={200}
+                                rows={5}
+                            />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row gutter={10}>
+                    <Col md={8} xs={8}>
+                        <Form.Item
+                            name="Data"
+                            label="Data de Cadastro"
+                        >
+                            <Space direction="vertical">
+                                <DatePicker
+                                    format={'DD/MM/YYYY'}
+                                    onChange={(date, dateString) => setData(dateString)}
+                                    defaultValue={moment(servicoSelecionado.Data, 'DD/MM/YYYY')} />
+                            </Space>
+                        </Form.Item>
+                    </Col>
+                    <Col md={4} xs={4}>
+                        <Form.Item
+                            name="Pago"
+                            label="Pago"
+                        >
+                            <Switch
+                                checked={pago === undefined ? servicoSelecionado.Pago === 'Sim' : pago}
+                                //onChange={(value) => setPago(value)}
+                                onChange={change}
+                                checkedChildren={<CheckOutlined />}
+                                unCheckedChildren={<CloseOutlined />}
+                            />
+                        </Form.Item>
+                    </Col>
+                    <Col md={8} xs={8}>
+                        <Form.Item
+                            name="Valor"
+                            label="Valor"
+                            rules={[{ required: true, message: messages.campoObrigatorio }]}
+                        >
+                            <Input
+                                type="number"
+                                ref={valorRef}
+                                min={0}
+                                max={1000}
+                                step="0.10"
+                            />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <BotaoCadastrar
+                    possuiCancelar
+                    funcaoCancelar={onClose}
+                />
+            </Form>
+        </Modal>
+    )
 }
 
-
-export default withRouter(ServicoEditModal);
+export default ServicoEditModal;

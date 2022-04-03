@@ -1,6 +1,6 @@
 export default {
     Chave: 'Chave',
-     EstoqueProduto: 'EstoqueProduto',
+    EstoqueProduto: 'EstoqueProduto',
     Servicos: 'Servicos',
     Vendas: 'Vendas',
     CopiasChave: 'CopiasChave',

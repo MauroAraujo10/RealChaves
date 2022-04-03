@@ -123,9 +123,6 @@ class Grid extends Component {
                 break;
 
             case 'Editar':
-                let dataSplit = dto.Data.split('/');
-                dto.dataCadastro = `${dataSplit[1]}/${dataSplit[0]}/${dataSplit[2]}`;
-
                 this.setState({ modalEditVisible: true, chaveSelecionada: dto })
                 break;
 

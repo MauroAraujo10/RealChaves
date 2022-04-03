@@ -9,12 +9,12 @@ import service from '../../../service';
 import servicosService from '../service/servicos.service';
 import tabelas from '../../../common/Messages/tabelas';
 
-import TotalRegistros from '../../../common/components/TotalRegistros/TotalRegistros';
+import Grid from '../../../common/components/Grid/Grid';
 import ServicosEditModal from '../components/servicos.edit.modal';
 import YesOrNoModal from '../../../common/yesOrNoModal';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { AiOutlineHome, AiOutlineDollar, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
 class servicosGrid extends Component {
     constructor(props) {
@@ -35,6 +35,7 @@ class servicosGrid extends Component {
             snapshot.forEach((x) => {
                 servicos.push({
                     Id: x.key,
+                    key: x.key,
                     Data: x.val().Data,
                     Servico: x.val().Servico,
                     Valor: x.val().Valor,
@@ -45,61 +46,10 @@ class servicosGrid extends Component {
         });
     }
 
-    getColumnSearchProps = dataIndex => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-            <div style={{ padding: 8 }}>
-                <Input
-                    ref={node => {
-                        this.searchInput = node;
-                    }}
-                    placeholder={`Filtrar ${dataIndex}`}
-                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-                    style={{ marginBottom: 8, display: 'block' }}
-                />
-                <Space>
-                    <Button
-                        type="primary"
-                        onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-                        icon={<SearchOutlined />}
-                        size="small"
-                        style={{ width: 90 }}
-                    >
-                        Filtrar
-                    </Button>
-                    <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
-                        Reset Filtro
-                    </Button>
-                </Space>
-            </div>
-        ),
-        filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-        onFilter: (value, record) =>
-            record[dataIndex]
-                ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
-                : '',
-    });
-
-    handleSearch = (selectedKeys, confirm, dataIndex) => {
-        confirm();
-        this.setState({
-            searchText: selectedKeys[0],
-            searchedColumn: dataIndex,
-        });
-    };
-
-    handleReset = clearFilters => {
-        clearFilters();
-        this.setState({ searchText: '' });
-    };
-
     funcaoAbrirModal(dto, funcionalidade) {
         switch (funcionalidade) {
 
             case 'Editar':
-                let dataSplit = dto.Data.split('/');
-                dto.dataCadastro = `${dataSplit[1]}/${dataSplit[0]}/${dataSplit[2]}`;
-
                 this.setState({ modalEditServicoVisible: true, servicoSelecionado: dto });
                 break;
 
@@ -124,26 +74,25 @@ class servicosGrid extends Component {
     }
 
     render() {
-        const iconSize = 20;
         const columns = [
-            { title: 'Serviço', dataIndex: 'Servico', key: 'Servico', ...this.getColumnSearchProps('Servico'), width: '60%' },
-            { title: 'Data do Serviço', dataIndex: 'Data', key: 'Data', ...this.getColumnSearchProps('Data'), width: '10%' },
-            { title: 'Valor (R$)', dataIndex: 'Valor', key: 'Valor', ...this.getColumnSearchProps('Valor'), width: '10%' },
-            { title: 'Pago', dataIndex: 'Pago', key: 'Pago', ...this.getColumnSearchProps('Pago'), width: '10%' },
+            { title: 'Serviço', dataIndex: 'Servico', key: 'Servico', width: '60%' },
+            { title: 'Data do Serviço', dataIndex: 'Data', key: 'Data', width: '10%' },
+            { title: 'Valor (R$)', dataIndex: 'Valor', key: 'Valor', width: '10%' },
+            { title: 'Pago', dataIndex: 'Pago', key: 'Pago', width: '10%' },
             {
                 title: 'Ações', width: '10%', render: (status, dto) => (
-                    <div style={{display: 'flex'}}>
+                    <div style={{ display: 'flex' }}>
                         <Tooltip title="Editar">
                             <AiOutlineEdit
                                 className="mr-2 iconEdit"
-                                size={iconSize}
+                                size={20}
                                 onClick={() => { this.funcaoAbrirModal(dto, 'Editar') }}
                             />
                         </Tooltip>
                         <Tooltip title="Deletar">
                             <AiOutlineDelete
                                 className="iconExcluir"
-                                size={iconSize}
+                                size={20}
                                 onClick={() => { this.funcaoAbrirModal(dto, 'Deletar') }}
                             />
                         </Tooltip>
@@ -169,17 +118,10 @@ class servicosGrid extends Component {
                     </Breadcrumb>
                 </div>
 
-                <div className="container">
-                    <TotalRegistros
-                        numeroRegistros={this.state.servicos.length} />
-
-                    <Table
-                        className='Grid'
-                        bordered
-                        dataSource={this.state.servicos}
-                        columns={columns}>
-                    </Table>
-                </div>
+                <Grid
+                    dataSource={this.state.servicos}
+                    columns={columns}
+                />
 
                 <ServicosEditModal
                     visible={this.state.modalEditServicoVisible}
@@ -195,6 +137,7 @@ class servicosGrid extends Component {
                     onOk={() => this.excluirServico(this.state.idServico)}
                 />
             </div>
+
         );
     }
 }
