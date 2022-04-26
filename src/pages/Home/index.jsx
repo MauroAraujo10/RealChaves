@@ -55,22 +55,22 @@ const Home = () => {
 
     return (
         <>
-            <Row className="mt-2">
-                <Col span={7} className="container homeCard t-center">
+            <Row style={{display: "flex", justifyContent: 'space-around'}} className="mt-2">
+                <Col md={6} xs={20} className="container t-center">
                     <div>
-                        <FcFaq size={40} className="circle-icon" />
+                        <FcFaq size={40} />
                     </div>
                     <h1>Venda de Chaves: {chavesVendidasHoje}</h1>
                     <h4 style={{ color: 'gray' }}>Número de chaves que foram vendidas hoje</h4>
                 </Col>
 
-                <Col span={7} className="container homeCard t-center" >
+                <Col md={6} xs={20} className="container t-center">
                     <FcKindle size={40} />
                     <h1>Alicates amolados: {alicatesAmoladoHoje}</h1>
                     <h4 style={{ color: 'gray' }}>Número de Alicates que foram amolados hoje</h4>
                 </Col>
 
-                <Col span={7} className="container homeCard t-center" >
+                <Col md={6} xs={20} className="container t-center">
                     <FcSupport size={40} />
                     <h1>Serviços Realizados: {servicosRealizadosHoje}</h1>
                     <h4 style={{ color: 'gray' }}>Número de serviços que foram reaizados hoje</h4>

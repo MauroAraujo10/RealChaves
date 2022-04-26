@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { messages } from '../../../common/Messages/messages';
-import { Table, Breadcrumb, Input, Space, Button, Tooltip } from 'antd';
+import { Breadcrumb, Tooltip } from 'antd';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
@@ -13,7 +13,6 @@ import Grid from '../../../common/components/Grid/Grid';
 import ServicosEditModal from '../components/servicos.edit.modal';
 import YesOrNoModal from '../../../common/yesOrNoModal';
 
-import { SearchOutlined } from '@ant-design/icons';
 import { AiOutlineHome, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
 class servicosGrid extends Component {

@@ -1,126 +1,100 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-
+import React from 'react';
 import { Modal, Button } from 'antd';
 import { messages } from '../../../common/Messages/messages';
 import { toast } from 'react-toastify';
 
 import moment from 'moment';
-import estoqueService from '../service/estoque.service';
+import chaveService from '../service/chave.service';
 
 import { AiOutlinePrinter } from "react-icons/ai";
 
-class ChavesEstoquePedidoModal extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        };
+const ChavesEstoquePedidoModal = ({ title, visible, onClose, listaPedidos, quantidadeTotal }) => {
+
+    const handlePrint = () => {
+        toast.warning(messages.funcionalidadeIndisponivel)
     }
 
-    HandlePrint() {
-        const element = document.createElement('a');
-        // const teste = document.getElementById('modal-revisaoEstoque');
-        const data = new Blob(['list'], { type: 'text/plain;charset-utf-8' });
-        element.href = URL.createObjectURL(data);
-        let date = moment().format('DD-MM-yyyy');
-        element.download = `Atualização de Estoque ${date}.txt`;
-        document.body.appendChild(element);
-        element.click();
-    }
+    const submitForm = () => {
+        let lista = [];
+        
+        listaPedidos.forEach((x) => {
+            lista.push({
+                Id: x.Id,
+                QuantidadeSolicitada: x.QuantidadeSolicitada
+            })
+        });
 
-    submitForm() {
-        const { preco, quantidadeTotal } = this.props;
-        const { chavesEstoque } = this.props;
-
-        const dto = {
-            ChavesEstoque: chavesEstoque,
-            QuantidadeTotal: quantidadeTotal,
-            Preco: preco
-        };
-        estoqueService.post(dto)
+        chaveService.postPedidoEstoque(lista, quantidadeTotal)
             .then(() => {
-                toast.success(messages.cadastradoSucesso('Atualização de estoque'));
-                this.props.chavesEstoque.splice(0, this.props.chavesEstoque.length)
-                this.props.onClose();
+                toast.success(messages.cadastradoSucesso('Pedido de estoque'));
+                listaPedidos.splice(0, listaPedidos.length);
+                onClose();
             })
             .catch(() => {
-                toast.error(messages.cadastradoErro('Atualização de estoque'));
+                toast.error(messages.cadastradoErro('Pedido de estoque'));
             });
     }
 
-    render() {
-        const { title, visible, onClose } = this.props;
-        const { chavesEstoque, quantidadeTotal, preco } = this.props;
+    return (
+        <>
+            <Modal
+                title={title}
+                visible={visible}
+                footer={(
+                    <>
+                        <Button onClick={onClose}>
+                            Cancelar
+                        </Button>
 
-        return (
-            <div id="modal-revisaoEstoque">
-                <Modal
-                    id="modal-revisaoEstoque"
-                    title={title}
-                    visible={visible}
-                    footer={(
-                        <>
-                            <Button onClick={onClose}>
-                                Cancelar
-                            </Button>
-
-                            <Button onClick={this.HandlePrint}>
-                                <AiOutlinePrinter className="mr-3" />
-                                Imprimir
-                            </Button>
-                            <Button
-                                onClick={(e) => this.submitForm(e)}
-                                type="primary"
-                            >
-                                Salvar
-                            </Button>
-                        </>
-                    )}
-                >
-                    {
-                        chavesEstoque.map((x) => {
-                            return (
-                                <>
-                                    <h2>Marca: {x.Marca}</h2>
-                                    <ul key={x.Id}>
-                                        <li>Número de Série: <strong>{x.NumeroSerie}</strong></li>
-                                        <li>Tipo: <strong>{x.Tipo}</strong></li>
-                                        <li>Quantidade: <strong>{x.QuantidadeSolicitada}</strong></li>
-                                    </ul>
-                                    <hr />
-                                </>
-                            );
-                        })
-                    }
-                    <ul
-                        key='ul'
-                        style={{
-                            textAlign: 'right',
-                            listStyleType: 'none'
-                        }}>
-                        <li>
-                            Quantidade Total:
-                            <strong className="ml-2">
-                                {quantidadeTotal}
-                            </strong>
-                        </li>
-                        <li>
-                            Valor Final R$:
-                            <strong className="ml-2">
-                                {preco}
-                            </strong>
-                        </li>
-                        <li>
-                            Data:
-                            <strong className="ml-2">
-                                {moment().format('DD/MM/yyyy')}
-                            </strong>
-                        </li>
-                    </ul>
-                </Modal>
-            </div>
-        );
-    }
+                        <Button onClick={handlePrint}>
+                            <AiOutlinePrinter className="mr-3" />
+                            Imprimir
+                        </Button>
+                        <Button
+                            onClick={() => submitForm()}
+                            type="primary"
+                        >
+                            Salvar
+                        </Button>
+                    </>
+                )}
+            >
+                {
+                    listaPedidos.map((x) => {
+                        return (
+                            <ul key={x.Id}>
+                                <h2>Marca: {x.Marca}</h2>
+                                <li>Número de Série: <strong>{x.NumeroSerie}</strong></li>
+                                <li>Tipo: <strong>{x.Tipo}</strong></li>
+                                <li>Quantidade em Estoque: <strong>{x.Quantidade}</strong></li>
+                                <li>Quantidade solicitada: <strong>{x.QuantidadeSolicitada}</strong></li>
+                                <hr />
+                            </ul>
+                        );
+                    })
+                }
+                <ul
+                    key='ul'
+                    style={{
+                        textAlign: 'right',
+                        listStyleType: 'none'
+                    }}>
+                    <li>
+                        Quantidade Total:
+                            <strong className="ml-1">
+                            {quantidadeTotal}
+                        </strong>
+                    </li>
+                    <li>
+                        Data:
+                            <strong className="ml-1">
+                            {moment().format('DD/MM/yyyy')}
+                        </strong>
+                    </li>
+                </ul>
+            </Modal>
+        </>
+    );
 }
 
-export default withRouter(ChavesEstoquePedidoModal);
+export default ChavesEstoquePedidoModal;

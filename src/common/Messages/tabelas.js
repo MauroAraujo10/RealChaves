@@ -4,7 +4,7 @@ export default {
     Servicos: 'Servicos',
     Vendas: 'Vendas',
     CopiasChave: 'CopiasChave',
-    Estoque: 'Estoque',
+    PedidoEstoque: 'PedidoEstoque',
     Descarte: 'Descarte',
     RelatorioAmolacao: 'RelatorioAmolacao'
 }

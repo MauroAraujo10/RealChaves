@@ -35,4 +35,7 @@ export const messages = {
     ValorMinimo: (valor) =>{
         return `Valor mínimo permitido é ${valor}`;
     },
+    funcionalidadeIndisponivel: () => {
+        return 'Funcionalidade ainda não está disponível, aguarde a proxima versão !';
+    }
 };

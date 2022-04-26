@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
-import { Rotas } from '../../../Routes/rotas';
+import { Rotas } from '../../../../Routes/rotas';
 
-import tabelas from '../../../common/Messages/tabelas';
-import service from '../../../service';
+import tabelas from '../../../../common/Messages/tabelas';
+import service from '../../../../service';
 
-import Grid from '../../../common/components/Grid/Grid';
+import Grid from '../../../../common/components/Grid/Grid';
 
 import { AiOutlineHome } from "react-icons/ai";
 
-const RelatorioChaveCopia = () => {
+const ChavesHistoricoCopia = () => {
     const [chaves, setChaves] = useState([]);
     const columns = [
         { title: 'IdProduto', dataIndex: 'IdProduto', key: 'IdProduto', width: '30%' },
@@ -39,7 +39,7 @@ const RelatorioChaveCopia = () => {
     return (
         <div className="mt-2">
             <div className="t-center">
-                <h1>Cópia de Chaves</h1>
+                <h1>Histórico de Cópia de Chaves</h1>
                 <Breadcrumb>
                     <Breadcrumb.Item>
                         <Link to={Rotas.Home}>
@@ -68,4 +68,4 @@ const RelatorioChaveCopia = () => {
 
 }
 
-export default RelatorioChaveCopia;
+export default ChavesHistoricoCopia;

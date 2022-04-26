@@ -1,5 +1,6 @@
 import service from '../../../service';
 import tabelas from '../../../common/Messages/tabelas';
+import moment from 'moment';
 
 const methods = {
 
@@ -52,6 +53,27 @@ const methods = {
             Motivo: dto.Motivo,
             Data: dto.Data
         });
+    },
+    async postPedidoEstoque(lista, quantidadeTotal) {
+        let id = Date.now();
+
+        await service.app.ref(tabelas.PedidoEstoque).child(id).set({
+            Data: moment().format('DD/MM/yyyy'),
+            QuantidadeTotal: quantidadeTotal,
+            Chaves: lista,
+            Status: false
+        });
+
+        // dto.ListaPedidos.forEach((x) => {
+        //     service.app.ref(tabelas.Chave).child(x.Id).set({
+        //             Data: x.Data,
+        //             Marca: x.Marca,
+        //             NumeroSerie: Number(x.NumeroSerie),
+        //             Quantidade: Number(x.Quantidade) + Number(x.QuantidadeSolicitada),
+        //             Tipo: x.Tipo
+        //     })
+        // })
+
     }
 };
 

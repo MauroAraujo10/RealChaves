@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
-import { Rotas } from '../../../Routes/rotas';
+import { Rotas } from '../../../../Routes/rotas';
 
-import tabelas from '../../../common/Messages/tabelas';
-import service from '../../../service';
-import Grid from '../../../common/components/Grid/Grid';
+import tabelas from '../../../../common/Messages/tabelas';
+import service from '../../../../service';
+import Grid from '../../../../common/components/Grid/Grid';
 
 import { AiOutlineHome } from "react-icons/ai";
 
-const RelatorioChaveDescarte = () => {
+const ChavesHistoricoDescarte = () => {
     const [descartados, setDescartados] = useState([]);
 
     const columns = [
@@ -44,7 +44,7 @@ const RelatorioChaveDescarte = () => {
     return (
         <div className="mt-2">
             <div className="t-center">
-                <h1>Chaves Descartadas</h1>
+                <h1>Histórico de Chaves Descartadas</h1>
                 <Breadcrumb>
                     <Breadcrumb.Item>
                         <Link to={Rotas.Home}>
@@ -71,4 +71,4 @@ const RelatorioChaveDescarte = () => {
     );
 }
 
-export default RelatorioChaveDescarte;
+export default ChavesHistoricoDescarte;
