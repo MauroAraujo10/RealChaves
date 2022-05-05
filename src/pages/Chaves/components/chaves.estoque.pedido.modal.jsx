@@ -20,6 +20,7 @@ const ChavesEstoquePedidoModal = ({ title, visible, onClose, listaPedidos, quant
         listaPedidos.forEach((x) => {
             lista.push({
                 Id: x.Id,
+                key: x.Id,
                 QuantidadeSolicitada: x.QuantidadeSolicitada
             })
         });

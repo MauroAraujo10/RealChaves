@@ -12,7 +12,7 @@ import chaveService from '../service/chave.service';
 
 const ChaveDescarteModal = ({ visible, onClose, chaveSelecionada }) => {
     const [data, setData] = useState('');
-    const [motivo, setMotivo] = useState('');
+    const [motivo, setMotivo] = useState(Descarte.Quebrou);
 
     const submitForm = (form) => {
         let novaQuantidade = chaveSelecionada.Quantidade - Number(form.Quantidade);

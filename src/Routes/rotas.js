@@ -12,6 +12,9 @@ export const Rotas = {
 
     AmolacaoCadastro: '/Amolacao/Cadastro',
     AmolacaoEstoque: '/Amolacao/Estoque',
+
+    AmolacaoHistoricoAmolacoes: '/Amolacao/Historico/Amolacoes',
+
     Servico: '/Servico',
     ServicoNew: '/Servico/Cadastro',
 

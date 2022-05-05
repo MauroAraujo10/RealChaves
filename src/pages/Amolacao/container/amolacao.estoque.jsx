@@ -14,7 +14,7 @@ import BaixaModal from '../components/amolacao.baixa.modal';
 import EditModal from '../components/amolacao.edit.modal';
 import YesOrNoModal from '../../../common/yesOrNoModal';
 
-import { AiOutlineHome, AiOutlineEye, AiOutlineDownSquare, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineEye, AiOutlineLike, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
 class AmolacaoEstoque extends Component {
     constructor(props) {
@@ -100,9 +100,9 @@ class AmolacaoEstoque extends Component {
                             />
                         </Tooltip>
                         <Tooltip title="Baixa">
-                            <AiOutlineDownSquare
-                                className="mr-2 iconDescarte"
-                                size={iconSize}
+                            <AiOutlineLike
+                                className="mr-2 iconVendaChave"
+                                size={20}
                                 onClick={() => { this.funcaoAbrirModal(dto, 'Baixa') }}
                             />
                         </Tooltip>

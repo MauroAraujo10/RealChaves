@@ -126,7 +126,7 @@ class Grid extends Component {
                 this.setState({ modalEditVisible: true, chaveSelecionada: dto })
                 break;
 
-            case 'Exclusao':
+            case 'Deletar':
                 this.setState({ modalExclusaoVisible: true, idSelecionado: Number(dto.Id) })
                 break;
 
@@ -138,7 +138,7 @@ class Grid extends Component {
     render() {
         const iconSize = 20;
         const columns = [
-            { title: 'Marca', dataIndex: 'Marca', key: 'Marca', ...this.getColumnSearchProps('Marca'), width: '25%' },
+            { title: 'Marca', dataIndex: 'Marca', key: 'Marca', ...this.getColumnSearchProps('Marca'), width: '15%' },
             { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', ...this.getColumnSearchProps('NumeroSerie'), width: '15%' },
             { title: 'Estoque', dataIndex: 'Quantidade', key: 'Quantidade', ...this.getColumnSearchProps('Quantidade'), width: '10%' },
             { title: 'Tipo', dataIndex: 'Tipo', key: 'Tipo', ...this.getColumnSearchProps('Tipo'), width: '10%' },
@@ -172,7 +172,7 @@ class Grid extends Component {
                             <AiOutlineDelete
                                 className="iconExcluir"
                                 size={iconSize}
-                                onClick={() => { this.funcaoAbrirModal(dto, 'Exclusao') }}
+                                onClick={() => { this.funcaoAbrirModal(dto, 'Deletar') }}
                             />
                         </Tooltip>
                     </div>

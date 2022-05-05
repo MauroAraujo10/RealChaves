@@ -18,7 +18,7 @@ class BotaoCadastrar extends Component {
                     type="primary"
                     htmlType="submit"
                 >
-                    <BiSave className="mr-1" size={16} />
+                    <BiSave className="mr-1 mt-1" size={16} />
                     Salvar
                 </Button>
             </div>

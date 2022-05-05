@@ -80,7 +80,7 @@ export default function Routes() {
                     </Menu.Item>
                 </SubMenu>
 
-                <SubMenu key="Chaves.Historico" icon={<AiOutlineSetting />} title="Histórico de Chaves">
+                <SubMenu key="Chaves.Historico" icon={<AiOutlineSetting />} title="Histórico">
                     <Menu.Item key="Chaves.Historico.Copia" onClick={(e) => HandleClickLink(e, Rotas.ChavesHistoricoCopias)} icon={<AiOutlineSnippets />}>
                         Cópias
                     </Menu.Item>
@@ -100,6 +100,11 @@ export default function Routes() {
                 <Menu.Item key="Amolacao.Cadastro" onClick={(e) => HandleClickLink(e, Rotas.AmolacaoCadastro)} icon={<AiOutlinePlusCircle />}>
                     Cadastro de Produto
                 </Menu.Item>
+                <SubMenu key="Amolacao.Historico" icon={<AiOutlineSetting />} title="Histórico">
+                    <Menu.Item key="Amolacao.Historico.Amolacoes" onClick={(e) => HandleClickLink(e, Rotas.AmolacaoHistoricoAmolacoes)} icon={<AiOutlineSnippets />}>
+                        Amolações
+                    </Menu.Item>
+                </SubMenu>
             </SubMenu>
 
             <SubMenu key="Servicos" icon={<AiOutlineTool />} title="Serviços">

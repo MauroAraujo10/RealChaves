@@ -7,6 +7,7 @@ const methods = {
     async post(dto) {
         let id = Date.now();
         return await service.app.ref(tabelas.Chave).child(id).set({
+            key: id,
             Marca: dto.Marca,
             NumeroSerie: dto.NumeroSerie,
             Quantidade: dto.Quantidade,
@@ -16,6 +17,7 @@ const methods = {
     },
     async update(dto) {
         return await service.app.ref(tabelas.Chave).child(dto.Id).set({
+            key: dto.Id,
             Marca: dto.Marca,
             NumeroSerie: dto.NumeroSerie,
             Quantidade: dto.Quantidade,
@@ -39,6 +41,7 @@ const methods = {
     async postCopiaChave(dto) {
         let id = Date.now();
         return service.app.ref(tabelas.CopiasChave).child(id).set({
+            key: id,
             IdChave: dto.IdChave,
             Data: dto.Data,
             Quantidade: dto.Quantidade,
@@ -48,6 +51,7 @@ const methods = {
     async postDescarte(dto) {
         let id = Date.now();
         return await service.app.ref(tabelas.Descarte).child(id).set({
+            key: id,
             IdChave: dto.IdChave,
             Quantidade: dto.Quantidade,
             Motivo: dto.Motivo,
@@ -58,10 +62,10 @@ const methods = {
         let id = Date.now();
 
         await service.app.ref(tabelas.PedidoEstoque).child(id).set({
+            key: id,
             Data: moment().format('DD/MM/yyyy'),
             QuantidadeTotal: quantidadeTotal,
-            Chaves: lista,
-            Status: false
+            Chaves: lista
         });
 
         // dto.ListaPedidos.forEach((x) => {
@@ -74,6 +78,30 @@ const methods = {
         //     })
         // })
 
+    },
+    async postBaixaPedidos(dto){
+        let id = Date.now();
+        console.log(dto);
+
+        // await dto.Chaves.forEach((x) => {
+        //     service.app.ref(tabelas.Chave).child(x.Id).set({
+        //             Data: x.Data,
+        //             Marca: x.Marca,
+        //             NumeroSerie: Number(x.NumeroSerie),
+        //             Quantidade: Number(x.Quantidade) + Number(x.QuantidadeSolicitada),
+        //             Tipo: x.Tipo
+        //     })
+        // })
+
+        //await service.app.ref(tabelas.PedidoEstoque).child(dto.IdPedido).remove();
+
+        await service.app.ref(tabelas.BaixaEstoque).child(id).set({
+            key: id,
+            IdPedido: dto.IdPedido,
+            Data: dto.Data,
+            QuantidadeTotal: dto.QuantidadeTotal,
+            //Chaves: dto.Chaves
+        })
     }
 };
 

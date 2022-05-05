@@ -38,7 +38,7 @@ const ChaveEstoquePedido = () => {
       snapshot.forEach((x) => {
         chaves.push({
           Id: x.key,
-          Key: x.key,
+          key: x.key,
           Marca: x.val().Marca,
           NumeroSerie: x.val().NumeroSerie,
           Quantidade: x.val().Quantidade,
@@ -91,6 +91,8 @@ const ChaveEstoquePedido = () => {
   const handleAddQuantidadeChave = (id) => {
     let chaves = listaPedidos;
     let index = chaves.findIndex(x => x.Id === id);
+
+    //Refatora: Adicionar somente o que vai usar no modal
 
     if (index >= 0) {
       chaves[index].QuantidadeSolicitada += 1;

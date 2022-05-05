@@ -9,10 +9,10 @@ import tabelas from '../../../../common/Messages/tabelas';
 
 import ChaveEstoqueBaixaPedidoModal from '../../components/chaves.estoque.baixaPedido.modal';
 
-import { AiOutlineHome, AiOutlineLike, AiOutlineDislike, AiOutlineSelect, AiOutlineEye } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineLike, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
 
 const ChaveEstoqueTabelaPedido = () => {
-    const [idProduto, setIdProduto] = useState([]);
+    const [pedidoSelecionado, setPedidoSelecionado] = useState([]);
     const [pedidosEstoque, setPedidosEstoque] = useState([]);
     const [baixaProdutoModalVisible, setBaixaProdutoModalVisible] = useState(false);
 
@@ -22,10 +22,10 @@ const ChaveEstoqueTabelaPedido = () => {
             snapshot.forEach((x) => {
                 pedido.push({
                     Id: x.key,
+                    key: x.key,
                     Chaves: x.val().Chaves,
                     Data: x.val().Data,
-                    QuantidadeTotal: x.val().QuantidadeTotal,
-                    Status: x.val().Status ? <AiOutlineLike size={24} /> : <AiOutlineDislike size={20} />
+                    QuantidadeTotal: x.val().QuantidadeTotal
                 })
             })
             setPedidosEstoque(pedido);
@@ -37,16 +37,26 @@ const ChaveEstoqueTabelaPedido = () => {
 
     }
 
-    const handleBaixaPedido = (id) => {
-        setIdProduto(id);
+    const handleBaixaPedido = (pedido) => {
+        setPedidoSelecionado(pedido);
         setBaixaProdutoModalVisible(true);
+    }
+
+    const funcaoAbrirModal = (pedido, funcionalidade) => {
+        switch (funcionalidade) {
+            case 'Visualizar':
+                break;
+            case 'Baixa':
+                break;
+            case 'Deletar':
+                break;
+        }
     }
 
     const columns = [
         { title: 'Id', dataIndex: 'Id', key: 'Id', width: '10%' },
         { title: 'Data', dataIndex: 'Data', key: 'Data', width: '10%' },
         { title: 'QuantidadeTotal', dataIndex: 'QuantidadeTotal', key: 'QuantidadeTotal', width: '10%' },
-        { title: 'Status', dataIndex: 'Status', key: 'Status', width: '5%' },
         {
             title: 'Ações', width: '10%', render: (status, pedido) => (
                 <div style={{ display: 'flex' }}>
@@ -58,10 +68,17 @@ const ChaveEstoqueTabelaPedido = () => {
                         />
                     </Tooltip>
                     <Tooltip title="Baixa em Pedido">
-                        <AiOutlineSelect
+                        <AiOutlineLike
                             className="mr-2 iconVendaChave"
                             size={20}
-                            onClick={() => handleBaixaPedido(pedido.Id)}
+                            onClick={() => handleBaixaPedido(pedido)}
+                        />
+                    </Tooltip>
+                    <Tooltip title="Deletar">
+                        <AiOutlineDelete
+                            className="iconExcluir"
+                            size={20}
+                            onClick={() => funcaoAbrirModal(pedido, 'Deletar')}
                         />
                     </Tooltip>
                 </div>
@@ -93,7 +110,7 @@ const ChaveEstoqueTabelaPedido = () => {
             <ChaveEstoqueBaixaPedidoModal
                 visible={baixaProdutoModalVisible}
                 onClose={() => setBaixaProdutoModalVisible(false)}
-                pedidoSelecionado={idProduto}
+                pedidoSelecionado={pedidoSelecionado}
             />
 
         </div>

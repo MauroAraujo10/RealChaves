@@ -65,7 +65,7 @@ class Grid extends Component {
                     bordered
                     dataSource={this.props.dataSource}
                     columns={this.props.columns}
-                    pagination={false}
+                    pagination={true}
                 />
             </div>
         );
