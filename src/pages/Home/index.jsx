@@ -32,7 +32,7 @@ const Home = () => {
     }
 
     function getAlicates() {
-        service.app.ref(tabelas.EstoqueProduto).once('value', (snapshot) => {
+        service.app.ref(tabelas.Amolacao).once('value', (snapshot) => {
             let numeroAlicatesAmoladosHoje = 0;
             snapshot.forEach((x) => {
                 if (x.val().Data === dataAtual)

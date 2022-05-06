@@ -17,22 +17,11 @@ const methods = {
     },
     async update(dto) {
         return await service.app.ref(tabelas.Chave).child(dto.Id).set({
-            key: dto.Id,
             Marca: dto.Marca,
             NumeroSerie: dto.NumeroSerie,
             Quantidade: dto.Quantidade,
             Tipo: dto.Tipo,
             Data: dto.Data
-        });
-    },
-    async getById(id) {
-        await service.app.ref(tabelas.Chave).child(id).once('value', (snapshot) => {
-            return {
-                Marca: snapshot.val().Marca,
-                NumeroSerie: snapshot.val().NumeroSerie,
-                Quantidade: snapshot.val().Quantidade,
-                Tipo: snapshot.val().Tipo
-            }
         });
     },
     async delete(id) {

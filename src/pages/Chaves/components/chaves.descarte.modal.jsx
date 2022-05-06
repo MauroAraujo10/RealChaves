@@ -93,7 +93,6 @@ const ChaveDescarteModal = ({ visible, onClose, chaveSelecionada }) => {
                 </Radio.Group>
 
                 <BotaoCadastrar
-                    possuiCancelar
                     funcaoCancelar={onClose}
                 />
             </Form>

@@ -86,7 +86,7 @@ const ChavesHistoricoPedidoEstoque = () => {
 
     // const handleVisualizar = (id) =>  {
     //     let chavesEstoque = [];
-    //     service.app.ref(tabelas.Estoque).child(id).child('Chaves').on('value', (snapshot) => {
+    //     service.app.ref(tabelas.Amolacao).child(id).child('Chaves').on('value', (snapshot) => {
     //         snapshot.forEach((x) => {
     //             chavesEstoque.push({
     //                 Id: x.key,

@@ -51,7 +51,7 @@ const ChaveCopiaModal = ({ visible, onClose, chaveSelecionada }) => {
             <TituloModal titulo={'Cópia de Chave'} />
 
             <Form layout={'vertical'} onFinish={submitForm}>
-                <Row>
+                <Row gutter={12}>
                     <Col md={8} xs={24}>
                         <Form.Item
                             label="Data"
@@ -64,10 +64,7 @@ const ChaveCopiaModal = ({ visible, onClose, chaveSelecionada }) => {
                             />
                         </Form.Item>
                     </Col>
-                </Row>
-
-                <Row gutter={10}>
-                    <Col md={8} xs={12}>
+                    <Col md={6} xs={12}>
                         <Form.Item
                             label="Quantidade"
                             name="Quantidade"
@@ -75,13 +72,13 @@ const ChaveCopiaModal = ({ visible, onClose, chaveSelecionada }) => {
                         >
                             <Input
                                 type="number"
-                                placeholder="0"
+                                placeholder="Quantidade"
+                                max={chaveSelecionada?.Quantidade}
                                 min={1}
-                                max={20}
                             />
                         </Form.Item>
                     </Col>
-                    <Col md={5} xs={12}>
+                    <Col md={8} xs={12}>
                         <Form.Item
                             label="Valor"
                             name="Valor"
@@ -89,17 +86,16 @@ const ChaveCopiaModal = ({ visible, onClose, chaveSelecionada }) => {
                         >
                             <Input
                                 type="number"
-                                placeholder="0,00"
-                                min={0}
+                                placeholder="Valor"
+                                min={1}
                                 max={1000}
-                                step="0.10"
+                                step="0.1"
                             />
                         </Form.Item>
                     </Col>
                 </Row>
 
                 <BotaoCadastar
-                    possuiCancelar
                     funcaoCancelar={onClose}
                 />
 

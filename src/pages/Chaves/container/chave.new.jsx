@@ -26,19 +26,17 @@ const ChaveCadastro = () => {
     const [data, setData] = useState('');
     const [imgSrc, setImgSrc] = useState('');
     const [tipo, setTipo] = useState('');
-
     const history = useHistory();
     const { Option } = Select;
 
     const submitForm = (form) => {
-
         const dto = {
             Marca: form.Marca,
             NumeroSerie: Number(form.NumeroSerie),
             Quantidade: Number(form.Quantidade),
             Data: data,
             Tipo: tipo
-        }
+        };
 
         chaveService.post(dto)
             .then(() => {
@@ -107,7 +105,7 @@ const ChaveCadastro = () => {
                             rules={[{ required: true, message: messages.CampoObrigatorio }]}>
                             <Input
                                 type="number"
-                                placeholder="123"
+                                placeholder="Número de Série"
                                 min={1}
                                 max={9999}
                             />
@@ -120,7 +118,7 @@ const ChaveCadastro = () => {
                             rules={[{ required: true, message: messages.CampoObrigatorio }]}>
                             <Input
                                 type="number"
-                                placeholder="0"
+                                placeholder="Quantidade"
                                 min={1}
                                 max={999}
                             />
@@ -173,7 +171,9 @@ const ChaveCadastro = () => {
                     </Col>
                 </Row>
 
-                <BotaoCadastrar />
+                <BotaoCadastrar
+                    funcaoCancelar={() => history.push(Rotas.Chaves)}
+                />
 
             </Form>
         </div>

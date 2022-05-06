@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Modal, Form, Input, DatePicker, Space, Switch } from 'antd';
 import { Row, Col } from 'antd';
 import { messages } from '../../../common/Messages/messages';
@@ -11,18 +11,22 @@ import TituloModal from '../../../common/components/TituloModal/TituloModal';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
 const ServicoEditModal = ({ visible, onClose, servicoSelecionado }) => {
-    const valorRef = React.useRef(servicoSelecionado);
-    const [data, setData] = useState('');
+    const [data, setData] = useState();
     const [pago, setPago] = useState(false);
 
+    useEffect(() => {
+        setData(servicoSelecionado?.Data);
+        setPago(servicoSelecionado?.Pago === "Sim");
+    }, [servicoSelecionado]);
+
     const submitForm = (form) => {
+
         const dto = {
             Id: servicoSelecionado.Id,
             Servico: form.Servico,
-            Data: data ? data : servicoSelecionado.Data,
-            Pago: pago === undefined ? (servicoSelecionado.Pago === 'Sim') : pago,
-            Valor: pago === undefined ? parseFloat(servicoSelecionado.Valor) : 0,
-            //CONFERIR VALOR
+            Data: data,
+            Pago: pago,
+            Valor: pago ? parseFloat(form.Valor) : 0,
         };
 
         service.update(dto)
@@ -35,25 +39,14 @@ const ServicoEditModal = ({ visible, onClose, servicoSelecionado }) => {
             })
     }
 
-    const change = (value) => {
-        setPago(value);
-        console.log(valorRef)
-    }
-
-    const closeModal = () => {
-        setData('');
-        setPago(false);
-    }
-
     return (
         <Modal
             visible={visible}
             onCancel={onClose}
             footer={null}
             destroyOnClose
-            afterClose={closeModal}
         >
-            <TituloModal titulo={'Edição de Serviço'} />
+            <TituloModal titulo={'Editar Serviço'} />
 
             <Form
                 initialValues={servicoSelecionado}
@@ -64,7 +57,7 @@ const ServicoEditModal = ({ visible, onClose, servicoSelecionado }) => {
                     <Col md={24} xs={24}>
                         <Form.Item
                             name="Servico"
-                            label="Serviço"
+                            label="Descrição do serviço"
                             rules={[
                                 { required: true, message: messages.campoObrigatorio }
                             ]}
@@ -72,7 +65,8 @@ const ServicoEditModal = ({ visible, onClose, servicoSelecionado }) => {
                             <Input.TextArea
                                 showCount
                                 maxLength={200}
-                                rows={5}
+                                rows={3}
+                                placeholder="Descrição do Serviço"
                             />
                         </Form.Item>
                     </Col>
@@ -82,12 +76,13 @@ const ServicoEditModal = ({ visible, onClose, servicoSelecionado }) => {
                         <Form.Item
                             name="Data"
                             label="Data de Cadastro"
+                            rules={[{ required: true, message: messages.campoObrigatorio }]}
                         >
                             <Space direction="vertical">
                                 <DatePicker
                                     format={'DD/MM/YYYY'}
                                     onChange={(date, dateString) => setData(dateString)}
-                                    defaultValue={moment(servicoSelecionado.Data, 'DD/MM/YYYY')} />
+                                    defaultValue={moment(servicoSelecionado?.Data, 'DD/MM/YYYY')} />
                             </Space>
                         </Form.Item>
                     </Col>
@@ -97,32 +92,34 @@ const ServicoEditModal = ({ visible, onClose, servicoSelecionado }) => {
                             label="Pago"
                         >
                             <Switch
-                                checked={pago === undefined ? servicoSelecionado.Pago === 'Sim' : pago}
-                                //onChange={(value) => setPago(value)}
-                                onChange={change}
+                                defaultChecked={servicoSelecionado?.Pago === 'Sim'}
+                                onChange={(value) => setPago(value)}
                                 checkedChildren={<CheckOutlined />}
                                 unCheckedChildren={<CloseOutlined />}
                             />
                         </Form.Item>
                     </Col>
-                    <Col md={8} xs={8}>
-                        <Form.Item
-                            name="Valor"
-                            label="Valor"
-                            rules={[{ required: true, message: messages.campoObrigatorio }]}
-                        >
-                            <Input
-                                type="number"
-                                ref={valorRef}
-                                min={0}
-                                max={1000}
-                                step="0.10"
-                            />
-                        </Form.Item>
-                    </Col>
+                    {
+                        pago &&
+                        <Col md={8} xs={8}>
+                            <Form.Item
+                                name="Valor"
+                                label="Valor"
+                                rules={[{ required: pago, message: messages.campoObrigatorio }]}
+                            >
+                                <Input
+                                    type="number"
+                                    placeholder="Valor"
+                                    min={0}
+                                    max={1000}
+                                    step="0.10"
+                                />
+                            </Form.Item>
+                        </Col>
+                    }
                 </Row>
+
                 <BotaoCadastrar
-                    possuiCancelar
                     funcaoCancelar={onClose}
                 />
             </Form>

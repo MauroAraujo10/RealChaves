@@ -168,16 +168,15 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
 
                 </Table> */}
 
-                {/* <Table
+                <Table
                     ref={tableRef}
                     className="Tabela-Lista-Pedidos mb-2"
                     dataSource={pedidoSelecionado?.Chaves}
                     columns={columns}
                     pagination={false}
-                /> */}
+                />
 
                 <BotaoCadastrar
-                    possuiCancelar
                     funcaoCancelar={onClose}
                 />
 

@@ -50,6 +50,8 @@ const ChaveEstoqueTabelaPedido = () => {
                 break;
             case 'Deletar':
                 break;
+            default:
+                break;
         }
     }
 

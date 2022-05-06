@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import ChavesVendaModal from '../components/chave.copia.modal';
 import ChavesDescarteModal from '../components/chaves.descarte.modal';
 import ChavesEditModal from '../components/chaves.edit.modal';
-import YesOrNoModal from '../../../common/yesOrNoModal';
+import YesOrNoModal from '../../../common/components/yesOrNoModal/yesOrNoModal';
 
 import TotalRegistros from '../../../common/components/TotalRegistros/TotalRegistros';
 
@@ -19,7 +19,7 @@ import tabelas from '../../../common/Messages/tabelas';
 import { SearchOutlined } from '@ant-design/icons';
 import { AiOutlineHome, AiOutlineSnippets, AiOutlineDownSquare, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
-class Grid extends Component {
+class ChaveTabela extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -115,10 +115,20 @@ class Grid extends Component {
     funcaoAbrirModal(dto, funcionalidade) {
         switch (funcionalidade) {
             case 'Copia':
+
+                if (Number(dto.Quantidade === 0)){
+                    toast.warning(messages.estoqueZerado);
+                    return;
+                }
                 this.setState({ modalVendaVisible: true, chaveSelecionada: dto })
                 break;
 
             case 'Descarte':
+                
+                if (Number(dto.Quantidade === 0)){
+                    toast.warning('Não é possível realizar esta operação pois não há chaves no estoque !');
+                    return;
+                }
                 this.setState({ modalDescarteVisible: true, chaveSelecionada: dto })
                 break;
 
@@ -236,4 +246,4 @@ class Grid extends Component {
     }
 }
 
-export default withRouter(Grid);
+export default withRouter(ChaveTabela);

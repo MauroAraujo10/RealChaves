@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { Form, Input, DatePicker, Switch, Breadcrumb } from 'antd';
 import { Row, Col } from 'antd';
 import { messages } from '../../../common/Messages/messages';
@@ -12,117 +12,116 @@ import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadas
 import { AiOutlineHome } from "react-icons/ai";
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 
-class ServicosNew extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            Servico: '',
-            Data: '',
-            Valor: '',
-            Pago: false
+const ServicosCadastro = () => {
+    const [data, setData] = useState();
+    const [pago, setPago] = useState();
+    const history = useHistory();
+
+    const submitForm = (form) => {
+        const dto = {
+            Servico: form.Servico,
+            Data: data,
+            Pago: pago,
+            Valor: pago ? parseFloat(form.Valor) : 0
         };
+
+        service.post(dto)
+            .then(() => {
+                toast.success(messages.cadastradoSucesso('Serviço'));
+                history.push(Rotas.Servico);
+            })
+            .catch(() => {
+                toast.error(messages.cadastradoErro('Serviço'));
+            });
     }
 
-    render() {
-        const submitForm = (e) => {
-            service.post(this.state)
-                .then(() => {
-                    toast.success(messages.cadastradoSucesso('Serviço'));
-                    this.props.history.replace(Rotas.Servico);
-                })
-                .catch(() => {
-                    toast.error(messages.cadastradoErro('Serviço'));
-                });
-        }
-
-        return (
-            <div className="container">
-                <div className="t-center mb-2">
-                    <h1> Cadastrar Serviço </h1>
-                    <Breadcrumb>
-                        <Breadcrumb.Item>
-                            <Link to={Rotas.Home}>
-                                <AiOutlineHome className="mr-1" />
-                                Início
+    return (
+        <div className="container">
+            <div className="t-center mb-2">
+                <h1> Cadastrar Serviço </h1>
+                <Breadcrumb>
+                    <Breadcrumb.Item>
+                        <Link to={Rotas.Home}>
+                            <AiOutlineHome className="mr-1" />
+                            Início
                         </Link>
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item>
-                            <Link to={Rotas.Servico}>
-                                Serviço
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>
+                        <Link to={Rotas.Servico}>
+                            Serviço
                         </Link>
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item>
-                            <Link>
-                                Cadastrar Serviço
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>
+                        <Link>
+                            Cadastrar Serviço
                             </Link>
-                        </Breadcrumb.Item>
-                    </Breadcrumb>
-                </div>
+                    </Breadcrumb.Item>
+                </Breadcrumb>
+            </div>
 
-                <Form
-                    layout="vertical"
-                    onFinish={submitForm}
-                >
-                    <Row gutter={8}>
-                        <Col span={24}>
-                            <Form.Item
-                                name="Descricao"
-                                label="Descrição do Serviço"
-                                rules={[{ required: true, message: messages.CampoObrigatorio, }]}
-                            >
-                                <Input.TextArea
-                                    showCount
-                                    maxLength={200}
-                                    onChange={(e) => this.setState({ Servico: e.target.value })}
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-
-                    <Row gutter={12}>
-                        <Col span={4}>
-                            <Form.Item
-                                label="Data"
-                                name="Data"
-                                rules={[{ required: true, message: messages.CampoObrigatorio }]}>
-                                <DatePicker
-                                    format="DD/MM/YYYY"
-                                    onChange={(date, dateString) => this.setState({ Data: dateString })}
-                                    value={this.state.data} />
-                            </Form.Item>
-                        </Col>
-                        <Col span={3}>
+            <Form
+                layout="vertical"
+                onFinish={submitForm}
+            >
+                <Row gutter={8}>
+                    <Col md={12} xs={24}>
+                        <Form.Item
+                            name="Servico"
+                            label="Descrição do Serviço"
+                            rules={[{ required: true, message: messages.CampoObrigatorio, }]}
+                        >
+                            <Input.TextArea
+                                showCount
+                                maxLength={200}
+                                placeholder="Descrição do serviço"
+                            />
+                        </Form.Item>
+                    </Col>
+                    <Col md={4} xs={12}>
+                        <Form.Item
+                            label="Data"
+                            name="Data"
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}>
+                            <DatePicker
+                                format="DD/MM/YYYY"
+                                onChange={(date, dateString) => setData(dateString)}
+                            />
+                        </Form.Item>
+                    </Col>
+                    <Col md={2} xs={4}>
+                        <Form.Item
+                            label="Pago"
+                            name="Pago">
+                            <Switch
+                                onChange={(value) => setPago(value)}
+                                checkedChildren={<CheckOutlined />}
+                                unCheckedChildren={<CloseOutlined />}
+                            />
+                        </Form.Item>
+                    </Col>
+                    {pago &&
+                        <Col md={3} xs={8}>
                             <Form.Item
                                 label="Valor"
                                 name="Valor"
-                                rules={[{ required: true, message: messages.CampoObrigatorio }]}>
+                                rules={[{ required: pago, message: messages.CampoObrigatorio }]}>
                                 <Input
                                     type="number"
                                     placeholder="Valor"
                                     min={0}
-                                    onChange={(e) => this.setState({ Valor: e.target.value })}
+                                    step="0.1"
                                 />
                             </Form.Item>
                         </Col>
-                        <Col span={4}>
-                            <Form.Item
-                                label="Pago"
-                                name="Pago">
-                                <Switch
-                                    onChange={(value) => this.setState({ Pago: value })}
-                                    checkedChildren={<CheckOutlined />}
-                                    unCheckedChildren={<CloseOutlined />}
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Row>
+                    }
+                </Row>
 
-                    <BotaoCadastrar />
-
-                </Form>
-            </div>
-        );
-    }
+                <BotaoCadastrar
+                    funcaoCancelar={() => history.push(Rotas.Servico)}
+                />
+            </Form>
+        </div>
+    );
 }
 
-export default withRouter(ServicosNew);
+export default ServicosCadastro;

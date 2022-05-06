@@ -5,38 +5,40 @@ const Methods = {
 
     async postProduto(dto) {
         let id = Number(Date.now());
-        return await service.app.ref(tabelas.EstoqueProduto).child(id).set({
+        return await service.app.ref(tabelas.Amolacao).child(id).set({
             Cliente: dto.Cliente,
-            Telefone: dto.Telefone,
+            Telefone: dto.Telefone ?? "",
             Produto: dto.Produto,
             Marca: dto.Marca,
-            Data: dto.Data,
-            Quantidade: dto.Quantidade,
-            Pago: dto.Pago,
-            Valor: dto.Valor
+            DataRecebimento: dto.DataRecebimento,
+            Quantidade: dto.Quantidade
         })
     },
     async updateProduto(dto) {
-        return await service.app.ref(tabelas.EstoqueProduto).child(dto.Id).set({
+        return await service.app.ref(tabelas.Amolacao).child(dto.Id).set({
             Cliente: dto.Cliente,
-            Telefone: dto.Telefone,
+            Telefone: dto.Telefone ?? "",
             Produto: dto.Produto,
             Marca: dto.Marca,
-            Data: dto.Data,
+            DataRecebimento: dto.DataRecebimento,
             Quantidade: dto.Quantidade,
-            Pago: dto.Pago,
-            Valor: dto.Valor
+            DataEntrega: dto.DataEntrega ?? "",
+            Valor: dto.Valor ?? "",
         });
     },
     async delete(id) {
-        await service.app.ref(tabelas.EstoqueProduto).child(id).remove();
+        await service.app.ref(tabelas.Amolacao).child(id).remove();
     },
     async postBaixaProduto(dto) {
         let id = Date.now();
-        return await service.app.ref(tabelas.RelatorioAmolacao).child(id).set({
-            IdProduto: dto.IdProduto,
-            DataEntrega: dto.DataEntrega,
+        return await service.app.ref(tabelas.ProdutosAmolados).child(id).set({
+            key: id,
+            Cliente: dto.Cliente,
+            Telefone: dto.Telefone ?? "",
             Produto: dto.Produto,
+            Marca: dto.Marca,
+            DataRecebimento: dto.DataRecebimento,
+            DataEntrega: dto.DataEntrega,
             Quantidade: dto.Quantidade,
             Valor: dto.Valor
         })

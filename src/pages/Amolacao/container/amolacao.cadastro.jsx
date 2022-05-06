@@ -5,6 +5,7 @@ import { Row, Col } from 'antd';
 import { messages } from '../../../common/Messages/messages';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
+import moment from 'moment';
 
 import amolacaoService from '../service/amolacao.service';
 import BotaoCadastar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
@@ -16,31 +17,42 @@ import { RiKnifeLine } from "react-icons/ri";
 const AmolacaoCadastro = () => {
     const history = useHistory();
     const { Option } = Select;
-    
     const [pago, setPago] = useState(false);
     const [data, setData] = useState('');
 
     const submitForm = (form) => {
-
         const dto = {
             Cliente: form.Cliente,
             Telefone: form.Telefone,
             Produto: form.Produto,
             Marca: form.Marca,
-            Data: data,
+            DataRecebimento: data,
             Quantidade: Number(form.Quantidade),
             Pago: pago,
             Valor: pago ? parseFloat(form.Valor) : 0
         }
 
-        amolacaoService.postProduto(dto)
-            .then(() => {
-                toast.success(messages.cadastradoSucesso('Produto'));
-                history.push(Rotas.AmolacaoEstoque);
-            })
-            .catch(() => {
-                toast.error(messages.cadastradoErro('Produto'));
-            });
+        if (pago) {
+            dto.DataEntrega = moment().format('DD/MM/YYYY');
+            amolacaoService.postBaixaProduto(dto)
+                .then(() => {
+                    toast.success(messages.cadastradoSucesso('Produto'));
+                    history.push(Rotas.AmolacaoHistoricoAmolacoes);
+                })
+                .catch(() => {
+                    toast.error(messages.cadastradoErro('Produto'));
+                });
+        }
+        else {
+            amolacaoService.postProduto(dto)
+                .then(() => {
+                    toast.success(messages.cadastradoSucesso('Produto'));
+                    history.push(Rotas.AmolacaoEstoque);
+                })
+                .catch(() => {
+                    toast.error(messages.cadastradoErro('Produto'));
+                });
+        }
     }
 
     return (
@@ -65,7 +77,7 @@ const AmolacaoCadastro = () => {
                         <Form.Item
                             label="Cliente"
                             name="Cliente"
-                            rules={[{ required: false, message: messages.CampoObrigatorio }]}>
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}>
                             <Input
                                 type="text"
                                 placeholder="Cliente"
@@ -120,9 +132,9 @@ const AmolacaoCadastro = () => {
                     </Col>
                 </Row>
                 <Row gutter={10}>
-                    <Col md={4} xs={10}>
+                    <Col md={3} xs={10}>
                         <Form.Item
-                            label="Data"
+                            label="Data Recebimento"
                             name="Data"
                             rules={[{ required: true, message: messages.CampoObrigatorio }]}>
                             <DatePicker
@@ -131,15 +143,16 @@ const AmolacaoCadastro = () => {
                             />
                         </Form.Item>
                     </Col>
-                    <Col md={4} xs={10}>
+                    <Col md={3} xs={10}>
                         <Form.Item
                             label="Quantidade"
                             name="Quantidade"
                             rules={[{ required: true, message: messages.CampoObrigatorio }]}>
                             <Input
                                 type="number"
-                                placeholder="0"
+                                placeholder="Quantidade"
                                 min={1}
+                                max={25}
                             />
                         </Form.Item>
                     </Col>
@@ -163,14 +176,16 @@ const AmolacaoCadastro = () => {
                                 <Input
                                     type="number"
                                     placeholder="Valor"
-                                    min={0}
+                                    min="0.1"
                                     step="0.10"
                                 />
                             </Form.Item>
                         }
                     </Col>
                 </Row>
-                <BotaoCadastar />
+                <BotaoCadastar
+                    funcaoCancelar={() => history.push(Rotas.AmolacaoHistoricoAmolacoes)}
+                />
             </Form>
         </div>
     )

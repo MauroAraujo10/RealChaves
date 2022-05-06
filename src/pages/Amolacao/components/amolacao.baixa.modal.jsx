@@ -8,27 +8,40 @@ import TituloModal from '../../../common/components/TituloModal/TituloModal';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
 const AmolacaoBaixaModal = ({ visible, onClose, produtoSelecionado }) => {
-    const [data, setData] = useState('');
+    const [dataEntrega, setDataEntrega] = useState('');
 
-    const submitForm = (form) => {
+    const submitForm = async (form) => {
+        const quantidadeForm = Number(form.Quantidade);
+        console.log(produtoSelecionado.Id);
 
-        const dto = {
-            IdProduto: produtoSelecionado.Id,
-            DataEntrega: data,
+        let dto = {
+            Id: produtoSelecionado.Id,
+            Cliente: produtoSelecionado.Cliente,
+            Telefone: produtoSelecionado.Telefone,
             Produto: produtoSelecionado.Produto,
-            Quantidade: produtoSelecionado.Quantidade,
-            Valor: produtoSelecionado.Pago === "Sim" ? produtoSelecionado.Valor : parseFloat(form.Valor)
+            Marca: produtoSelecionado.Marca,
+            DataRecebimento: produtoSelecionado.DataRecebimento,
+            DataEntrega: dataEntrega,
+            Valor: parseFloat(form.Valor),
         };
 
-        service.postBaixaProduto(dto)
-            .then(() => {
-                service.delete(dto.IdProduto);
-                toast.success(messages.cadastradoSucesso('Baixa de Produto'));
-                onClose();
-            })
-            .catch(() => {
-                toast.error(messages.cadastradoErro('Baixa de Produto'));
-            })
+        if (quantidadeForm === produtoSelecionado.Quantidade) {
+            dto.Quantidade = quantidadeForm;
+            await service.delete(produtoSelecionado.Id);
+        }
+        else{
+            dto.Quantidade = produtoSelecionado?.Quantidade - Number(form.Quantidade);
+            await service.updateProduto(dto);
+        }
+
+        await service.postBaixaProduto(dto)
+                .then(() => {
+                    toast.success(messages.cadastradoSucesso('Baixa de Produto'));
+                    onClose();
+                })
+                .catch(() => {
+                    toast.error(messages.cadastradoErro('Baixa de Produto'));
+                })
     }
 
 
@@ -40,61 +53,53 @@ const AmolacaoBaixaModal = ({ visible, onClose, produtoSelecionado }) => {
             destroyOnClose
         >
 
-            <TituloModal titulo={'Entregar Produto'} />
+            <TituloModal titulo={'Baixa de Produto'} />
 
-            <Form
-                layout="vertical"
-                onFinish={submitForm}
-            >
-
-                <Row gutter={8}>
-                    <Col span={10}>
+            <Form layout="vertical" onFinish={submitForm}>
+                <Row gutter={12}>
+                    <Col md={8} xs={24}>
                         <Form.Item
                             label="Data da Entrega"
                             name="DataEntrega"
                             rules={[{ required: true, message: messages.CampoObrigatorio }]}>
                             <DatePicker
                                 format="DD/MM/YYYY"
-                                onChange={(date, dateString) => setData(dateString)}
+                                onChange={(date, dateString) => setDataEntrega(dateString)}
                             />
                         </Form.Item>
                     </Col>
-                    {
-                        produtoSelecionado?.Pago === "Não" && (
-                            <Col span={10}>
-                                <Form.Item
-                                    label="Valor Pago"
-                                    name="Valor"
-                                    rules={[{ required: true, message: messages.CampoObrigatorio }]}
-                                >
-                                    <Input
-                                        type="text"
-                                        placeholder="0,00"
-                                        min={0}
-                                        step="0.10"
-                                        value="0,20"
-                                    />
-                                </Form.Item>
-                            </Col>
-                        )
-                    }
+                    <Col md={6} xs={24}>
+                        <Form.Item
+                            label="Valor Pago"
+                            name="Valor"
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
+                        >
+                            <Input
+                                type="number"
+                                placeholder="Valor"
+                                max={999}
+                                min="0.1"
+                                step="0.1"
+                            />
+                        </Form.Item>
+                    </Col>
+                    <Col md={8} xs={24}>
+                        <Form.Item
+                            label="Quantidade entregue"
+                            name="Quantidade"
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
+                        >
+                            <Input
+                                type="number"
+                                placeholder="Quantidade"
+                                min={1}
+                                max={produtoSelecionado?.Quantidade}
+                            />
+                        </Form.Item>
+                    </Col>
                 </Row>
 
-                {
-                    produtoSelecionado?.Pago === 'Sim' &&
-                    (
-                        <div className="mb-1 t-right">
-                            {
-                                produtoSelecionado.Quantidade === 1 ?
-                                    <b>* Este Alicate Já está Pago</b> :
-                                    <b>* Estes Alicates Já estão Pagos</b>
-                            }
-                        </div>
-                    )
-                }
-
                 <BotaoCadastrar
-                    possuiCancelar
                     funcaoCancelar={onClose}
                 />
 

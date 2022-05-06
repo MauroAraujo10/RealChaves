@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Modal, Form, Col, Row, Input, Select, DatePicker, Space, Switch } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Modal, Form, Col, Row, Input, Select, DatePicker, Space } from 'antd';
 import { toast } from 'react-toastify';
 import { messages } from '../../../common/Messages/messages';
 import moment from 'moment';
@@ -10,12 +10,14 @@ import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadas
 
 import { AiOutlineFork, AiOutlineScissor } from "react-icons/ai";
 import { RiKnifeLine } from "react-icons/ri";
-import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 
 const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
     const [data, setData] = useState('');
-    const [pago, setPago] = useState(false);
     const { Option } = Select;
+
+    useEffect(() => {
+        setData(produtoSelecionado?.DataRecebimento);
+    }, [produtoSelecionado]);
 
     const submitForm = (form) => {
 
@@ -25,11 +27,8 @@ const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
             Telefone: form.Telefone,
             Produto: form.Produto,
             Marca: form.Marca,
-            Data: data,
-            Quantidade: Number(form.Quantidade),
-            Pago: pago === undefined ? (produtoSelecionado?.Pago === 'Sim') : pago,
-            Valor: pago === undefined ? parseFloat(produtoSelecionado?.Valor) : 0, 
-            // PRECISA FAZER OUTRO TESTE COM O VALOR 
+            DataRecebimento: data,
+            Quantidade: produtoSelecionado?.Quantidade
         };
 
         service.updateProduto(dto)
@@ -49,7 +48,6 @@ const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
             footer={null}
             destroyOnClose
         >
-
             <TituloModal titulo={'Editar Produto'} />
 
             <Form
@@ -66,6 +64,7 @@ const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
                         >
                             <Input
                                 type="text"
+                                placeholder="Cliente"
                                 autoFocus
                                 maxLength={50}
                             />
@@ -80,13 +79,14 @@ const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
                             <Input
                                 type="text"
                                 maxLength={15}
+                                placeholder={"Telefone"}
                             />
                         </Form.Item>
                     </Col>
                 </Row>
 
                 <Row gutter={12}>
-                    <Col md={10} xs={24}>
+                    <Col md={9} xs={24}>
                         <Form.Item
                             label="Produto"
                             name="Produto"
@@ -109,7 +109,7 @@ const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
                         </Form.Item>
                     </Col>
 
-                    <Col md={14} xs={24}>
+                    <Col md={6} xs={24}>
                         <Form.Item
                             name="Marca"
                             label="Marca"
@@ -118,74 +118,28 @@ const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
                             <Input
                                 type="text"
                                 maxLength={20}
+                                placeholder={"Marca"}
                             />
                         </Form.Item>
                     </Col>
-                </Row>
-                <Row gutter={12}>
                     <Col md={8} xs={24}>
                         <Form.Item
-                            name="Data"
-                            label="Data de Cadastro"
+                            name="DataRecebimento"
+                            label="Data Recebimento"
                             rules={[{ required: true, message: messages.campoObrigatorio }]}
                         >
                             <Space direction="vertical">
                                 <DatePicker
                                     format={'DD/MM/YYYY'}
                                     onChange={(date, dateString) => setData(dateString)}
-                                    defaultValue={moment(produtoSelecionado.Data, 'DD/MM/YYYY')}
+                                    defaultValue={moment(produtoSelecionado?.DataRecebimento, 'DD/MM/YYYY')}
                                 />
                             </Space>
                         </Form.Item>
                     </Col>
-                    <Col md={5} xs={24}>
-                        <Form.Item
-                            name="Quantidade"
-                            label="Quantidade"
-                            rules={[{ required: true, message: messages.campoObrigatorio }]}
-                        >
-                            <Input
-                                type="number"
-                                max={10}
-                                min={0}
-                            />
-                        </Form.Item>
-                    </Col>
-
-                    <Col md={3} xs={4}>
-                        <Form.Item
-                            name="Pago"
-                            label="Pago"
-                        >
-                            <Switch
-                                onChange={(value) => setPago(value)}
-                                defaultChecked={produtoSelecionado?.Pago === 'Sim'}
-                                checkedChildren={<CheckOutlined />}
-                                unCheckedChildren={<CloseOutlined />}
-                            />
-                        </Form.Item>
-                    </Col>
-                    {/* CORRIGIR O BUG */}
-                    {pago &&
-                        <Col md={6}>
-                            <Form.Item
-                                name="Valor"
-                                label="Valor"
-                                rules={[{ required: true, message: messages.campoObrigatorio }]}
-                            >
-                                <Input
-                                    type="number"
-                                    min={0}
-                                    max={1000}
-                                    step="0.10"
-                                />
-                            </Form.Item>
-                        </Col>
-                    }
                 </Row>
 
                 <BotaoCadastrar
-                    possuiCancelar
                     funcaoCancelar={onClose}
                 />
             </Form>

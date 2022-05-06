@@ -55,7 +55,8 @@ const ChaveEstoquePedido = () => {
       setQuantidadeTotal(0);
       setDrawerVisible(false);
       setPedidoModalVisible(false);
-      // Implementar validação se vai sair mesmo do form
+      // Refatora: Implementar validação se vai sair mesmo do form
+      // Refatora: Verificar a Necessidade de zerar as variaveis
     }
   }, []);
 

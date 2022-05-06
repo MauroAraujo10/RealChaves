@@ -37,5 +37,8 @@ export const messages = {
     },
     funcionalidadeIndisponivel: () => {
         return 'Funcionalidade ainda não está disponível, aguarde a proxima versão !';
+    },
+    estoqueZerado: () => {
+        return 'Não é possível realizar esta operação pois não há chaves no estoque !';
     }
 };

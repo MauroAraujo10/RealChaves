@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Form, Input, Row, Col, DatePicker, Space, Select, Image } from 'antd';
 import { messages } from '../../../common/Messages/messages';
 import { toast } from "react-toastify";
@@ -26,14 +26,19 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
     const [tipo, setTipo] = useState('');
     const { Option } = Select;
 
+    useEffect(() => {
+        setData(chaveSelecionada?.Data);
+        setTipo(chaveSelecionada?.Tipo);
+    }, [chaveSelecionada])
+
     const submitForm = (form) => {
         const dto = {
             Id: chaveSelecionada.Id,
             Marca: form.Marca,
             NumeroSerie: Number(form.NumeroSerie),
             Quantidade: Number(form.Quantidade),
-            Data: data ? data : chaveSelecionada.Data,
-            Tipo: tipo ? tipo : chaveSelecionada.Tipo
+            Data: data,
+            Tipo: tipo
         };
 
         service.update(dto)
@@ -120,7 +125,7 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
                         >
                             <Input
                                 type="number"
-                                placeholder={123}
+                                placeholder={"Número de Série"}
                                 max={99999}
                                 min={1}
                             />
@@ -212,7 +217,6 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
                 </Row>
 
                 <BotaoCadastrar
-                    possuiCancelar
                     funcaoCancelar={onClose}
                 />
             </Form>
