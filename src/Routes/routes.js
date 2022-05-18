@@ -24,13 +24,13 @@ import ServicosGrid from '../pages/Servicos/container/servicos.grid';
 import ServicosNew from '../pages/Servicos/container/servicos.new';
 
 import EstatisticasChaves from '../pages/Estatistica/Chaves/estatistica.chave';
-import EstatisticasAlicates from '../pages/Estatistica/Alicates';
-import EstatisticasServicos from '../pages/Estatistica/Servicos';
+import EstatisticasAmolacoes from '../pages/Estatistica/Amolacoes/estatisticas.Amolacoes';
+import EstatisticasServicos from '../pages/Estatistica/Servicos/estatisticas.servicos';
 
-export default function Routes() {
+export default function Routes({ configuracoes }) {
     return (
         <div style={{ display: 'flex', height: '1200px' }}>
-            <Menu />
+            <Menu configuracoes={configuracoes} />
             <div style={{ width: '100%' }}>
                 <Switch>
                     <Route path="/" exact component={Home} />
@@ -40,7 +40,7 @@ export default function Routes() {
 
                     <Route exact path={Rotas.ChavesEstoqueTabelaPedido} component={ChaveEstoqueTabelaPedido} />
                     <Route exact path={Rotas.ChavesEstoquePedido} component={ChaveEstoquePedido} />
-                
+
                     <Route exact path={Rotas.ChavesHistoricoCopias} component={ChavesHistoricoCopias} />
                     <Route exact path={Rotas.ChavesHistoricoDescarte} component={ChavesHistoricoDescarte} />
                     <Route exact path={Rotas.ChavesHistoricoPedidoEstoque} component={ChavesHistoricoPedidoEstoque} />
@@ -53,7 +53,7 @@ export default function Routes() {
                     <Route exact path={Rotas.ServicoNew} component={ServicosNew} />
 
                     <Route exact path={Rotas.EstatisticasChave} component={EstatisticasChaves} />
-                    <Route exact path={Rotas.EstatisticasAlicates} component={EstatisticasAlicates} />
+                    <Route exact path={Rotas.EstatisticasAmolacoes} component={EstatisticasAmolacoes} />
                     <Route exact path={Rotas.EstatisticasServicos} component={EstatisticasServicos} />
 
                     <Route path="*" component={Erro} />

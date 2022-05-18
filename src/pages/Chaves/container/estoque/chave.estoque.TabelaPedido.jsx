@@ -17,6 +17,7 @@ const ChaveEstoqueTabelaPedido = () => {
     const [baixaProdutoModalVisible, setBaixaProdutoModalVisible] = useState(false);
 
     useEffect(() => {
+        //REFATORA: Arrumar quais colunas vão aparecer na grid
         service.app.ref(tabelas.PedidoEstoque).on('value', (snapshot) => {
             let pedido = [];
             snapshot.forEach((x) => {
@@ -57,8 +58,8 @@ const ChaveEstoqueTabelaPedido = () => {
 
     const columns = [
         { title: 'Id', dataIndex: 'Id', key: 'Id', width: '10%' },
-        { title: 'Data', dataIndex: 'Data', key: 'Data', width: '10%' },
-        { title: 'QuantidadeTotal', dataIndex: 'QuantidadeTotal', key: 'QuantidadeTotal', width: '10%' },
+        { title: 'Data do Pedido', dataIndex: 'Data', key: 'Data', width: '10%' },
+        { title: 'Quantidade Total', dataIndex: 'QuantidadeTotal', key: 'QuantidadeTotal', width: '10%' },
         {
             title: 'Ações', width: '10%', render: (status, pedido) => (
                 <div style={{ display: 'flex' }}>

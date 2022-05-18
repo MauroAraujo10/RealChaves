@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Menu, Switch } from "antd";
 import { Rotas } from './rotas';
+import service from './service/config.service';
 import {
     AiOutlineHome,
     AiOutlineLineChart,
@@ -22,9 +23,13 @@ import { VscKey } from "react-icons/vsc";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-export default function Routes() {
+export default function Routes({ configuracoes }) {
     const history = useHistory();
-    const [theme, setTheme] = useState('light');
+    const [theme, setTheme] = useState('');
+
+    useEffect(() => {
+        setTheme(configuracoes?.DarkTheme ? 'dark' : 'light');
+    }, [configuracoes]);
 
     const { SubMenu } = Menu;
     const rootSubmenuKeys = ['sub1', 'sub2', 'sub4'];
@@ -43,6 +48,12 @@ export default function Routes() {
     };
 
     function changeTheme(value) {
+        const dto = {
+            DarkTheme: value,
+            Paginacao: false //REFATORA
+        };
+
+        service.post(dto);
         setTheme(value ? 'dark' : 'light')
     }
 
@@ -72,11 +83,11 @@ export default function Routes() {
                 </Menu.Item>
 
                 <SubMenu key="Chaves.Estoque" icon={<AiOutlineFileDone />} title="Estoque">
-                    <Menu.Item key="Chaves.Estoque.TabelaPedido" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoqueTabelaPedido)} >
-                        Tabela de Pedidos
-                    </Menu.Item>
                     <Menu.Item key="Chaves.Estoque.Pedido" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoquePedido)} >
                         Fazer pedido
+                    </Menu.Item>
+                    <Menu.Item key="Chaves.Estoque.TabelaPedido" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoqueTabelaPedido)} >
+                        Tabela de Pedidos
                     </Menu.Item>
                 </SubMenu>
 
@@ -117,13 +128,13 @@ export default function Routes() {
             </SubMenu>
 
             <SubMenu key="Estatisticas" icon={<AiOutlineLineChart />} title="Estatisticas">
-                <Menu.Item key="Estatisticas.Chave" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasChave)}>
+                <Menu.Item key="Estatisticas.Chave" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasChave)} icon={<VscKey />}>
                     Chaves
                 </Menu.Item>
-                <Menu.Item key="Estatisticas.Alicate" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasAlicates)}>
-                    Alicates
+                <Menu.Item key="Estatisticas.Alicate" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasAmolacoes)} icon={<AiOutlineFork />}>
+                    Amolações
                 </Menu.Item>
-                <Menu.Item key="Estatisticas.servico" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasServicos)}>
+                <Menu.Item key="Estatisticas.servico" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasServicos)} icon={<AiOutlineTool />}>
                     Serviços
                 </Menu.Item>
             </SubMenu>
@@ -133,6 +144,7 @@ export default function Routes() {
                     Tema
                         <div className="f-right">
                         <Switch
+                            defaultChecked={configuracoes?.DarkTheme}
                             checkedChildren="Dark"
                             unCheckedChildren="Light"
                             onChange={changeTheme}>

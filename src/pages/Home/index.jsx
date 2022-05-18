@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
 import { Row, Col } from 'antd';
 import moment from 'moment';
 import tabelas from '../../common/Messages/tabelas';
@@ -14,48 +13,49 @@ const Home = () => {
     const dataAtual = moment().format('DD/MM/yyyy');
 
     useEffect(() => {
+
+        function getChaves() {
+            service.app.ref(tabelas.CopiasChave).once('value', (snapshot) => {
+                let numeroChavesVendidasHoje = 0;
+                snapshot.forEach((x) => {
+                    if (x.val().Data === dataAtual)
+                        numeroChavesVendidasHoje++;
+                })
+                setChavesVendidasHoje(numeroChavesVendidasHoje);
+            })
+        }
+
+        function getAlicates() {
+            service.app.ref(tabelas.Amolacao).once('value', (snapshot) => {
+                let numeroAlicatesAmoladosHoje = 0;
+                snapshot.forEach((x) => {
+                    if (x.val().Data === dataAtual)
+                        numeroAlicatesAmoladosHoje++;
+                })
+                setAlicatesAmoladoHoje(numeroAlicatesAmoladosHoje);
+            })
+        }
+
+        function getServicos() {
+            service.app.ref(tabelas.Servicos).once('value', (snapshot) => {
+                let numeroServicosRealizadosHoje = 0;
+                snapshot.forEach((x) => {
+                    if (x.val().Data === dataAtual)
+                        numeroServicosRealizadosHoje++;
+                })
+                setServicosRealizadosHoje(numeroServicosRealizadosHoje);
+            })
+        }
+
         getChaves();
         getAlicates();
         getServicos();
-        
-    }, []);
 
-    function getChaves() {
-        service.app.ref(tabelas.CopiasChave).once('value', (snapshot) => {
-            let numeroChavesVendidasHoje = 0;
-            snapshot.forEach((x) => {
-                if (x.val().Data === dataAtual)
-                    numeroChavesVendidasHoje++;
-            })
-            setChavesVendidasHoje(numeroChavesVendidasHoje);
-        })
-    }
-
-    function getAlicates() {
-        service.app.ref(tabelas.Amolacao).once('value', (snapshot) => {
-            let numeroAlicatesAmoladosHoje = 0;
-            snapshot.forEach((x) => {
-                if (x.val().Data === dataAtual)
-                    numeroAlicatesAmoladosHoje++;
-            })
-            setAlicatesAmoladoHoje(numeroAlicatesAmoladosHoje);
-        })
-    }
-
-    function getServicos() {
-        service.app.ref(tabelas.Servicos).once('value', (snapshot) => {
-            let numeroServicosRealizadosHoje = 0;
-            snapshot.forEach((x) => {
-                if (x.val().Data === dataAtual)
-                    numeroServicosRealizadosHoje++;
-            })
-            setServicosRealizadosHoje(numeroServicosRealizadosHoje);
-        })
-    }
+    }, [dataAtual]);
 
     return (
         <>
-            <Row style={{display: "flex", justifyContent: 'space-around'}} className="mt-2">
+            <Row style={{ display: "flex", justifyContent: 'space-around' }} className="mt-2">
                 <Col md={6} xs={20} className="container t-center">
                     <div>
                         <FcFaq size={40} />
@@ -80,4 +80,4 @@ const Home = () => {
     );
 }
 
-export default withRouter(Home);
+export default Home;

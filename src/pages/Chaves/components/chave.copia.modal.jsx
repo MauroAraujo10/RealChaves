@@ -89,7 +89,7 @@ const ChaveCopiaModal = ({ visible, onClose, chaveSelecionada }) => {
                                 placeholder="Valor"
                                 min={1}
                                 max={1000}
-                                step="0.1"
+                                step="0.10"
                             />
                         </Form.Item>
                     </Col>

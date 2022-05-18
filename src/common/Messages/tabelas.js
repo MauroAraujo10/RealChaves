@@ -4,11 +4,12 @@ export default {
     CopiasChave: 'CopiasChave',
     Descarte: 'Descarte',
     PedidoEstoque: 'PedidoEstoque',
+    BaixaPedidoChaves: 'BaixaPedidoChaves',
     
     Amolacao: 'Amolacao',
     ProdutosAmolados: 'ProdutosAmolados',
 
     Servicos: 'Servicos',
     
-    Vendas: 'Vendas', //Excluir
+    Configuracoes: 'Configuracoes'
 }

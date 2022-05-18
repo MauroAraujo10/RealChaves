@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Form, Input, Row, Col, DatePicker, Space, Select, Image } from 'antd';
+import { Modal, Form, Input, Row, Col, DatePicker, Space, Select, Image, Table, Button, Tooltip, Divider } from 'antd';
 import { messages } from '../../../common/Messages/messages';
 import { toast } from "react-toastify";
+import { AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
 
 import service from '../service/chave.service';
+import ChaveAddNumeroSerieModal from '../components/chave.AddNumeroSerie.modal';
 import TituloModal from '../../../common/components/TituloModal/TituloModal';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 import moment from 'moment';
@@ -24,11 +26,32 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
     const [data, setData] = useState('');
     const [imgSrc, setImgSrc] = useState('');
     const [tipo, setTipo] = useState('');
+    const [numeroSerieModalVisible, setNumeroSerieModalVisible] = useState(false);
+    const [listaNumeroSerie, setListaNumeroSerie] = useState([]);
     const { Option } = Select;
+
+    const columns = [
+        { title: 'Marca', dataIndex: 'Marca', key: 'Marca' },
+        { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie' },
+        {
+            title: 'Ações', render: (status, dto) => (
+                <div style={{ display: 'flex' }}>
+                    <Tooltip title="Deletar">
+                        <AiOutlineDelete
+                            className="iconExcluir"
+                            size={20}
+                            onClick={() => handleDeleteNumeroSerie(dto)}
+                        />
+                    </Tooltip>
+                </div>
+            )
+        }
+    ];
 
     useEffect(() => {
         setData(chaveSelecionada?.Data);
         setTipo(chaveSelecionada?.Tipo);
+        setListaNumeroSerie(chaveSelecionada?.ListaNumeroSerie ? chaveSelecionada.ListaNumeroSerie : [])
     }, [chaveSelecionada])
 
     const submitForm = (form) => {
@@ -36,9 +59,10 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
             Id: chaveSelecionada.Id,
             Marca: form.Marca,
             NumeroSerie: Number(form.NumeroSerie),
-            Quantidade: Number(form.Quantidade),
+            Quantidade: Number(chaveSelecionada?.Quantidade),
             Data: data,
-            Tipo: tipo
+            Tipo: tipo,
+            ListaNumeroSerie: listaNumeroSerie
         };
 
         service.update(dto)
@@ -74,11 +98,26 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
         setImgSrc(img);
     }
 
-    const closeModal = () => {
-        setData('');
-        setTipo('');
-        setImgSrc('');
+    const addNumeroSerie = (marca, numeroSerie) => {
+        const dto = {
+            key: Date.now(),
+            Marca: marca,
+            NumeroSerie: Number(numeroSerie)
+        };
+
+        if (listaNumeroSerie.some(x => x.Marca === marca && x.NumeroSerie === numeroSerie)) {
+            toast.warning(messages.registroRepetido);
+            return
+        }
+
+        setListaNumeroSerie([...listaNumeroSerie, dto]);
     }
+
+    const handleDeleteNumeroSerie = (dto) => {
+        const novaLista = listaNumeroSerie.filter(x => x.key !== dto.key);
+        setListaNumeroSerie(novaLista);
+    }
+
 
     return (
         <Modal
@@ -86,7 +125,6 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
             onCancel={onClose}
             footer={null}
             destroyOnClose={true}
-            afterClose={closeModal}
         >
             <TituloModal titulo={'Edição de Chave'} />
 
@@ -95,8 +133,8 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
                 layout="vertical"
                 onFinish={submitForm}
             >
-                <Row>
-                    <Col md={24} xs={24}>
+                <Row gutter={10}>
+                    <Col md={8} xs={24}>
                         <Form.Item
                             name="Marca"
                             label="Marca"
@@ -112,9 +150,6 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
                             />
                         </Form.Item>
                     </Col>
-                </Row>
-
-                <Row gutter={10}>
                     <Col md={8} xs={24}>
                         <Form.Item
                             name="NumeroSerie"
@@ -131,22 +166,6 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
                             />
                         </Form.Item>
                     </Col>
-
-                    <Col md={8} xs={24}>
-                        <Form.Item
-                            name="Quantidade"
-                            label="Quantidade"
-                            rules={[
-                                { required: true, message: messages.campoObrigatorio }
-                            ]}
-                        >
-                            <Input
-                                disabled
-                                type="number"
-                            />
-                        </Form.Item>
-                    </Col>
-
                     <Col md={8} xs={24}>
                         <Form.Item
                             name="Data"
@@ -165,7 +184,6 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
                         </Form.Item>
                     </Col>
                 </Row>
-
                 <Row gutter={10}>
                     <Col md={12} xs={24}>
                         <Form.Item
@@ -216,11 +234,38 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
                     </Col>
                 </Row>
 
+                <Divider />
+
+                <Row>
+                    <Col md={24} xs={24}>
+                        <Button
+                            onClick={() => setNumeroSerieModalVisible(true)}
+                            style={{ float: 'right', marginBottom: '10px' }}
+                        >
+                            <AiOutlinePlusCircle className="mr-1" />
+                            Adicionar
+                        </Button>
+                        <Table
+                            className="grid-numeroSerie"
+                            bordered
+                            dataSource={listaNumeroSerie}
+                            columns={columns}
+                            pagination={false}
+                        />
+                    </Col>
+                </Row>
+
                 <BotaoCadastrar
                     funcaoCancelar={onClose}
                 />
+
+                <ChaveAddNumeroSerieModal
+                    visible={numeroSerieModalVisible}
+                    onClose={() => setNumeroSerieModalVisible(false)}
+                    addNumeroSerie={addNumeroSerie}
+                />
             </Form>
-        </Modal>
+        </Modal >
     );
 
 }

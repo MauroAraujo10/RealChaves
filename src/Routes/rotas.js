@@ -19,6 +19,6 @@ export const Rotas = {
     ServicoNew: '/Servico/Cadastro',
 
     EstatisticasChave: '/Estatistica/Chaves',
-    EstatisticasAlicates: '/Estatistica/Alicates',
+    EstatisticasAmolacoes: '/Estatistica/Amolacoes',
     EstatisticasServicos: '/Estatistica/Servicos',
 }

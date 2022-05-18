@@ -13,26 +13,31 @@ import { AiOutlineHome } from "react-icons/ai";
 const ChavesHistoricoCopia = () => {
     const [chaves, setChaves] = useState([]);
     const columns = [
-        { title: 'IdProduto', dataIndex: 'IdProduto', key: 'IdProduto', width: '30%' },
+        { title: 'Data da Cópia', dataIndex: 'Data', key: 'Data', width: '10%' },
+        { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '30%' },
+        { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', width: '30%' },
         { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', width: '20%' },
         { title: 'Valor (R$)', dataIndex: 'Valor', key: 'Valor', width: '10%' },
-        { title: 'Data da Cópia', dataIndex: 'Data', key: 'Data', width: '10%' },
     ];
 
     useEffect(() => {
-        service.app.ref(tabelas.CopiasChave).on('value', (snapshot) => {
-            let chaves = [];
-            snapshot.forEach((x) => {
-                chaves.push({
-                    Id: x.key,
-                    IdProduto: x.val().IdProduto,
-                    Quantidade: x.val().Quantidade,
-                    Valor: x.val().Valor,
-                    Data: x.val().Data,
-
+        let copia = [];
+        service.app.ref(tabelas.CopiasChave).once('value', snap => {
+            snap.forEach((copiaChave) => {
+                service.app.ref(tabelas.Chave).child(copiaChave.val().IdChave).on('value', chave => {
+                    copia.push({
+                        Id: copiaChave.key,
+                        key: copiaChave.key,
+                        Marca: chave.val().Marca,
+                        NumeroSerie: chave.val().NumeroSerie,
+                        Data: copiaChave.val().Data,
+                        Quantidade: copiaChave.val().Quantidade,
+                        Valor: copiaChave.val().Valor
+                    });
+                    setChaves([]);
+                    setChaves(copia);
                 })
             })
-            setChaves(chaves);
         });
     }, []);
 
@@ -45,7 +50,7 @@ const ChavesHistoricoCopia = () => {
                         <Link to={Rotas.Home}>
                             <AiOutlineHome className="mr-1" />
                             Início
-                            </Link>
+                        </Link>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
                         <Link to={Rotas.Chaves}>

@@ -63,7 +63,7 @@ const ChaveEstoquePedido = () => {
   const handleAddDrawer = (chave) => {
 
     if (listaPedidos.some(x => x.Id === chave.Id)) {
-      toast.error(`Esta chave ja foi adicionada a lista de pedidos`);
+      toast.warning(`Esta chave ja foi adicionada a lista de pedidos`);
       return;
     }
     switch (chave.Tipo) {
@@ -136,7 +136,8 @@ const ChaveEstoquePedido = () => {
   const columns = [
     { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '20%' },
     { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', width: '10%' },
-    { title: 'Estoque', dataIndex: 'Quantidade', key: 'Quantidade', width: '10%' },
+    { title: 'Tipo de Chave', dataIndex: 'Tipo', key: 'Tipo', width: '10%' },
+    { title: 'Quantidade em Estoque', dataIndex: 'Quantidade', key: 'Quantidade', width: '10%' },
     {
       title: 'Ações', width: '5%', render: (status, x) => (
         <>

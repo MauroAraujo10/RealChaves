@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import { Row, Col, Modal, Form, DatePicker, Input, Switch, Table } from 'antd';
+import { Row, Col, Modal, Form, DatePicker, Input, Table } from 'antd';
 import { messages } from '../../../common/Messages/messages';
 import { toast } from 'react-toastify';
 
@@ -17,17 +17,17 @@ import Column from 'antd/lib/table/Column';
 
 const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
     const [listaChaves, setListaChaves] = useState([]);
+    const [listaQuantidadesEntregues, setListaQuantidadesEntregues] = useState([]);
     const [data, setData] = useState();
-    const tableRef = useRef();
-    const switchRef = useRef();
+    const inputRef = useRef();
 
     useEffect(() => {
         setListaChaves(pedidoSelecionado?.Chaves);
-        console.log('alterei');
     }, [pedidoSelecionado]);
 
     const submitForm = (form) => {
-        console.log(form);
+
+        let listaQuantidades = [];
 
         const dto = {
             IdPedido: pedidoSelecionado.Id,
@@ -37,9 +37,10 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
             Empresa: form.Empresa,
             Chaves: pedidoSelecionado?.Chaves
         };
+        console.log(pedidoSelecionado);
+        console.log(form);
 
-        console.log(dto);
-        console.log(tableRef);
+        
 
         // chaveService.postBaixaPedidos(dto)
         //     .then(() => {
@@ -51,40 +52,14 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
         //     })
     }
 
-    const funcaoAlteraQuantidade = (status, dto, index) => {
-        console.log(status);
+    const changeQuantidade = (status, dto, index, value,aa) => {
+        console.log(inputRef.current);
+        console.log(dto);
+        console.log(index);
+        console.log(value);
+        console.log(aa);
         //const listaChavesPedidoSelecionado = 
     }
-
-    const columns = [
-        { title: 'Marca', dataIndex: 'Marca', key: 'Marca' },
-        { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie' },
-        { title: 'Quantidade Solicitada', dataIndex: 'QuantidadeSolicitada', key: 'QuantidadeSolicitada' },
-        {
-            title: 'Quantidade Entregue', render: (status, dto, index) => (
-                <Input
-                    type="number"
-                    min={1}
-                    max={100}
-                    onChange={() => funcaoAlteraQuantidade(status, dto, index)}
-                    required
-                />
-            )
-        },
-        {
-            title: 'Status Entrega', render: (pedido, _, index) => (
-                <Switch
-                    ref={switchRef}
-                    checkedChildren={'Completo'}
-                    unCheckedChildren={'Incompleto'}
-                    defaultChecked={false}
-                    disabled={true}
-                />
-            )
-        }
-
-    ];
-
 
     return (
         <Modal
@@ -105,7 +80,7 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
                         <Form.Item
                             name="DataBaixa"
                             label="Data da Baixa"
-                            rules={[{ required: false, message: messages.CampoObrigatorio }]}
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
                         >
                             <DatePicker
                                 format="DD/MM/YYYY"
@@ -117,7 +92,7 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
                         <Form.Item
                             label="Valor"
                             name="Valor"
-                            rules={[{ required: false, message: messages.CampoObrigatorio }]}
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
                         >
                             <Input
                                 type="number"
@@ -132,7 +107,7 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
                         <Form.Item
                             label="Empresa"
                             name="Empresa"
-                            rules={[{ required: false, message: messages.CampoObrigatorio }]}
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
                         >
                             <Input
                                 type="text"
@@ -143,38 +118,31 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
                     </Col>
                 </Row>
 
-                {/* <Table
-                    ref={tableRef}
+                <Table
                     className="Tabela-Lista-Pedidos mb-2"
                     dataSource={pedidoSelecionado?.Chaves}
                     pagination={false}
                 >
                     <Column title="Marca" dataIndex="Marca" key="Marca" />
                     <Column title="Quantidade Solicitada" dataIndex="QuantidadeSolicitada" key="QuantidadeSolicitada" />
-                    <Column title="Quantidade Entregue" render={(status, dto, index) => (
+                    <Column title="Quantidade Entregue" render={(status, dto, index, value) => (
                         <>
                             <Form.Item
-                                name="QuantidadeEntregue"
+                                name={`Quantidade-${index}`}
                             >
                                 <Input
+                                    ref={inputRef}
                                     type="number"
                                     min={1}
                                     max={100}
+                                    onChange={(value, aa) => changeQuantidade(status, dto, index, value,aa )}
                                 />
                             </Form.Item>
                         </>
                     )}
                     />
 
-                </Table> */}
-
-                <Table
-                    ref={tableRef}
-                    className="Tabela-Lista-Pedidos mb-2"
-                    dataSource={pedidoSelecionado?.Chaves}
-                    columns={columns}
-                    pagination={false}
-                />
+                </Table>
 
                 <BotaoCadastrar
                     funcaoCancelar={onClose}
