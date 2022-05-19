@@ -33,6 +33,8 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
             ListaChaves: [],
             Chaves: pedidoSelecionado?.Chaves,
         };
+        console.log(pedidoSelecionado);
+        console.log(form);
 
         listaQuantidadesEntregues.forEach((quantidadeRecebida, index) => {
             let quantidadeSolicitada = pedidoSelecionado?.Chaves[index].QuantidadeSolicitada;
