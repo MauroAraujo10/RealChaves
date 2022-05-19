@@ -83,6 +83,12 @@ svg:hover{
   color: #FFF !important;
 }
 
+.grid-numeroSerie th{
+  background-color: #94A1A6 !important;
+  color: #FFF !important;
+}
+
+
 .t-center{
   text-align: center;
 }

@@ -13,31 +13,31 @@ const ChavesHistoricoDescarte = () => {
     const [descartados, setDescartados] = useState([]);
 
     const columns = [
-        { title: 'Data do Descarte', dataIndex: 'Data', key: 'Data', width: '25%' },
-        { title: 'Motivo', dataIndex: 'Motivo', key: 'Motivo', width: '35%' },
-        { title: 'Quantidade Descartada', dataIndex: 'QuantidadeDescartada', key: 'QuantidadeDescartada', width: '20%' },
-        {
-            title: 'Ações', width: '10%', render: (status, x) => (
-                <>
-                </>
-            )
-        }
+        { title: 'Data do Descarte', dataIndex: 'Data', key: 'Data', width: '10%' },
+        { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '30%' },
+        { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', width: '20%' },
+        { title: 'Motivo', dataIndex: 'Motivo', key: 'Motivo', width: '30%' },
+        { title: 'Quantidade Descartada', dataIndex: 'QuantidadeDescartada', key: 'QuantidadeDescartada', width: '10%' },
     ];
 
     useEffect(() => {
-        service.app.ref(tabelas.Descarte).on('value', (snapshot) => {
-            let descartados = [];
-            snapshot.forEach((x) => {
-                descartados.push({
-                    Id: x.key,
-                    key: x.key,
-                    IdChave: x.val().IdChave,
-                    QuantidadeDescartada: x.val().QuantidadeDescartada,
-                    Motivo: x.val().Motivo,
-                    Data: x.val().Data
+        let descartados = [];
+        service.app.ref(tabelas.Descarte).once('value', snap => {
+            snap.forEach((descarte) => {
+                service.app.ref(tabelas.Chave).child(descarte.val().IdChave).on('value', chave => {
+                    descartados.push({
+                        Id: descarte.key,
+                        key: descarte.key,
+                        Data: descarte.val().Data,
+                        Marca: chave.val().Marca,
+                        NumeroSerie: chave.val().NumeroSerie,
+                        Motivo: descarte.val().Motivo,
+                        QuantidadeDescartada: descarte.val().Quantidade,
+                    });
+                    setDescartados([]);
+                    setDescartados(descartados);
                 })
             })
-            setDescartados(descartados);
         });
     }, []);
 

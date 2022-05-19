@@ -21,11 +21,17 @@ const ChavesEstoquePedidoModal = ({ title, visible, onClose, listaPedidos, quant
             lista.push({
                 Id: x.Id,
                 key: x.Id,
+                Marca: x.Marca,
+                NumeroSerie: x.NumeroSerie,
+                Quantidade: x.Quantidade,
+                Data: x.Data,
+                Tipo: x.Tipo,
+                ListaNumeroSerie: x.ListaNumeroSerie ? x.ListaNumeroSerie : [],
                 QuantidadeSolicitada: x.QuantidadeSolicitada
             })
         });
 
-        chaveService.postPedidoEstoque(lista, quantidadeTotal)
+         chaveService.postPedidoEstoque(lista, quantidadeTotal)
             .then(() => {
                 toast.success(messages.cadastradoSucesso('Pedido de estoque'));
                 listaPedidos.splice(0, listaPedidos.length);

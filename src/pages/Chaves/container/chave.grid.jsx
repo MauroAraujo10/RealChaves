@@ -46,7 +46,8 @@ class ChaveTabela extends Component {
                     NumeroSerie: x.val().NumeroSerie,
                     Quantidade: x.val().Quantidade,
                     Tipo: x.val().Tipo,
-                    Data: x.val().Data
+                    Data: x.val().Data,
+                    ListaNumeroSerie: x.val().ListaNumeroSerie
                 })
             })
             this.setState({ chaves: chaves });
@@ -116,7 +117,7 @@ class ChaveTabela extends Component {
         switch (funcionalidade) {
             case 'Copia':
 
-                if (Number(dto.Quantidade === 0)){
+                if (Number(dto.Quantidade === 0)) {
                     toast.warning(messages.estoqueZerado);
                     return;
                 }
@@ -124,8 +125,8 @@ class ChaveTabela extends Component {
                 break;
 
             case 'Descarte':
-                
-                if (Number(dto.Quantidade === 0)){
+
+                if (Number(dto.Quantidade === 0)) {
                     toast.warning('Não é possível realizar esta operação pois não há chaves no estoque !');
                     return;
                 }
@@ -148,11 +149,11 @@ class ChaveTabela extends Component {
     render() {
         const iconSize = 20;
         const columns = [
-            { title: 'Marca', dataIndex: 'Marca', key: 'Marca', ...this.getColumnSearchProps('Marca'), width: '15%' },
-            { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', ...this.getColumnSearchProps('NumeroSerie'), width: '15%' },
-            { title: 'Estoque', dataIndex: 'Quantidade', key: 'Quantidade', ...this.getColumnSearchProps('Quantidade'), width: '10%' },
-            { title: 'Tipo', dataIndex: 'Tipo', key: 'Tipo', ...this.getColumnSearchProps('Tipo'), width: '10%' },
             { title: 'Data de Cadastro', dataIndex: 'Data', key: 'Data', ...this.getColumnSearchProps('Data'), width: '15%' },
+            { title: 'Marca', dataIndex: 'Marca', key: 'Marca', ...this.getColumnSearchProps('Data'), width: '15%' },
+            { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', ...this.getColumnSearchProps('Data'), width: '15%' },
+            { title: 'Quantidade em estoque', dataIndex: 'Quantidade', key: 'Quantidade', ...this.getColumnSearchProps('Quantidade'), width: '10%' },
+            { title: 'Tipo', dataIndex: 'Tipo', key: 'Tipo', ...this.getColumnSearchProps('Tipo'), width: '10%' },
             {
                 title: 'Ações', width: '10%', render: (status, dto) => (
                     <div style={{ display: 'flex' }}>

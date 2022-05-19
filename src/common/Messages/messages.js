@@ -40,5 +40,8 @@ export const messages = {
     },
     estoqueZerado: () => {
         return 'Não é possível realizar esta operação pois não há chaves no estoque !';
+    },
+    registroRepetido: () => {
+        return 'Erro ao cadastrar pois o registro esta repetido !';
     }
 };

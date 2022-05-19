@@ -3,6 +3,7 @@ import { Modal, Button } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { AiOutlinePrinter } from "react-icons/ai";
 
+//REFATORA colocar essa tela no modal de visualizar Pedido
 class ChavesEstoqueVisualizar extends Component {
     render() {
 
@@ -11,7 +12,6 @@ class ChavesEstoqueVisualizar extends Component {
         }
 
         const { title, visible, onClose } = this.props;
-        // const { quantidadeTotal, preco } = this.props;
         const { chavesEstoque } = this.props;
 
         return (

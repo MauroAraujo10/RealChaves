@@ -1,65 +1,64 @@
-import React, { Component, useEffect, useState } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Breadcrumb, Tooltip } from 'antd';
+import { Link } from 'react-router-dom';
 import { Rotas } from '../../../../Routes/rotas';
 
 import Grid from '../../../../common/components/Grid/Grid';
-
 import service from '../../../../service';
-import TotalRegistros from '../../../../common/components/TotalRegistros/TotalRegistros';
-
-// import ChavesEstoqueVisualizarModal from '../../../components/chaves.estoque.visualizar.modal';
 import tabelas from '../../../../common/Messages/tabelas';
 
-import { Table, Breadcrumb, Input, Space, Button, Tooltip } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
 import { AiOutlineHome, AiOutlineEye } from "react-icons/ai";
 
 const ChavesHistoricoPedidoEstoque = () => {
-    const [estoqueChaves, setEstoqueChaves] = useState([]);
-    const [pedidoSelecionado, setPedidoSelecionado] = useState([]);
-    const [visualizarModal, setVisualizarModal] = useState(false);
+    const [estoque, setEstoque] = useState([]);
 
     const columns = [
-        { title: 'Data', dataIndex: 'Data', key: 'Data', width: '20%' },
-        { title: 'Quantidade Pedida', dataIndex: 'Quantidade', key: 'Quantidade', width: '10%' },
+        { title: 'Data do Pedido', dataIndex: 'DataPedido', key: 'DataPedido', width: '10%' },
+        { title: 'Data da Baixa', dataIndex: 'DataBaixa', key: 'DataBaixa', width: '10%' },
+        { title: 'Quantidade Solicitada', dataIndex: 'QuantidadeSolicitada', key: 'QuantidadeSolicitada', width: '10%' },
+        { title: 'Quantidade Entregue', dataIndex: 'QuantidadeRecebida', key: 'QuantidadeRecebida', width: '10%' },
+        { title: 'Empresa', dataIndex: 'Empresa', key: 'Empresa', width: '10%' },
         { title: 'Valor (R$)', dataIndex: 'Valor', key: 'Valor', width: '10%' },
+        { title: 'Status', dataIndex: 'Status', key: 'Status', width: '10%' },
         {
-            title: 'Ações', width: '5%', render: (status, x) => (
-                <>
+            title: 'Ações', width: '10%', render: (status, dto) => (
+                <div style={{ display: 'flex' }}>
                     <Tooltip title="Visualizar">
                         <AiOutlineEye
+                            className="mr-2"
                             size={20}
-                            onClick={() => handleVisualizar(x.Id)}
+                            onClick={() => handleVisualizar(dto)}
                         />
                     </Tooltip>
-                </>
+                </div>
             )
         }
     ];
 
     useEffect(() => {
-        service.app.ref(tabelas.PedidoEstoque).on('value', (snapshot) => {
-            let estoqueHistorico = [];
-            snapshot.forEach((x) => {
-                estoqueHistorico.push({
-                    Id: x.key,
-                    Data: x.val().Data,
-                    Quantidade: x.val().Quantidade,
+        service.app.ref(tabelas.BaixaPedidoChaves).on('value', snap => {
+            let estoque = [];
+            snap.forEach((x) => {
+                estoque.push({
+                    key: x.key,
+                    DataPedido: x.val().DataPedido,
+                    DataBaixa: x.val().DataBaixa,
+                    QuantidadeSolicitada: x.val().QuantidadePedidaTotal,
+                    QuantidadeRecebida: x.val().QuantidadeRecebidaTotal,
+                    Empresa: x.val().Empresa,
                     Valor: x.val().Valor,
-                    Chaves: x.val().Chaves
+                    Status: x.val().Status,
+                    ListaChaves: x.val().ListaChaves
                 })
+                setEstoque([]);
+                setEstoque(estoque);
             })
-            setEstoqueChaves(estoqueHistorico);
         });
     }, []);
 
-    const handleVisualizar = (id) => {
-        const estoque = estoqueChaves.find(x => x.Id === id);
-
-        if (estoque) {
-            setVisualizarModal(true);
-            setPedidoSelecionado(estoque);
-        }
+    const handleVisualizar = (dto) => {
+        //Refatora: implemetar visualizar, talvez chamar de detalhes
+        console.log(dto)
     }
 
     return (
@@ -78,64 +77,11 @@ const ChavesHistoricoPedidoEstoque = () => {
             </div>
 
             <Grid
-                dataSource={estoqueChaves}
+                dataSource={estoque}
                 columns={columns}
             />
         </>
     );
-
-    // const handleVisualizar = (id) =>  {
-    //     let chavesEstoque = [];
-    //     service.app.ref(tabelas.Amolacao).child(id).child('Chaves').on('value', (snapshot) => {
-    //         snapshot.forEach((x) => {
-    //             chavesEstoque.push({
-    //                 Id: x.key,
-    //                 Marca: x.val().Marca,
-    //                 NumeroSerie: x.val().NumeroSerie,
-    //                 Quantidade: x.val().Quantidade,
-    //                 QuantidadeSolicitada: x.val().QuantidadeSolicitada,
-    //                 Tipo: x.val().Tipo,
-    //             })
-    //         })
-    //     })
-    //     this.setState({
-    //         visualizarModal: true,
-    //         idEstoque: id,
-    //         chavesEstoque
-    //     });
-    // }
-
 }
 
 export default ChavesHistoricoPedidoEstoque;
-//     render() {
-//         const { Item } = Breadcrumb;
-
-
-//         <div className="container">
-
-//             <TotalRegistros
-//                 numeroRegistros={this.state.estoqueHistorico.length}
-//             />
-
-//             <Table
-//                 className="Grid"
-//                 bordered
-//                 dataSource={this.state.estoqueHistorico}
-//                 columns={columns}>
-//             </Table>
-//         </div>
-
-//             <ChavesEstoqueVisualizarModal
-//                 title={'Detalhes do pedido'}
-//                 idEstoque={this.state.idEstoque}
-//                 chavesEstoque={this.state.chavesEstoque}
-//                 visible={this.state.visualizarModal}
-//                 onClose={() => this.setState({ visualizarModal: false })}
-//             />
-//             </>
-//         );
-//     }
-// }
-
-// export default withRouter(EstoqueHistorico);
