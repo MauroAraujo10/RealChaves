@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function TotalRegistros(valor) {
     return (
-        <div style={{float: 'right'}}>
+        <div className="f-right">
             <h4>
                 Número total de Registros: {valor.numeroRegistros}
             </h4>

@@ -9,9 +9,8 @@ export default function Header() {
         <header>
             <Link to={Rotas.Home}>
                 <FaKey
-                    style={{ marginRight: "10px" }}
-                    size={20}
-                    color="FF0" />
+                    className="mr-2"
+                    size={20} />
                 Real Chaves
                 </Link>
         </header>

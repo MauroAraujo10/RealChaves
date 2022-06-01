@@ -9,6 +9,7 @@ import Grid from '../../../../common/components/Grid/Grid';
 import service from '../../../../service';
 import tabelas from '../../../../common/Messages/tabelas';
 
+import ChaveEstoqueViewPedidoModal from '../../components/chave.estoque.viewPedido.modal';
 import ChaveEstoqueBaixaPedidoModal from '../../components/chaves.estoque.baixaPedido.modal';
 import YesOrNoModal from '../../../../common/components/yesOrNoModal/yesOrNoModal';
 
@@ -17,6 +18,7 @@ import { AiOutlineHome, AiOutlineLike, AiOutlineEye, AiOutlineDelete } from "rea
 const ChaveEstoqueTabelaPedido = () => {
     const [pedidoSelecionado, setPedidoSelecionado] = useState([]);
     const [pedidosEstoque, setPedidosEstoque] = useState([]);
+    const [viewProdutoModalVisible, setViewProdutoModalVisible] = useState(false);
     const [baixaProdutoModalVisible, setBaixaProdutoModalVisible] = useState(false);
     const [yesOrNoModalVisible, setYesOrNoModalVisible] = useState(false);
 
@@ -29,30 +31,25 @@ const ChaveEstoqueTabelaPedido = () => {
                     Id: x.key,
                     key: x.key,
                     Chaves: x.val().Chaves,
+                    NumeroChaves: x.val().Chaves.length ? x.val().Chaves.length : 0,
                     DataPedido: x.val().DataPedido,
                     QuantidadePedidaTotal: x.val().QuantidadePedidaTotal
                 })
             })
             setPedidosEstoque(pedido);
         })
-
     }, []);
 
 
     const funcaoAbrirModal = (pedido, funcioalidade) => {
+
+        setPedidoSelecionado(pedido);
+
         switch (funcioalidade) {
-            case 'Visualizar':
-                break;
-            case 'Baixar':
-                setPedidoSelecionado(pedido);
-                setBaixaProdutoModalVisible(true);
-                break;
-            case 'Deletar':
-                setPedidoSelecionado(pedido);
-                setYesOrNoModalVisible(true);
-                break;
-            default: 
-                break;
+            case 'Visualizar': setViewProdutoModalVisible(true); break;
+            case 'Baixar': setBaixaProdutoModalVisible(true); break;
+            case 'Deletar': setYesOrNoModalVisible(true); break;
+            default: break;
         }
     }
 
@@ -69,6 +66,7 @@ const ChaveEstoqueTabelaPedido = () => {
 
     const columns = [
         { title: 'Data do Pedido', dataIndex: 'DataPedido', key: 'DataPedido', width: '10%' },
+        { title: 'Número de chaves', dataIndex: 'NumeroChaves', key: 'NumeroChaves', width: '10%' },
         { title: 'Quantidade Total', dataIndex: 'QuantidadePedidaTotal', key: 'QuantidadePedidaTotal', width: '10%' },
         {
             title: 'Ações', width: '10%', render: (status, pedido) => (
@@ -114,10 +112,16 @@ const ChaveEstoqueTabelaPedido = () => {
                     <Breadcrumb.Item>Tabela de Pedidos de Estoque</Breadcrumb.Item>
                 </Breadcrumb>
             </div>
-
+            {/* Refatora: Grid Perfeita */}
             <Grid
                 dataSource={pedidosEstoque}
                 columns={columns}
+            />
+
+            <ChaveEstoqueViewPedidoModal
+                visible={viewProdutoModalVisible}
+                onClose={() => setViewProdutoModalVisible(false)}
+                pedidoSelecionado={pedidoSelecionado}
             />
 
             <ChaveEstoqueBaixaPedidoModal

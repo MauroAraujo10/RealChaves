@@ -25,15 +25,15 @@ import Tubular from '../../assets/Tubular.jpg';
 
 const ChaveEstoquePedido = () => {
   const ButtonGroup = Button.Group;
+
   const [chaves, setChaves] = useState([]);
   const [listaPedidos, setListaPedidos] = useState([]);
   const [quantidadeTotal, setQuantidadeTotal] = useState(0);
-
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [pedidoModalVisible, setPedidoModalVisible] = useState(false);
 
   useEffect(() => {
-    service.app.ref(tabelas.Chave).on('value', (snapshot) => {
+    service.app.ref(tabelas.Chave).once('value', (snapshot) => {
       let chaves = [];
       snapshot.forEach((x) => {
         chaves.push({
@@ -44,27 +44,18 @@ const ChaveEstoquePedido = () => {
           Quantidade: x.val().Quantidade,
           Tipo: x.val().Tipo,
           Data: x.val().Data,
+          QuantidadeSolicitada: 1,
           ListaNumeroSerie: x.val().ListaNumeroSerie ? x.val().ListaNumeroSerie : [],
         })
       })
       setChaves(chaves);
     });
-
-    return () => {
-      setChaves([]);
-      setListaPedidos([]);
-      setQuantidadeTotal(0);
-      setDrawerVisible(false);
-      setPedidoModalVisible(false);
-      // Refatora: Implementar validação se vai sair mesmo do form
-      // Refatora: Verificar a Necessidade de zerar as variaveis
-    }
   }, []);
 
   const handleAddDrawer = (chave) => {
 
     if (listaPedidos.some(x => x.Id === chave.Id)) {
-      toast.warning(`Esta chave ja foi adicionada a lista de pedidos`);
+      toast.warning(`Esta chave ja foi adicionada na lista de pedidos`);
       return;
     }
     switch (chave.Tipo) {
@@ -82,11 +73,11 @@ const ChaveEstoquePedido = () => {
       default: chave.Image = null; break;
     }
 
-    let chaveAddLista = listaPedidos;
-    chave.QuantidadeSolicitada = 1;
-    chaveAddLista.push(chave);
+    let novaListaChaves = listaPedidos;
+    //chave.QuantidadeSolicitada = 1;
+    novaListaChaves.push(chave);
 
-    setListaPedidos(chaveAddLista);
+    setListaPedidos(novaListaChaves);
     setDrawerVisible(true);
   }
 
@@ -95,7 +86,7 @@ const ChaveEstoquePedido = () => {
     let index = chaves.findIndex(x => x.Id === id);
 
     if (index >= 0) {
-      chaves[index].QuantidadeSolicitada += 1;
+      chaves[index].QuantidadeSolicitada++;
       setListaPedidos(chaves);
     }
   }
@@ -103,13 +94,11 @@ const ChaveEstoquePedido = () => {
     let chaves = listaPedidos;
     let index = chaves.findIndex(x => x.Id === id);
 
-    if (index >= 0) {
-      if (chaves[index].QuantidadeSolicitada === 0)
-        return;
+    if (chaves[index].QuantidadeSolicitada === 1)
+      return;
 
-      chaves[index].QuantidadeSolicitada -= 1;
-      setListaPedidos(chaves);
-    }
+    chaves[index].QuantidadeSolicitada--;
+    setListaPedidos(chaves);
   }
 
   const handleDeleteChave = (id) => {
@@ -177,6 +166,16 @@ const ChaveEstoquePedido = () => {
           </Button>
         </Tooltip>
       </div>
+
+      {listaPedidos.map((x) => (
+        <>
+          Teste do Mauro
+          <Badge
+            showZero
+            count={x.QuantidadeSolicitada}
+          />
+        </>
+      ))}
 
       <Grid
         dataSource={chaves}
@@ -269,11 +268,10 @@ const ChaveEstoquePedido = () => {
       </Drawer>
 
       <ChavesEstoquePedidoModal
-        title="Revise o seu pedido"
-        quantidadeTotal={quantidadeTotal}
-        listaPedidos={listaPedidos}
         visible={pedidoModalVisible}
         onClose={() => setPedidoModalVisible(false)}
+        quantidadeTotal={quantidadeTotal}
+        listaPedidos={listaPedidos}
       />
     </div>
   );

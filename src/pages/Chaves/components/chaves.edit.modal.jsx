@@ -240,7 +240,7 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
                     <Col md={24} xs={24}>
                         <Button
                             onClick={() => setNumeroSerieModalVisible(true)}
-                            style={{ float: 'right', marginBottom: '10px' }}
+                            className="f-right mb-1"
                         >
                             <AiOutlinePlusCircle className="mr-1" />
                             Adicionar

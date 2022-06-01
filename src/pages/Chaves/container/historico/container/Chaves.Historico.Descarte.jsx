@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
-import { Rotas } from '../../../../Routes/rotas';
+import { Rotas } from '../../../../../Routes/rotas';
 
-import tabelas from '../../../../common/Messages/tabelas';
-import service from '../../../../service';
-import Grid from '../../../../common/components/Grid/Grid';
+import tabelas from '../../../../../common/Messages/tabelas';
+import service from '../../../../../service';
+import Grid from '../../../../../common/components/Grid/Grid';
 
 import { AiOutlineHome } from "react-icons/ai";
 
@@ -26,13 +26,13 @@ const ChavesHistoricoDescarte = () => {
             snap.forEach((descarte) => {
                 service.app.ref(tabelas.Chave).child(descarte.val().IdChave).on('value', chave => {
                     descartados.push({
-                        Id: descarte.key,
-                        key: descarte.key,
-                        Data: descarte.val().Data,
-                        Marca: chave.val().Marca,
-                        NumeroSerie: chave.val().NumeroSerie,
-                        Motivo: descarte.val().Motivo,
-                        QuantidadeDescartada: descarte.val().Quantidade,
+                        Id: descarte?.key,
+                        key: descarte?.key,
+                        Data: descarte.val()?.Data,
+                        Marca: chave.val()?.Marca,
+                        NumeroSerie: chave.val()?.NumeroSerie,
+                        Motivo: descarte.val()?.Motivo,
+                        QuantidadeDescartada: descarte.val()?.Quantidade,
                     });
                     setDescartados([]);
                     setDescartados(descartados);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { Form, Input, DatePicker, Select, Breadcrumb, Image, Table, Tooltip, Button } from 'antd';
+import { Form, Input, Select, Breadcrumb, Image, Table, Tooltip, Button } from 'antd';
 import { Row, Col } from 'antd';
 import { messages } from '../../../common/Messages/messages';
 import { Rotas } from '../../../Routes/rotas';
@@ -24,7 +24,6 @@ import Gorje from '../assets/Gorje.jpg';
 import Tubular from '../assets/Tubular.jpg';
 
 const ChaveCadastro = () => {
-    const [data, setData] = useState('');
     const [imgSrc, setImgSrc] = useState('');
     const [tipo, setTipo] = useState('');
     const [listaNumeroSerie, setListaNumeroSerie] = useState([]);
@@ -57,7 +56,6 @@ const ChaveCadastro = () => {
             NumeroSerie: Number(form.NumeroSerie),
             Tipo: tipo,
             Quantidade: Number(form.Quantidade),
-            Data: data,
             ListaNumeroSerie: listaNumeroSerie ? listaNumeroSerie : []
         };
 
@@ -158,6 +156,20 @@ const ChaveCadastro = () => {
                                 <Option value="Tubular">Tubular</Option>
                             </Select>
                         </Form.Item>
+                    </Col>
+                    <Col md={3} xs={24}>
+                        <Form.Item
+                            label="Número Serie"
+                            name="NumeroSerie"
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}>
+                            <Input
+                                type="number"
+                                placeholder="Número Serie"
+                                min={1}
+                                max={99999}
+                                step="1"
+                            />
+                        </Form.Item>
                         <Image.PreviewGroup>
                             {imgSrc && (
                                 <Image
@@ -171,17 +183,6 @@ const ChaveCadastro = () => {
                     </Col>
                     <Col md={3} xs={24}>
                         <Form.Item
-                            label="Número Serie"
-                            name="NumeroSerie"
-                            rules={[{ required: true, message: messages.CampoObrigatorio }]}>
-                            <Input
-                                type="number"
-                                placeholder="Número Serie"
-                                min={1}
-                                max={99999}
-                            />
-                        </Form.Item>
-                        <Form.Item
                             label="Quantidade"
                             name="Quantidade"
                             rules={[{ required: true, message: messages.CampoObrigatorio }]}>
@@ -193,21 +194,10 @@ const ChaveCadastro = () => {
                             />
                         </Form.Item>
                     </Col>
-                    <Col md={4} xs={24}>
-                        <Form.Item
-                            label="Data"
-                            name="Data"
-                            rules={[{ required: true, message: messages.CampoObrigatorio }]}>
-                            <DatePicker
-                                format="DD/MM/YYYY"
-                                onChange={(date, dateString) => setData(dateString)}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col md={12} xs={24}>
+                    <Col md={12} xs={24} offset={1}>
                         <Button
                             onClick={() => setNumeroSerieModalVisible(true)}
-                            style={{ float: 'right', marginBottom: '10px' }}
+                            className="f-right mb-1"
                         >
                             <AiOutlinePlusCircle className="mr-1" />
                             Adicionar

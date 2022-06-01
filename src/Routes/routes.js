@@ -12,9 +12,9 @@ import ChavesNew from '../pages/Chaves/container/chave.new';
 import ChaveEstoqueTabelaPedido from '../pages/Chaves/container/estoque/chave.estoque.TabelaPedido';
 import ChaveEstoquePedido from '../pages/Chaves/container/estoque/chave.estoque.Pedido';
 
-import ChavesHistoricoCopias from '../pages/Chaves/container/historico/Chaves.Historico.Copia';
-import ChavesHistoricoDescarte from '../pages/Chaves/container/historico/Chaves.Historico.Descarte';
-import ChavesHistoricoPedidoEstoque from '../pages/Chaves/container/historico/Chaves.Historico.PedidoEstoque';
+import ChavesHistoricoCopias from '../pages/Chaves/container/historico/container/Chaves.Historico.Copia';
+import ChavesHistoricoDescarte from '../pages/Chaves/container/historico/container/Chaves.Historico.Descarte';
+import ChavesHistoricoPedidoEstoque from '../pages/Chaves/container/historico/container/Chaves.Historico.PedidoEstoque';
 
 import AmolacaoCadastro from '../pages/Amolacao/container/amolacao.cadastro';
 import AmolacaoTabela from '../pages/Amolacao/container/amolacao.tabela';
@@ -24,8 +24,8 @@ import ServicosGrid from '../pages/Servicos/container/servicos.grid';
 import ServicosNew from '../pages/Servicos/container/servicos.new';
 
 import EstatisticasChaves from '../pages/Estatistica/Chaves/estatistica.chave';
-import EstatisticasAmolacoes from '../pages/Estatistica/Amolacoes/estatisticas.Amolacoes';
-import EstatisticasServicos from '../pages/Estatistica/Servicos/estatisticas.servicos';
+import EstatisticasAmolacoes from '../pages/Estatistica/Amolacoes/estatistica.Amolacoes';
+import EstatisticasServicos from '../pages/Estatistica/Servicos/estatistica.servicos';
 
 export default function Routes({ configuracoes }) {
     return (

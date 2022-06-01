@@ -2,50 +2,49 @@ import React from 'react';
 import { Modal, Button } from 'antd';
 import { messages } from '../../../common/Messages/messages';
 import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
+import { Rotas } from '../../../Routes/rotas';
 
 import moment from 'moment';
 import chaveService from '../service/chave.service';
 
 import { AiOutlinePrinter } from "react-icons/ai";
 
-const ChavesEstoquePedidoModal = ({ title, visible, onClose, listaPedidos, quantidadeTotal }) => {
-
-    const handlePrint = () => {
-        toast.warning(messages.funcionalidadeIndisponivel)
-    }
+const ChavesEstoquePedidoModal = ({ visible, onClose, quantidadeTotal, listaPedidos }) => {
+    const history = useHistory();
 
     const submitForm = () => {
         let lista = [];
-        
+
         listaPedidos.forEach((x) => {
             lista.push({
-                Id: x.Id,
+                IdChave: x.Id,
                 key: x.Id,
-                Marca: x.Marca,
-                NumeroSerie: x.NumeroSerie,
-                Quantidade: x.Quantidade,
                 Data: x.Data,
-                Tipo: x.Tipo,
-                ListaNumeroSerie: x.ListaNumeroSerie ? x.ListaNumeroSerie : [],
                 QuantidadeSolicitada: x.QuantidadeSolicitada
             })
         });
 
-         chaveService.postPedidoEstoque(lista, quantidadeTotal)
+        chaveService.postPedidoEstoque(lista, quantidadeTotal)
             .then(() => {
                 toast.success(messages.cadastradoSucesso('Pedido de estoque'));
                 listaPedidos.splice(0, listaPedidos.length);
                 onClose();
+                history.push(Rotas.ChavesEstoqueTabelaPedido);
             })
             .catch(() => {
                 toast.error(messages.cadastradoErro('Pedido de estoque'));
             });
     }
 
+    const handlePrint = () => {
+        toast.warning(messages.funcionalidadeIndisponivel)
+    }
+
     return (
         <>
             <Modal
-                title={title}
+                title={'Revise o seu pedido'}
                 visible={visible}
                 footer={(
                     <>

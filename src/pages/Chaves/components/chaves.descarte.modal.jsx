@@ -75,7 +75,8 @@ const ChaveDescarteModal = ({ visible, onClose, chaveSelecionada }) => {
                             <Input
                                 type="number"
                                 min={1}
-                                placeholder="0"
+                                max={chaveSelecionada?.Quantidade}
+                                placeholder="Quantidade"
                             />
                         </Form.Item>
                     </Col>

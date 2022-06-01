@@ -9,7 +9,7 @@ const methods = {
             key: id,
             Marca: dto.Marca,
             NumeroSerie: dto.NumeroSerie,
-            Data: dto.Data,
+            Data: moment().format('DD/MM/yyyy'),
             Tipo: dto.Tipo,
             Quantidade: dto.Quantidade,
             ListaNumeroSerie: dto.ListaNumeroSerie ? dto.ListaNumeroSerie : []
@@ -22,8 +22,23 @@ const methods = {
             Quantidade: dto.Quantidade,
             Tipo: dto.Tipo,
             Data: dto.Data,
-            ListaNumeroSerie: dto.ListaNumeroSerie
+            ListaNumeroSerie: dto.ListaNumeroSerie ? dto.ListaNumeroSerie : []
         });
+    },
+    async getById(id) {
+        let chaveGetDto;
+        await service.app.ref(tabelas.Chave).child(id).once('value', x => {
+            chaveGetDto = {
+                key: x.val().key,
+                Marca: x.val().Marca,
+                NumeroSerie: x.val().NumeroSerie,
+                Quantidade: x.val().Quantidade,
+                Tipo: x.val().Tipo,
+                Data: x.val().Data,
+                ListaNumeroSerie: x.val().ListaNumeroSerie ? x.val().ListaNumeroSerie : []
+            };
+        })
+        return chaveGetDto;
     },
     async delete(id) {
         await service.app.ref(tabelas.Chave).child(id).remove();
@@ -35,7 +50,8 @@ const methods = {
             IdChave: dto.IdChave,
             Data: dto.Data,
             Quantidade: dto.Quantidade,
-            Valor: dto.Valor
+            Valor: dto.Valor,
+            TipoPagamento: dto.TipoPagamento
         })
     },
     async postDescarte(dto) {
@@ -60,16 +76,18 @@ const methods = {
     async postBaixaPedidos(dto) {
         let id = Date.now();
 
-        await dto.Chaves.forEach((x, index) => {
-            service.app.ref(tabelas.Chave).child(x.Id).set({
-                key: x.Id,
-                Data: x.Data,
-                Marca: x.Marca,
-                NumeroSerie: x.NumeroSerie,
-                Quantidade: Number(x.Quantidade) + Number(dto.ListaChaves[index].QuantidadeRecebida),
-                Tipo: x.Tipo,
-                ListaNumeroSerie: x.ListaNumeroSerie ? x.ListaNumeroSerie : []
-            })
+        await dto.Chaves.forEach((chaveSolicitada, index) => {
+            this.getById(chaveSolicitada.key).then((chave) => {
+                service.app.ref(tabelas.Chave).child(chave.Id).set({
+                    key: chave.key,
+                    Marca: chave.Marca,
+                    NumeroSerie: chave.NumeroSerie,
+                    Data: chave.Data,
+                    Quantidade: Number(chaveSolicitada.Quantidade) + Number(dto.ListaChaves[index].QuantidadeRecebida),
+                    Tipo: chave.Tipo,
+                    ListaNumeroSerie: chave.ListaNumeroSerie ? chave.ListaNumeroSerie : []
+                });
+            });
         })
 
         await service.app.ref(tabelas.PedidoEstoque).child(dto.Id).remove();
@@ -85,42 +103,6 @@ const methods = {
             Status: dto.Status,
             ListaChaves: dto.ListaChaves
         })
-    },
-    async teste() {
-        let dto = {};
-
-        await service.app.ref(tabelas.CopiasChave).once('value', (snapshot) => {
-            let copias = [];
-            let copiasHoje = 0;
-            let copiasEsteMes = 0;
-            let quantidadeTotal = 0;
-
-            let valorHoje = 45;
-            let valorMes = 225;
-            let valorTotal = 0;
-
-            snapshot.forEach((x) => {
-                copias.push({
-                    Id: x.val().key,
-                    key: x.val().key,
-                    Quantidade: x.val().Quantidade,
-                    Valor: x.val().Valor,
-                    Data: x.val().Data
-                })
-                quantidadeTotal = quantidadeTotal + x.val().Quantidade;
-                valorTotal = valorTotal + x.val().Valor;
-            })
-            dto = {
-                CopiasHoje: copiasHoje,
-                CopiasEsteMes: copiasEsteMes,
-                QuantidadeTotal: quantidadeTotal,
-                ValorHoje: valorHoje,
-                ValorMes: valorMes,
-                ValorTotal: valorTotal
-            }
-        })
-
-        return dto;
     }
 };
 

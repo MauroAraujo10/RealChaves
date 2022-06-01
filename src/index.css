@@ -42,14 +42,9 @@ svg:hover{
   cursor: pointer;
 }
 
-.m-0{
-  margin: 0px;
-}
-
 .mb-1{
   margin-bottom: 10px;
 }
-
 .mb-2{
   margin-bottom: 20px;
 }
@@ -70,10 +65,6 @@ svg:hover{
   margin-left: 10px;
 }
 
-.ml-2{
-  margin-left: 20px;
-}
-
 .f-right{
   float: right
 }
@@ -87,7 +78,6 @@ svg:hover{
   background-color: #94A1A6 !important;
   color: #FFF !important;
 }
-
 
 .t-center{
   text-align: center;
@@ -103,6 +93,10 @@ svg:hover{
 
 .iconDescarte{
   color: #df6706;
+}
+
+.iconPedidoEstoque{
+  color: rgb(12, 41, 31);
 }
 
 .iconEdit{
@@ -142,24 +136,25 @@ svg:hover{
   color: #FFF !important;
 }
 
-.ordenacaoLista{
-  border-radius: 20%;
-  background: #004878;
-  padding: 5px;
-  color: #FFF;
-  margin-right: 5px;
-}
-
-.homeCard{
-  border-bottom: 5px solid #004878;
-  box-shadow: 5px 2px 3px rgb(0 0 0 / 12%), 0 1px 2px rgb(0 0 0 / 24%);
-}
 
 .Tabela-Lista-Pedidos th{
   background-color: #0f4c5c !important;
   color: #FFF !important;
 }
 
-.Tabela-Lista-Pedidos td{
-  
+.EstatisticaCard{
+  border-top: 5px solid #004878 !important;
+  background-color: #e4f3fd !important;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.container{
+  background-color: #FFF;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }

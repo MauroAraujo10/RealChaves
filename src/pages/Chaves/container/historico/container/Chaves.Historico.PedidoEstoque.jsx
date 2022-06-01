@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Breadcrumb, Tooltip } from 'antd';
 import { Link } from 'react-router-dom';
-import { Rotas } from '../../../../Routes/rotas';
+import { Rotas } from '../../../../../Routes/rotas';
 
-import Grid from '../../../../common/components/Grid/Grid';
-import service from '../../../../service';
-import tabelas from '../../../../common/Messages/tabelas';
+import Grid from '../../../../../common/components/Grid/Grid';
+import service from '../../../../../service';
+import tabelas from '../../../../../common/Messages/tabelas';
 
+import PedidoEstoqueHistoricoViewModal from '../components/pedidoEstoque.Historico.view.modal';
 import { AiOutlineHome, AiOutlineEye } from "react-icons/ai";
 
 const ChavesHistoricoPedidoEstoque = () => {
     const [estoque, setEstoque] = useState([]);
+    const [pedidoSelecionado, setPedidoSelecionado] = useState([]);
+    const [pedidoEstoqueViewModal, setPedidoEstoqueViewModal] = useState(false);
 
     const columns = [
         { title: 'Data do Pedido', dataIndex: 'DataPedido', key: 'DataPedido', width: '10%' },
@@ -57,14 +60,14 @@ const ChavesHistoricoPedidoEstoque = () => {
     }, []);
 
     const handleVisualizar = (dto) => {
-        //Refatora: implemetar visualizar, talvez chamar de detalhes
-        console.log(dto)
+        setPedidoSelecionado(dto);
+        setPedidoEstoqueViewModal(true);
     }
 
     return (
         <>
             <div className="t-center mt-2">
-                <h1>Histórico de Pedidos de estoque</h1>
+                <h1>Histórico de Baixas em pedidos de estoque</h1>
                 <Breadcrumb>
                     <Breadcrumb.Item>
                         <Link to={Rotas.Home}>
@@ -79,6 +82,12 @@ const ChavesHistoricoPedidoEstoque = () => {
             <Grid
                 dataSource={estoque}
                 columns={columns}
+            />
+
+            <PedidoEstoqueHistoricoViewModal
+                visible={pedidoEstoqueViewModal}
+                onClose={() => setPedidoEstoqueViewModal(false)}
+                pedidoSelecionado={pedidoSelecionado}
             />
         </>
     );

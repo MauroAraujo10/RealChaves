@@ -1,17 +1,28 @@
 import React from 'react';
-import { BiSave } from "react-icons/bi";
 import { Button } from 'antd'
+import { AiOutlineSave } from 'react-icons/ai'
 
-const BotaoCadastrar = ({ funcaoCancelar }) => {
+const BotaoCadastrar = ({ isView, funcaoCancelar }) => {
     return (
         <div className="t-right mt-2">
-            <Button className="mr-1" onClick={funcaoCancelar}>
-                Cancelar
-            </Button>
-            <Button type="primary" htmlType="submit">
-                <BiSave className="mr-1 mt-1" size={16} />
-                Salvar
-            </Button>
+            {
+                isView &&
+                <Button className="mr-1" onClick={funcaoCancelar}>
+                    Fechar
+                </Button>
+            }
+            {
+                !isView &&
+                <>
+                    <Button className="mr-1" onClick={funcaoCancelar}>
+                        Cancelar
+                    </Button>
+                    <Button type="primary" htmlType="submit">
+                        <AiOutlineSave className="mr-1" size={16} />
+                        Salvar
+                    </Button>
+                </>
+            }
         </div>
     );
 }

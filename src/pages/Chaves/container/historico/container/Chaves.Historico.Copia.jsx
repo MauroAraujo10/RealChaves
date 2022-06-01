@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
-import { Rotas } from '../../../../Routes/rotas';
+import { Rotas } from '../../../../../Routes/rotas';
 
-import tabelas from '../../../../common/Messages/tabelas';
-import service from '../../../../service';
+import tabelas from '../../../../../common/Messages/tabelas';
+import service from '../../../../../service';
 
-import Grid from '../../../../common/components/Grid/Grid';
+import Grid from '../../../../../common/components/Grid/Grid';
 
 import { AiOutlineHome } from "react-icons/ai";
 
 const ChavesHistoricoCopia = () => {
     const [chaves, setChaves] = useState([]);
     const columns = [
-        { title: 'Data da Cópia', dataIndex: 'Data', key: 'Data', width: '10%' },
-        { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '30%' },
-        { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', width: '30%' },
+        { title: 'Data da Cópia', dataIndex: 'Data', key: 'Data', width: '15%' },
+        { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '20%' },
+        { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', width: '20%' },
         { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', width: '20%' },
         { title: 'Valor (R$)', dataIndex: 'Valor', key: 'Valor', width: '10%' },
+        { title: 'Tipo de Pagamento', dataIndex: 'TipoPagamento', key: 'TipoPagamento', width: '15%' },
     ];
 
     useEffect(() => {
@@ -26,13 +27,14 @@ const ChavesHistoricoCopia = () => {
             snap.forEach((copiaChave) => {
                 service.app.ref(tabelas.Chave).child(copiaChave.val().IdChave).on('value', chave => {
                     copia.push({
-                        Id: copiaChave.key,
-                        key: copiaChave.key,
-                        Marca: chave.val().Marca,
-                        NumeroSerie: chave.val().NumeroSerie,
-                        Data: copiaChave.val().Data,
-                        Quantidade: copiaChave.val().Quantidade,
-                        Valor: copiaChave.val().Valor
+                        Id: copiaChave?.key,
+                        key: copiaChave?.key,
+                        Marca: chave.val()?.Marca,
+                        NumeroSerie: chave.val()?.NumeroSerie,
+                        Data: copiaChave.val()?.Data,
+                        Quantidade: copiaChave.val()?.Quantidade,
+                        Valor: copiaChave.val()?.Valor,
+                        TipoPagamento : copiaChave.val()?.TipoPagamento
                     });
                     setChaves([]);
                     setChaves(copia);

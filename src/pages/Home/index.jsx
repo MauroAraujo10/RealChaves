@@ -19,7 +19,7 @@ const Home = () => {
                 let numeroChavesVendidasHoje = 0;
                 snapshot.forEach((x) => {
                     if (x.val().Data === dataAtual)
-                        numeroChavesVendidasHoje++;
+                        numeroChavesVendidasHoje = numeroChavesVendidasHoje + x.val().Quantidade;
                 })
                 setChavesVendidasHoje(numeroChavesVendidasHoje);
             })

@@ -47,7 +47,7 @@ class ChaveTabela extends Component {
                     Quantidade: x.val().Quantidade,
                     Tipo: x.val().Tipo,
                     Data: x.val().Data,
-                    ListaNumeroSerie: x.val().ListaNumeroSerie
+                    ListaNumeroSerie: x.val().ListaNumeroSerie ? x.val().ListaNumeroSerie : []
                 })
             })
             this.setState({ chaves: chaves });
@@ -115,8 +115,8 @@ class ChaveTabela extends Component {
 
     funcaoAbrirModal(dto, funcionalidade) {
         switch (funcionalidade) {
-            case 'Copia':
 
+            case 'Copia':
                 if (Number(dto.Quantidade === 0)) {
                     toast.warning(messages.estoqueZerado);
                     return;
@@ -125,7 +125,6 @@ class ChaveTabela extends Component {
                 break;
 
             case 'Descarte':
-
                 if (Number(dto.Quantidade === 0)) {
                     toast.warning('Não é possível realizar esta operação pois não há chaves no estoque !');
                     return;

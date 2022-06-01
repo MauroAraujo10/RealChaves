@@ -33,8 +33,6 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
             ListaChaves: [],
             Chaves: pedidoSelecionado?.Chaves,
         };
-        console.log(pedidoSelecionado);
-        console.log(form);
 
         listaQuantidadesEntregues.forEach((quantidadeRecebida, index) => {
             let quantidadeSolicitada = pedidoSelecionado?.Chaves[index].QuantidadeSolicitada;
@@ -83,7 +81,7 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
 
             <Form onFinish={submitForm} layout='vertical'>
                 <Row gutter={4}>
-                    <Col md={8} xs={24}>
+                    <Col md={8} xs={8}>
                         <Form.Item
                             name="DataBaixa"
                             label="Data da Baixa"
@@ -95,7 +93,7 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
                             />
                         </Form.Item>
                     </Col>
-                    <Col md={8} xs={24}>
+                    <Col md={8} xs={8}>
                         <Form.Item
                             label="Valor"
                             name="Valor"
@@ -110,7 +108,7 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
                             />
                         </Form.Item>
                     </Col>
-                    <Col md={8} xs={24}>
+                    <Col md={8} xs={8}>
                         <Form.Item
                             label="Empresa"
                             name="Empresa"
@@ -130,11 +128,10 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
                     dataSource={pedidoSelecionado?.Chaves}
                     pagination={false}
                 >
-                    {/* Refatora width */}
-                    <Column title="Marca" dataIndex="Marca" key="Marca" />
-                    <Column title="Número de Série" dataIndex="NumeroSerie" key="NumeroSerie" />
-                    <Column title="Quantidade Solicitada" dataIndex="QuantidadeSolicitada" key="QuantidadeSolicitada" />
-                    <Column title="Quantidade Entregue" render={(status, dto, index) => (
+                    <Column title="Marca" dataIndex="Marca" key="Marca" width={'10%'}/>
+                    <Column title="Número de Série" dataIndex="NumeroSerie" key="NumeroSerie" width={'20%'}/>
+                    <Column title="Quantidade Solicitada" dataIndex="QuantidadeSolicitada" key="QuantidadeSolicitada" width={'10%'}/>
+                    <Column title="Quantidade Entregue" width={'10%'} render={(status, dto, index) => (
                         <Input
                             type="number"
                             min={1}

@@ -12,7 +12,6 @@ const AmolacaoBaixaModal = ({ visible, onClose, produtoSelecionado }) => {
 
     const submitForm = async (form) => {
         const quantidadeForm = Number(form.Quantidade);
-        console.log(produtoSelecionado.Id);
 
         let dto = {
             Id: produtoSelecionado.Id,

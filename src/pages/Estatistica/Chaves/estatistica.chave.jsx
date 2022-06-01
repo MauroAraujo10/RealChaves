@@ -1,85 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Breadcrumb, Card, Avatar, Button, Divider } from 'antd';
+import { Row, Col, Breadcrumb } from 'antd';
+
 import { ResponsiveContainer, BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import { Rotas } from '../../../Routes/rotas';
-import service from '../../../service';
-import tabelas from '../../../common/Messages/tabelas';
-import { AiOutlineHome, AiOutlineSnippets, AiOutlineDownSquare, AiOutlineHdd, AiOutlineEnvironment, AiOutlineDollar, AiOutlineEye } from "react-icons/ai";
-import chaveService from '../../Chaves/service/chave.service';
+import EstatisticaCard from '../../../common/components/EstatisticaCard/EstatisticaCard';
+
+import estatisticaService from '../service/estatisticas.service';
+import { AiOutlineHome, AiOutlineSnippets, AiOutlineDownSquare, AiOutlineFileDone } from "react-icons/ai";
+import { FaRegMoneyBillAlt } from "react-icons/fa";
 
 const EstatisticaChave = () => {
-    const [listaCopia, setListaCopia] = useState([]);
     const [dtoListaCopia, setDtoListaCopia] = useState({});
-    const [listaDescarte, setListaDescarte] = useState([]);
-    const [chartData, setChartData] = useState([]);
+    const [dtoListaDescarte, setDtoListaDescarte] = useState([]);
+    const [dtoListaPedidoEstoque, setDtoListaPedidoEstoque] = useState([]);
+    //const [chartData, setChartData] = useState([]);
 
     useEffect(() => {
-        //setListaCopia(chaveService.teste());
-        const a = chaveService.teste().then((dtoListCopia) => {
-            setDtoListaCopia(dtoListCopia);
-        })
-            
-        // service.app.ref(tabelas.CopiasChave).once('value', (snapshot) => {
-        //     let copias = [];
-        //     let copiasHoje = 0;
-        //     let copiasEsteMes = 0;
-        //     let quantidadeTotal = 0;
-        //     let valorTotal = 0;
-        //     snapshot.forEach((x) => {
-        //         copias.push({
-        //             Id: x.val().key,
-        //             key: x.val().key,
-        //             Quantidade: x.val().Quantidade,
-        //             Valor: x.val().Valor,
-        //             Data: x.val().Data
-        //         })
-        //         quantidadeTotal = quantidadeTotal + x.val().Quantidade;
-        //         valorTotal = valorTotal + x.val().Valor;
-        //     })
+        function getEstatisticasCopias() {
+            estatisticaService.getEstatisticaCopias().then((dtoListCopia) => { setDtoListaCopia(dtoListCopia); })
+        }
 
-        //     const dtoLista = {
-        //         CopiasFeitasHoje: copiasHoje,
-        //         CopiasFeitaMes: copiasEsteMes,
-        //         QuantidadeTotal: quantidadeTotal,
-        //         ValorHoje: 55,
-        //         ValorMes: 264,
-        //         ValorTotal: valorTotal
-        //     };
+        function getEstatisticasDescartes() {
+            estatisticaService.getEstatisticaDescartes().then((dtoListaDescartes) => { setDtoListaDescarte(dtoListaDescartes); })
+        }
 
-        //     setListaCopia(copias);
-        //     setDtoListaCopia(dtoLista);
-        // })
+        function getEstatisticasPedidoEstoque() {
+            estatisticaService.getEstatisticasPedidoEstoque().then((dtoPedidoEstoque) => { setDtoListaPedidoEstoque(dtoPedidoEstoque); })
+        }
 
-        // service.app.ref(tabelas.Descarte).once('value', (snapshot) => {
-        //     let descartes = [];
-        //     snapshot.forEach((x) => {
-        //         descartes.push({
-        //             Id: x.val().key,
-        //             key: x.val().key,
-        //             Data: x.val().Data,
-        //             Quantidade: x.val().Quantidade,
-        //             Motivo: x.val().Motivo,
-        //         })
-        //     })
-        //     setListaDescarte(descartes);
-        // });
-
+        getEstatisticasCopias();
+        getEstatisticasDescartes();
+        getEstatisticasPedidoEstoque();
     }, []);
-
-    const handle = () => {
-        const a = listaCopia.then((XAxis) => {
-            console.log(XAxis);
-        })
-        console.log(listaCopia);
-    }
 
     return (
         <>
-            <Button onClick={handle}>
-                aaaaaaaaaaaa
-            </Button>
-            <div className="t-center mb-2">
+            <div className="t-center mt-2 mb-2">
                 <h1>Estatísticas Chaves</h1>
                 <Breadcrumb>
                     <Breadcrumb.Item>
@@ -93,75 +50,104 @@ const EstatisticaChave = () => {
                 </Breadcrumb>
             </div>
 
-            <Row style={{ margin: '10px' }} gutter={10}>
-                <Col md={8} xs={24}>
-                    <Card
-                        style={{ borderTop: '5px solid #004878' }}
-                        className="container"
-                        title={'Cópias de Chave'}
-                        extra={<AiOutlineEye size={24} />}
-                    >
-                        <Card.Meta
-                            avatar={<Avatar icon={<AiOutlineSnippets className="iconVendaChave" />} style={{ background: '#FFF' }} size={80} />}
-                            title={(
-                                <>
-                                    <h5>Quantidades</h5>
-                                    <p>Hoje:<b>{dtoListaCopia?.CopiasFeitasHoje}</b></p>
-                                    <p>Este mês: <b>{dtoListaCopia?.CopiasFeitaMes}</b></p>
-                                    <p>Quantidade Total: <b>{dtoListaCopia?.QuantidadeTotal}</b></p>
-                                    <Divider />
-                                    <h5>Arrecadados</h5>
-                                    <p>Hoje R$: <b>{dtoListaCopia?.ValorHoje}</b></p>
-                                    <p>Este mês R$: <b>{dtoListaCopia?.ValorMes}</b></p>
-                                    <p>Total R$: <b>{dtoListaCopia?.ValorTotal}</b></p>
-                                </>
-                            )}
+            <div className="container2">
+                <Row gutter={10} style={{ margin: '10px' }}>
+                    <Col md={6} xs={24}>
+                        <EstatisticaCard
+                            className="mb-2"
+                            title={'Cópias - Quantidade'}
+                            icon={<AiOutlineSnippets className="iconVendaChave" />}
+                            hoje={dtoListaCopia.CopiasFeitasHoje}
+                            esteMes={dtoListaCopia.CopiasFeitasEsteMes}
+                            total={dtoListaCopia.CopiasFeitasTotal}
                         />
-                    </Card>
-                </Col>
-                <Col md={8} xs={24}>
-                    <Card style={{ width: 300, borderTop: '5px solid #004878' }} className="container" title={"Descarte de chaves"}>
-                        <Card.Meta
-                            avatar={<Avatar icon={<AiOutlineDownSquare className="iconDescarte" />} style={{ background: '#FFF' }} size={60} />}
-                            title={(
-                                <>
-                                    <p>Chaves feitas hoje: <b>{dtoListaCopia?.CopiasFeitasHoje}</b></p>
-                                    <p>Chaves feitas este mês: <b>{dtoListaCopia?.CopiasFeitaMes}</b></p>
-                                    <p>Quantidade Total: <b>{dtoListaCopia?.QuantidadeTotal}</b></p>
-                                </>
-                            )}
+                    </Col>
+
+                    <Col md={6} xs={24}>
+                        <EstatisticaCard
+                            title={'Cópias - Valores'}
+                            icon={<FaRegMoneyBillAlt className="iconVendaChave" />}
+                            hoje={`R$: ${dtoListaCopia.ValorCopiasFeitasHoje}`}
+                            esteMes={`R$: ${dtoListaCopia.ValorCopiasFeitasEsteMes}`}
+                            total={`R$: ${dtoListaCopia.ValorCopiasFeitasTotal}`}
                         />
-                    </Card>
-                </Col>
-                <Col md={8} xs={24}>
-                    <Card style={{ width: 300, borderTop: '5px solid #004878' }} className="container" title={"Pedidos de Estoque"}>
-                        <Card.Meta
-                            avatar={<Avatar icon={<AiOutlineHdd />} />}
-                            title={(
-                                <>
-                                    <p>Chaves feitas hoje: <b>{dtoListaCopia?.CopiasFeitasHoje}</b></p>
-                                    <p>Chaves feitas este mês: <b>{dtoListaCopia?.CopiasFeitaMes}</b></p>
-                                    <p>Quantidade Total: <b>{dtoListaCopia?.QuantidadeTotal}</b></p>
-                                </>
-                            )}
+                    </Col>
+
+                    <Col md={6} xs={24}>
+                        <EstatisticaCard
+                            title={'Descarte - Quantidade'}
+                            icon={<AiOutlineDownSquare className="iconDescarte" />}
+                            hoje={dtoListaDescarte?.ChavesDescartadasHoje}
+                            esteMes={dtoListaDescarte?.ChavesDescartadasEsteMes}
+                            total={dtoListaDescarte?.ChavesDescartadasTotal}
                         />
-                    </Card>
-                </Col>
-            </Row>
-            <Row>
-                <Col md={24} xs={24}>
-                    <ResponsiveContainer width="100%" height={500} className="container" style={{ margin: '20px' }}>
-                        <BarChart data={chartData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="valor" fill="#004878" />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </Col>
-            </Row>
+                    </Col>
+
+                    <Col md={6} xs={24}>
+                        <EstatisticaCard
+                            title={'Baixa de Estoque - Quantidade'}
+                            icon={<AiOutlineFileDone className="iconPedidoEstoque" />}
+                            hoje={dtoListaPedidoEstoque.PedidosBaixadosHoje}
+                            esteMes={dtoListaPedidoEstoque.PedidosBaixadosEsteMes}
+                            total={dtoListaPedidoEstoque.PedidosBaixadosTotal}
+                        />
+                    </Col>
+                </Row>
+                <Row gutter={10} style={{ margin: '10px' }}>
+                    <Col md={6} xs={24}>
+                        <EstatisticaCard
+                            title={'Baixa de Estoque - Valores'}
+                            icon={<AiOutlineFileDone className="iconPedidoEstoque" />}
+                            hoje={dtoListaPedidoEstoque.valorBaixadosHoje}
+                            esteMes={dtoListaPedidoEstoque.valorBaixadosEsteMes}
+                            total={dtoListaPedidoEstoque.valorBaixadosTotal}
+                        />
+                    </Col>
+                    <Col md={6} xs={24}>
+                        <EstatisticaCard
+                            title={'Pedidos de Estoque - Valores'}
+                            icon={<FaRegMoneyBillAlt className="iconVendaChave" />}
+                            hoje={dtoListaPedidoEstoque?.refatora}
+                            esteMes={dtoListaPedidoEstoque?.refatora}
+                            total={dtoListaPedidoEstoque?.refatora}
+                        />
+                    </Col>
+                    <Col md={6} xs={24}>
+                        <EstatisticaCard
+                            title={'Pedidos de Estoque - Valores'}
+                            icon={<FaRegMoneyBillAlt className="iconVendaChave" />}
+                            hoje={dtoListaPedidoEstoque?.refatora}
+                            esteMes={dtoListaPedidoEstoque?.refatora}
+                            total={dtoListaPedidoEstoque?.refatora}
+                        />
+                    </Col>
+                    <Col md={6} xs={24}>
+                        <EstatisticaCard
+                            title={'Pedidos de Estoque - Valores'}
+                            icon={<FaRegMoneyBillAlt className="iconVendaChave" />}
+                            hoje={dtoListaPedidoEstoque?.refatora}
+                            esteMes={dtoListaPedidoEstoque?.refatora}
+                            total={dtoListaPedidoEstoque?.refatora}
+                        />
+                    </Col>
+                </Row>
+            </div>
+            <div className="container">
+                <Row style={{background: ''}}>
+                    Teste
+                </Row>
+                <ResponsiveContainer height={500} style={{ margin: '20px' }}>
+                    <BarChart data={dtoListaCopia}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="valor" fill="#004878" />
+                    </BarChart>
+                </ResponsiveContainer>
+
+            </div>
         </>
     );
 }
