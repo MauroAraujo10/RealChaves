@@ -9,8 +9,8 @@ import Erro from '../pages/Erro';
 import ChavesGrid from '../pages/Chaves/container/chave.grid';
 import ChavesNew from '../pages/Chaves/container/chave.new';
 
+import ChaveEstoqueFazerPedido from '../pages/Chaves/container/estoque/Chave.Estoque.FazerPedido';
 import ChaveEstoqueTabelaPedido from '../pages/Chaves/container/estoque/chave.estoque.TabelaPedido';
-import ChaveEstoquePedido from '../pages/Chaves/container/estoque/chave.estoque.Pedido';
 
 import ChavesHistoricoCopias from '../pages/Chaves/container/historico/container/Chaves.Historico.Copia';
 import ChavesHistoricoDescarte from '../pages/Chaves/container/historico/container/Chaves.Historico.Descarte';
@@ -39,7 +39,7 @@ export default function Routes({ configuracoes }) {
                     <Route exact path={Rotas.ChavesCadastro} component={ChavesNew} />
 
                     <Route exact path={Rotas.ChavesEstoqueTabelaPedido} component={ChaveEstoqueTabelaPedido} />
-                    <Route exact path={Rotas.ChavesEstoquePedido} component={ChaveEstoquePedido} />
+                    <Route exact path={Rotas.ChavesEstoquePedido} component={ChaveEstoqueFazerPedido} />
 
                     <Route exact path={Rotas.ChavesHistoricoCopias} component={ChavesHistoricoCopias} />
                     <Route exact path={Rotas.ChavesHistoricoDescarte} component={ChavesHistoricoDescarte} />

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { messages } from '../../../common/Messages/messages';
+import { messages } from '../../../common/Enum/messages';
 import { Modal, Form, Input, DatePicker, Select } from 'antd';
 import { Row, Col } from 'antd';
 import { toast } from 'react-toastify';

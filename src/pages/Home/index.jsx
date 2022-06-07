@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'antd';
 import moment from 'moment';
-import tabelas from '../../common/Messages/tabelas';
+import tabelas from '../../common/Enum/tabelas';
 
 import service from '../../service';
 import { FcFaq, FcKindle, FcSupport } from "react-icons/fc";

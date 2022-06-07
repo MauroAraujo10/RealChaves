@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 import { Rotas } from '../../../../../Routes/rotas';
 
-import tabelas from '../../../../../common/Messages/tabelas';
+import tabelas from '../../../../../common/Enum/tabelas';
 import service from '../../../../../service';
 
 import Grid from '../../../../../common/components/Grid/Grid';
@@ -34,7 +34,12 @@ const ChavesHistoricoCopia = () => {
                         Data: copiaChave.val()?.Data,
                         Quantidade: copiaChave.val()?.Quantidade,
                         Valor: copiaChave.val()?.Valor,
-                        TipoPagamento : copiaChave.val()?.TipoPagamento
+                        TipoPagamento:
+                            copiaChave.val()?.TipoPagamento === 'Dinheiro' ? 'Dinheiro' :
+                                copiaChave.val()?.TipoPagamento === 'CartaoCredito' ? 'Cartão de Crédito' :
+                                    copiaChave.val()?.TipoPagamento === 'CartaoDebito' ? 'Cartão de Débito' :
+                                        copiaChave.val()?.TipoPagamento === 'Pix' ? 'Pix' : ''
+
                     });
                     setChaves([]);
                     setChaves(copia);

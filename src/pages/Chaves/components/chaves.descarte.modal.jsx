@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Row, Col } from 'antd';
 import { Modal, Form, Radio, DatePicker, Space, Input } from 'antd';
-import { messages } from '../../../common/Messages/messages';
+import { messages } from '../../../common/Enum/messages';
 import { toast } from "react-toastify";
-import { Descarte } from '../../../common/Messages/descarte'
+import { Descarte } from '../../../common/Enum/descarte'
 
 import TituloModal from '../../../common/components/TituloModal/TituloModal';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';

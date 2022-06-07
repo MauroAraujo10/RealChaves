@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, Input, Row, Col, DatePicker, Space, Select, Image, Table, Button, Tooltip, Divider } from 'antd';
-import { messages } from '../../../common/Messages/messages';
+import { messages } from '../../../common/Enum/messages';
 import { toast } from "react-toastify";
 import { AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
 
@@ -34,7 +34,7 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
         { title: 'Marca', dataIndex: 'Marca', key: 'Marca' },
         { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie' },
         {
-            title: 'Ações', render: (status, dto) => (
+            title: 'Ações', key: 'acoes', render: (status, dto) => (
                 <div style={{ display: 'flex' }}>
                     <Tooltip title="Deletar">
                         <AiOutlineDelete
@@ -145,7 +145,7 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
                             <Input
                                 type="text"
                                 autoFocus
-                                placeholder={'Pado'}
+                                placeholder={'Marca'}
                                 maxLength={30}
                             />
                         </Form.Item>

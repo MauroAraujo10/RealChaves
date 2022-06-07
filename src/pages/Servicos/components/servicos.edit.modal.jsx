@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Modal, Form, Input, DatePicker, Space, Switch } from 'antd';
 import { Row, Col } from 'antd';
-import { messages } from '../../../common/Messages/messages';
+import { messages } from '../../../common/Enum/messages';
 import { toast } from "react-toastify";
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 

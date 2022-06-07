@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
 import { Row, Col, Modal, Form, DatePicker, Input, Table } from 'antd';
-import { messages } from '../../../common/Messages/messages';
+import { messages } from '../../../common/Enum/messages';
 import { toast } from 'react-toastify';
+import { TagStatusEnum } from '../../../common/Enum/TagStatusEnum';
 
 import chaveService from '../service/chave.service';
 
@@ -29,7 +30,7 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
             QuantidadePedidaTotal: pedidoSelecionado?.QuantidadePedidaTotal,
             Valor: parseFloat(form.Valor),
             Empresa: form.Empresa,
-            Status: 'Completo',
+            Status: TagStatusEnum.Completo,
             ListaChaves: [],
             Chaves: pedidoSelecionado?.Chaves,
         };
@@ -40,12 +41,14 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
 
             dto.ListaChaves.push({
                 key: Date.now(),
+                Marca: pedidoSelecionado?.Chaves[index].Marca,
+                NumeroSerie: pedidoSelecionado?.Chaves[index].NumeroSerie,
                 QuantidadeSolicitada: quantidadeSolicitada,
                 QuantidadeRecebida: quantidadeRecebida
             });
 
             if (quantidadeSolicitada > quantidadeRecebida)
-                dto.Status = 'Incompleto'
+                dto.Status = TagStatusEnum.Incompleto
 
         })
 
@@ -101,9 +104,8 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
                         >
                             <Input
                                 type="number"
-                                placeholder="0,00"
+                                placeholder={'Valor'}
                                 min={0}
-                                max={1000}
                                 step="0.10"
                             />
                         </Form.Item>
@@ -128,9 +130,9 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
                     dataSource={pedidoSelecionado?.Chaves}
                     pagination={false}
                 >
-                    <Column title="Marca" dataIndex="Marca" key="Marca" width={'10%'}/>
-                    <Column title="Número de Série" dataIndex="NumeroSerie" key="NumeroSerie" width={'20%'}/>
-                    <Column title="Quantidade Solicitada" dataIndex="QuantidadeSolicitada" key="QuantidadeSolicitada" width={'10%'}/>
+                    <Column title="Marca" dataIndex="Marca" key="Marca" width={'10%'} />
+                    <Column title="Número de Série" dataIndex="NumeroSerie" key="NumeroSerie" width={'20%'} />
+                    <Column title="Quantidade Solicitada" dataIndex="QuantidadeSolicitada" key="QuantidadeSolicitada" width={'10%'} />
                     <Column title="Quantidade Entregue" width={'10%'} render={(status, dto, index) => (
                         <Input
                             type="number"

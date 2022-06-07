@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 import { Breadcrumb, Tooltip } from 'antd';
 import { Rotas } from '../../../../Routes/rotas';
 import { toast } from 'react-toastify';
-import { messages } from '../../../../common/Messages/messages';
+import { messages } from '../../../../common/Enum/messages';
 
 import Grid from '../../../../common/components/Grid/Grid';
 import service from '../../../../service';
-import tabelas from '../../../../common/Messages/tabelas';
+import tabelas from '../../../../common/Enum/tabelas';
 
 import ChaveEstoqueViewPedidoModal from '../../components/chave.estoque.viewPedido.modal';
 import ChaveEstoqueBaixaPedidoModal from '../../components/chaves.estoque.baixaPedido.modal';
@@ -28,12 +28,12 @@ const ChaveEstoqueTabelaPedido = () => {
             let pedido = [];
             snapshot.forEach((x) => {
                 pedido.push({
-                    Id: x.key,
-                    key: x.key,
-                    Chaves: x.val().Chaves,
-                    NumeroChaves: x.val().Chaves.length ? x.val().Chaves.length : 0,
-                    DataPedido: x.val().DataPedido,
-                    QuantidadePedidaTotal: x.val().QuantidadePedidaTotal
+                    Id: x?.key,
+                    key: x?.key,
+                    Chaves: x.val()?.Chaves,
+                    Modelos: x.val()?.Chaves.length ? x.val().Chaves.length : 0,
+                    DataPedido: x.val()?.DataPedido,
+                    QuantidadePedidaTotal: x.val()?.QuantidadePedidaTotal
                 })
             })
             setPedidosEstoque(pedido);
@@ -66,10 +66,10 @@ const ChaveEstoqueTabelaPedido = () => {
 
     const columns = [
         { title: 'Data do Pedido', dataIndex: 'DataPedido', key: 'DataPedido', width: '10%' },
-        { title: 'Número de chaves', dataIndex: 'NumeroChaves', key: 'NumeroChaves', width: '10%' },
+        { title: 'Modelos', dataIndex: 'Modelos', key: 'Modelos', width: '10%' },
         { title: 'Quantidade Total', dataIndex: 'QuantidadePedidaTotal', key: 'QuantidadePedidaTotal', width: '10%' },
         {
-            title: 'Ações', width: '10%', render: (status, pedido) => (
+            title: 'Ações', key: 'acoes', width: '10%', render: (status, pedido) => (
                 <div style={{ display: 'flex' }}>
                     <Tooltip title="Visualizar">
                         <AiOutlineEye

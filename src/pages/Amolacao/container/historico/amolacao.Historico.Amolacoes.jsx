@@ -5,7 +5,7 @@ import { Breadcrumb } from 'antd';
 import { Rotas } from '../../../../Routes/rotas';
 
 import service from '../../../../service';
-import tabelas from '../../../../common/Messages/tabelas';
+import tabelas from '../../../../common/Enum/tabelas';
 
 import { AiOutlineHome } from "react-icons/ai";
 

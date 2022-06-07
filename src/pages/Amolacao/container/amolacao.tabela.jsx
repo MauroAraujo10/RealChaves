@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 import { Breadcrumb, Tooltip } from 'antd';
 import { toast } from "react-toastify";
 import { Rotas } from '../../../Routes/rotas';
-import { messages } from '../../../common/Messages/messages';
+import { messages } from '../../../common/Enum/messages';
 
 import service from '../../../service';
 import serviceAmolacao from '../service/amolacao.service';
-import tabelas from '../../../common/Messages/tabelas';
+import tabelas from '../../../common/Enum/tabelas';
 import Grid from '../../../common/components/Grid/Grid';
 
 import BaixaModal from '../components/amolacao.baixa.modal';
@@ -30,7 +30,7 @@ const AmolacaoTabela = () => {
         { title: 'Data Recebimento', dataIndex: 'DataRecebimento', key: 'DataRecebimento', width: '10%' },
         { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', width: '10%' },
         {
-            title: 'Ações', width: '10%', render: (status, dto) => (
+            title: 'Ações', key: 'acoes', width: '10%', render: (status, dto) => (
                 <div style={{ display: 'flex' }}>
                     <Tooltip title="Baixa">
                         <AiOutlineLike

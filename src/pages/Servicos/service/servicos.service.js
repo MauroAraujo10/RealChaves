@@ -1,5 +1,5 @@
 import service from '../../../service';
-import tabelas from '../../../common/Messages/tabelas';
+import tabelas from '../../../common/Enum/tabelas';
 
 const methods = {
     async post(dto){

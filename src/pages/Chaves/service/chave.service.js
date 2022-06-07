@@ -1,5 +1,5 @@
 import service from '../../../service';
-import tabelas from '../../../common/Messages/tabelas';
+import tabelas from '../../../common/Enum/tabelas';
 import moment from 'moment';
 
 const methods = {
@@ -29,12 +29,12 @@ const methods = {
         let chaveGetDto;
         await service.app.ref(tabelas.Chave).child(id).once('value', x => {
             chaveGetDto = {
-                key: x.val().key,
-                Marca: x.val().Marca,
-                NumeroSerie: x.val().NumeroSerie,
-                Quantidade: x.val().Quantidade,
-                Tipo: x.val().Tipo,
-                Data: x.val().Data,
+                key: x.val()?.key,
+                Marca: x.val()?.Marca,
+                NumeroSerie: x.val()?.NumeroSerie,
+                Quantidade: x.val()?.Quantidade,
+                Tipo: x.val()?.Tipo,
+                Data: x.val()?.Data,
                 ListaNumeroSerie: x.val().ListaNumeroSerie ? x.val().ListaNumeroSerie : []
             };
         })
@@ -78,30 +78,34 @@ const methods = {
 
         await dto.Chaves.forEach((chaveSolicitada, index) => {
             this.getById(chaveSolicitada.key).then((chave) => {
-                service.app.ref(tabelas.Chave).child(chave.Id).set({
+                service.app.ref(tabelas.Chave).child(chave.key).set({
                     key: chave.key,
                     Marca: chave.Marca,
                     NumeroSerie: chave.NumeroSerie,
                     Data: chave.Data,
-                    Quantidade: Number(chaveSolicitada.Quantidade) + Number(dto.ListaChaves[index].QuantidadeRecebida),
+                    Quantidade: Number(chave.Quantidade) + Number(dto.ListaChaves[index].QuantidadeRecebida),
                     Tipo: chave.Tipo,
                     ListaNumeroSerie: chave.ListaNumeroSerie ? chave.ListaNumeroSerie : []
-                });
+                })
+                    .then(() => {
+                        service.app.ref(tabelas.PedidoEstoque)
+                            .child(dto.Id)
+                            .remove()
+                            .then(() => {
+                                service.app.ref(tabelas.BaixaPedidoChaves).child(id).set({
+                                    key: id,
+                                    DataPedido: dto.DataPedido,
+                                    DataBaixa: dto.DataBaixa,
+                                    Valor: dto.Valor,
+                                    Empresa: dto.Empresa,
+                                    QuantidadePedidaTotal: dto.QuantidadePedidaTotal,
+                                    QuantidadeRecebidaTotal: dto.QuantidadeTotalRecebida,
+                                    Status: dto.Status,
+                                    ListaChaves: dto.ListaChaves
+                                })
+                            });
+                    });
             });
-        })
-
-        await service.app.ref(tabelas.PedidoEstoque).child(dto.Id).remove();
-
-        await service.app.ref(tabelas.BaixaPedidoChaves).child(id).set({
-            key: id,
-            DataPedido: dto.DataPedido,
-            DataBaixa: dto.DataBaixa,
-            Valor: dto.Valor,
-            Empresa: dto.Empresa,
-            QuantidadePedidaTotal: dto.QuantidadePedidaTotal,
-            QuantidadeRecebidaTotal: dto.QuantidadeTotalRecebida,
-            Status: dto.Status,
-            ListaChaves: dto.ListaChaves
         })
     }
 };

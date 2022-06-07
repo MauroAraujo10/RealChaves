@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Form, Input, DatePicker, Switch, Breadcrumb } from 'antd';
 import { Row, Col } from 'antd';
-import { messages } from '../../../common/Messages/messages';
+import { messages } from '../../../common/Enum/messages';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
@@ -63,7 +63,7 @@ const ServicosCadastro = () => {
                 layout="vertical"
                 onFinish={submitForm}
             >
-                <Row gutter={8}>
+                <Row gutter={20}>
                     <Col md={12} xs={24}>
                         <Form.Item
                             name="Servico"
@@ -73,11 +73,12 @@ const ServicosCadastro = () => {
                             <Input.TextArea
                                 showCount
                                 maxLength={200}
+                                rows={5}
                                 placeholder="Descrição do serviço"
                             />
                         </Form.Item>
                     </Col>
-                    <Col md={4} xs={12}>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
                         <Form.Item
                             label="Data"
                             name="Data"
@@ -87,33 +88,35 @@ const ServicosCadastro = () => {
                                 onChange={(date, dateString) => setData(dateString)}
                             />
                         </Form.Item>
+                        <Row gutter={10}>
+                            <Col xs={8} sm={4} md={4} lg={4} xl={3} xxl={2}>
+                                <Form.Item
+                                    label="Pago"
+                                    name="Pago">
+                                    <Switch
+                                        onChange={(value) => setPago(value)}
+                                        checkedChildren={<CheckOutlined />}
+                                        unCheckedChildren={<CloseOutlined />}
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col xs={4} sm={8} md={8} lg={6} xl={4} xxl={4}>
+                                {pago &&
+                                    <Form.Item
+                                        label="Valor"
+                                        name="Valor"
+                                        rules={[{ required: pago, message: messages.CampoObrigatorio }]}>
+                                        <Input
+                                            type="number"
+                                            placeholder="Valor"
+                                            min={1}
+                                            step="0.1"
+                                        />
+                                    </Form.Item>
+                                }
+                            </Col>
+                        </Row>
                     </Col>
-                    <Col md={2} xs={4}>
-                        <Form.Item
-                            label="Pago"
-                            name="Pago">
-                            <Switch
-                                onChange={(value) => setPago(value)}
-                                checkedChildren={<CheckOutlined />}
-                                unCheckedChildren={<CloseOutlined />}
-                            />
-                        </Form.Item>
-                    </Col>
-                    {pago &&
-                        <Col md={3} xs={8}>
-                            <Form.Item
-                                label="Valor"
-                                name="Valor"
-                                rules={[{ required: pago, message: messages.CampoObrigatorio }]}>
-                                <Input
-                                    type="number"
-                                    placeholder="Valor"
-                                    min={0}
-                                    step="0.1"
-                                />
-                            </Form.Item>
-                        </Col>
-                    }
                 </Row>
 
                 <BotaoCadastrar

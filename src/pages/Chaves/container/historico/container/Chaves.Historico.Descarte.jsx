@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 import { Rotas } from '../../../../../Routes/rotas';
 
-import tabelas from '../../../../../common/Messages/tabelas';
+import tabelas from '../../../../../common/Enum/tabelas';
 import service from '../../../../../service';
 import Grid from '../../../../../common/components/Grid/Grid';
 

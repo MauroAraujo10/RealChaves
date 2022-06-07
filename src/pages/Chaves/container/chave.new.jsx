@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Form, Input, Select, Breadcrumb, Image, Table, Tooltip, Button } from 'antd';
 import { Row, Col } from 'antd';
-import { messages } from '../../../common/Messages/messages';
+import { messages } from '../../../common/Enum/messages';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 import { AiOutlineHome, AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
@@ -36,7 +36,7 @@ const ChaveCadastro = () => {
         { title: 'Marca', dataIndex: 'Marca', key: 'Marca' },
         { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie' },
         {
-            title: 'Ações', render: (status, dto) => (
+            title: 'Ações', key: 'acoes', render: (status, dto) => (
                 <div style={{ display: 'flex' }}>
                     <Tooltip title="Deletar">
                         <AiOutlineDelete
@@ -166,7 +166,7 @@ const ChaveCadastro = () => {
                                 type="number"
                                 placeholder="Número Serie"
                                 min={1}
-                                max={99999}
+                                max={999999}
                                 step="1"
                             />
                         </Form.Item>

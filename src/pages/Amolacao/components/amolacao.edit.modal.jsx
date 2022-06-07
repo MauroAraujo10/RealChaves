@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, Col, Row, Input, Select, DatePicker, Space } from 'antd';
 import { toast } from 'react-toastify';
-import { messages } from '../../../common/Messages/messages';
+import { messages } from '../../../common/Enum/messages';
 import moment from 'moment';
 
 import service from '../service/amolacao.service';

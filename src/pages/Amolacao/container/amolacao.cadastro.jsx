@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Form, Input, Select, DatePicker, Switch, Breadcrumb } from 'antd';
 import { Row, Col } from 'antd';
-import { messages } from '../../../common/Messages/messages';
+import { messages } from '../../../common/Enum/messages';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 import moment from 'moment';
@@ -37,7 +37,8 @@ const AmolacaoCadastro = () => {
             amolacaoService.postBaixaProduto(dto)
                 .then(() => {
                     toast.success(messages.cadastradoSucesso('Produto'));
-                    history.push(Rotas.AmolacaoHistoricoAmolacoes);
+                    // Refatora: Limpar os campos
+                    history.push(Rotas.AmolacaoCadastro);
                 })
                 .catch(() => {
                     toast.error(messages.cadastradoErro('Produto'));

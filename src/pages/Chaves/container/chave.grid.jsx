@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { Table, Breadcrumb, Input, Space, Button, Tooltip } from 'antd';
-import { messages } from '../../../common/Messages/messages';
+import { messages } from '../../../common/Enum/messages';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
@@ -14,7 +14,7 @@ import TotalRegistros from '../../../common/components/TotalRegistros/TotalRegis
 
 import service from '../../../service';
 import chaveService from '../service/chave.service';
-import tabelas from '../../../common/Messages/tabelas';
+import tabelas from '../../../common/Enum/tabelas';
 
 import { SearchOutlined } from '@ant-design/icons';
 import { AiOutlineHome, AiOutlineSnippets, AiOutlineDownSquare, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
@@ -154,7 +154,7 @@ class ChaveTabela extends Component {
             { title: 'Quantidade em estoque', dataIndex: 'Quantidade', key: 'Quantidade', ...this.getColumnSearchProps('Quantidade'), width: '10%' },
             { title: 'Tipo', dataIndex: 'Tipo', key: 'Tipo', ...this.getColumnSearchProps('Tipo'), width: '10%' },
             {
-                title: 'Ações', width: '10%', render: (status, dto) => (
+                title: 'Ações', key: 'acoes', width: '10%', render: (status, dto) => (
                     <div style={{ display: 'flex' }}>
 
                         <Tooltip title="Cópia de Chave">

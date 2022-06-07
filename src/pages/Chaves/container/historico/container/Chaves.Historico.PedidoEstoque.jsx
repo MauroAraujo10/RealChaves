@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Breadcrumb, Tooltip } from 'antd';
+import { Breadcrumb, Tooltip, Tag } from 'antd';
 import { Link } from 'react-router-dom';
 import { Rotas } from '../../../../../Routes/rotas';
+import { TagStatusEnum } from '../../../../../common/Enum/TagStatusEnum';
 
 import Grid from '../../../../../common/components/Grid/Grid';
 import service from '../../../../../service';
-import tabelas from '../../../../../common/Messages/tabelas';
+import tabelas from '../../../../../common/Enum/tabelas';
 
 import PedidoEstoqueHistoricoViewModal from '../components/pedidoEstoque.Historico.view.modal';
 import { AiOutlineHome, AiOutlineEye } from "react-icons/ai";
@@ -24,7 +25,7 @@ const ChavesHistoricoPedidoEstoque = () => {
         { title: 'Valor (R$)', dataIndex: 'Valor', key: 'Valor', width: '10%' },
         { title: 'Status', dataIndex: 'Status', key: 'Status', width: '10%' },
         {
-            title: 'Ações', width: '10%', render: (status, dto) => (
+            title: 'Ações', key: 'acoes', width: '10%', render: (status, dto) => (
                 <div style={{ display: 'flex' }}>
                     <Tooltip title="Visualizar">
                         <AiOutlineEye
@@ -50,8 +51,12 @@ const ChavesHistoricoPedidoEstoque = () => {
                     QuantidadeRecebida: x.val().QuantidadeRecebidaTotal,
                     Empresa: x.val().Empresa,
                     Valor: x.val().Valor,
-                    Status: x.val().Status,
-                    ListaChaves: x.val().ListaChaves
+                    ListaChaves: x.val().ListaChaves ? x.val().ListaChaves : [],
+                    Status:
+                        x.val().Status ===
+                            TagStatusEnum.Completo ? <Tag color={'green'}> {TagStatusEnum.Completo} </Tag> :
+                            TagStatusEnum.Incompleto ? <Tag color={'red'}> {TagStatusEnum.Incompleto} </Tag> :
+                            TagStatusEnum.Excedente ? <Tag color={'blue'}> {TagStatusEnum.Excedente} </Tag> : ''
                 })
                 setEstoque([]);
                 setEstoque(estoque);

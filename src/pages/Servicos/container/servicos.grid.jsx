@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { messages } from '../../../common/Messages/messages';
+import { messages } from '../../../common/Enum/messages';
 import { Breadcrumb, Tooltip } from 'antd';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 
 import service from '../../../service';
 import servicosService from '../service/servicos.service';
-import tabelas from '../../../common/Messages/tabelas';
+import tabelas from '../../../common/Enum/tabelas';
 
 import Grid from '../../../common/components/Grid/Grid';
 import ServicosEditModal from '../components/servicos.edit.modal';
@@ -27,7 +27,7 @@ const ServicosTabela = () => {
         { title: 'Pago', dataIndex: 'Pago', key: 'Pago', width: '10%' },
         { title: 'Valor (R$)', dataIndex: 'Valor', key: 'Valor', width: '10%' },
         {
-            title: 'Ações', width: '10%', render: (status, dto) => (
+            title: 'Ações', key: 'acoes', width: '10%', render: (status, dto) => (
                 <div style={{ display: 'flex' }}>
                     <Tooltip title="Editar">
                         <AiOutlineEdit

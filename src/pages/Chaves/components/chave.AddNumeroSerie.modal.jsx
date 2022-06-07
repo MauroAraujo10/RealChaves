@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Modal, Form, Input } from 'antd';
-import { messages } from '../../../common/Messages/messages';
+import { messages } from '../../../common/Enum/messages';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 import TituloModal from '../../../common/components/TituloModal/TituloModal';
 

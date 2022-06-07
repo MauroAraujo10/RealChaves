@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Form, Col, Row, DatePicker, Input } from 'antd';
-import { messages } from '../../../common/Messages/messages';
+import { messages } from '../../../common/Enum/messages';
 import { toast } from 'react-toastify';
 
 import service from '../service/amolacao.service';

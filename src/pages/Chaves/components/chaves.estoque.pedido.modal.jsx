@@ -1,17 +1,39 @@
-import React from 'react';
-import { Modal, Button } from 'antd';
-import { messages } from '../../../common/Messages/messages';
+import React, { useState, useEffect } from 'react';
+import { Modal, Button, List, Badge } from 'antd';
+import { messages } from '../../../common/Enum/messages';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import { Rotas } from '../../../Routes/rotas';
 
-import moment from 'moment';
 import chaveService from '../service/chave.service';
-
 import { AiOutlinePrinter } from "react-icons/ai";
 
 const ChavesEstoquePedidoModal = ({ visible, onClose, quantidadeTotal, listaPedidos }) => {
     const history = useHistory();
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        let pedidos = [];
+        if (listaPedidos) {
+            listaPedidos.forEach((x, index) => {
+                pedidos.push(
+                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                        <div className="mr-2">
+                            <Badge count={index + 1} />
+                        </div>
+                        <div>
+                            Marca: <b>{x.Marca}</b> - Número de Série: <b>{x.NumeroSerie}</b>
+                            <br />
+                            Quantidade em estoque: <b>{x.Quantidade}</b>
+                            <br />
+                            Quantidade Solicitada: <b>{x.QuantidadeSolicitada}</b>
+                        </div>
+                    </div>
+                )
+            })
+        }
+        setData(pedidos);
+    }, [quantidadeTotal]);
 
     const submitForm = () => {
         let lista = [];
@@ -19,6 +41,8 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, quantidadeTotal, listaPedi
         listaPedidos.forEach((x) => {
             lista.push({
                 IdChave: x.Id,
+                Marca: x.Marca,
+                NumeroSerie: x.NumeroSerie,
                 key: x.Id,
                 Data: x.Data,
                 QuantidadeSolicitada: x.QuantidadeSolicitada
@@ -65,39 +89,13 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, quantidadeTotal, listaPedi
                     </>
                 )}
             >
-                {
-                    listaPedidos.map((x) => {
-                        return (
-                            <ul key={x.Id}>
-                                <h2>Marca: {x.Marca}</h2>
-                                <li>Número de Série: <strong>{x.NumeroSerie}</strong></li>
-                                <li>Tipo: <strong>{x.Tipo}</strong></li>
-                                <li>Quantidade em Estoque: <strong>{x.Quantidade}</strong></li>
-                                <li>Quantidade solicitada: <strong>{x.QuantidadeSolicitada}</strong></li>
-                                <hr />
-                            </ul>
-                        );
-                    })
-                }
-                <ul
-                    key='ul'
-                    style={{
-                        textAlign: 'right',
-                        listStyleType: 'none'
-                    }}>
-                    <li>
-                        Quantidade Total:
-                            <strong className="ml-1">
-                            {quantidadeTotal}
-                        </strong>
-                    </li>
-                    <li>
-                        Data:
-                            <strong className="ml-1">
-                            {moment().format('DD/MM/yyyy')}
-                        </strong>
-                    </li>
-                </ul>
+                <List
+                    header={<div><b>Lista Pedido de chaves</b></div>}
+                    footer={<div>Quantidade Total: <b>{quantidadeTotal}</b></div>}
+                    bordered
+                    dataSource={data}
+                    renderItem={(item) => <List.Item>{item}</List.Item>}
+                />
             </Modal>
         </>
     );
