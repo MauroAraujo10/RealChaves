@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Row, Col, Breadcrumb } from 'antd';
-
+import { Row, Col } from 'antd';
 import { ResponsiveContainer, BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
-import { Rotas } from '../../../Routes/rotas';
 import EstatisticaCard from '../../../common/components/EstatisticaCard/EstatisticaCard';
-
+import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
 import estatisticaService from '../service/estatisticas.service';
-import { AiOutlineHome, AiOutlineSnippets, AiOutlineDownSquare, AiOutlineFileDone } from "react-icons/ai";
+import { AiOutlineSnippets, AiOutlineDownSquare, AiOutlineFileDone } from "react-icons/ai";
 import { FaRegMoneyBillAlt } from "react-icons/fa";
 
 const EstatisticaChave = () => {
@@ -35,20 +32,11 @@ const EstatisticaChave = () => {
     }, []);
 
     return (
-        <>
-            <div className="t-center mt-2 mb-2">
-                <h1>Estatísticas Chaves</h1>
-                <Breadcrumb>
-                    <Breadcrumb.Item>
-                        <Link to={Rotas.Home}>
-                            <AiOutlineHome className="mr-1" />
-                            Início
-                        </Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item >Estatísticas</Breadcrumb.Item>
-                    <Breadcrumb.Item >Chaves</Breadcrumb.Item>
-                </Breadcrumb>
-            </div>
+        <div className="mt-2">
+            <HeaderForm
+                titulo={'Estatísticas Chaves'}
+                listaCaminhos={['Estatísticas', 'Chaves']}
+            />
 
             <div className="container2">
                 <Row gutter={10} style={{ margin: '10px' }}>
@@ -133,7 +121,7 @@ const EstatisticaChave = () => {
                 </Row>
             </div>
             <div className="container">
-                <Row style={{background: ''}}>
+                <Row style={{ background: '' }}>
                     Teste
                 </Row>
                 <ResponsiveContainer height={500} style={{ margin: '20px' }}>
@@ -148,7 +136,7 @@ const EstatisticaChave = () => {
                 </ResponsiveContainer>
 
             </div>
-        </>
+        </div>
     );
 }
 

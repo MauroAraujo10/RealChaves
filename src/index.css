@@ -151,14 +151,6 @@ svg:hover{
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
-.container{
-  background-color: #FFF;
-  border-radius: 5px;
-  margin: 10px;
-  padding: 10px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-}
-
 .ant-list-header{
   background: #004878 !important;
   color: #FFF;

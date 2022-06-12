@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Grid from '../../../../common/components/Grid/Grid';
-import { Link } from 'react-router-dom';
-import { Breadcrumb } from 'antd';
-import { Rotas } from '../../../../Routes/rotas';
 
 import service from '../../../../service';
 import tabelas from '../../../../common/Enum/tabelas';
-
-import { AiOutlineHome } from "react-icons/ai";
+import HeaderForm from '../../../../common/components/HeaderForm/HeaderForm';
 
 const AmolacaoHistoricoAmolacoes = () => {
     const [produtos, setProdutos] = useState([]);
@@ -44,19 +40,11 @@ const AmolacaoHistoricoAmolacoes = () => {
 
     return (
         <div className="mt-2">
-            <div className="t-center">
-                <h1>Histórico de produtos amolados e entregues</h1>
-                <Breadcrumb>
-                    <Breadcrumb.Item>
-                        <Link to={Rotas.Home}>
-                            <AiOutlineHome className="mr-1" />
-                            Início
-                        </Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>Histórico</Breadcrumb.Item>
-                    <Breadcrumb.Item>Produtos Amolados</Breadcrumb.Item>
-                </Breadcrumb>
-            </div>
+
+            <HeaderForm
+                titulo={'Histórico de produtos amolados e entregues'}
+                listaCaminhos={['Histórico', 'Produtos Amolados']}
+            />
 
             <Grid
                 dataSource={produtos}

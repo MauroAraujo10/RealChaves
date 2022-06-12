@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
-import { Breadcrumb, Button, Tooltip, Image, Drawer, Row, Col, Badge } from 'antd';
-import { Link } from 'react-router-dom';
-import { Rotas } from '../../../../Routes/rotas';
+import { Button, Tooltip, Image, Drawer, Row, Col, Badge } from 'antd';
 import { toast } from 'react-toastify';
-
 import service from '../../../../service';
 import tabelas from '../../../../common/Enum/tabelas';
 import Grid from '../../../../common/components/Grid/Grid';
+import HeaderForm from '../../../../common/components/HeaderForm/HeaderForm';
 import ChavesEstoquePedidoModal from '../../components/chaves.estoque.pedido.modal';
-
-import { AiOutlineHome, AiOutlineShoppingCart, AiOutlineDoubleLeft, AiOutlineMinus, AiOutlinePlus, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineShoppingCart, AiOutlineDoubleLeft, AiOutlineMinus, AiOutlinePlus, AiOutlineDelete } from "react-icons/ai";
 
 import Plana from '../../assets/Plana.jpg';
 import PlanaColorida from '../../assets/PlanaColorida.jpg';
@@ -140,18 +137,11 @@ class ChaveEstoqueFazerPedido extends Component {
 
         return (
             <div className="mt-2">
-                <div className="t-center">
-                    <h1>Pedido de Chaves</h1>
-                    <Breadcrumb>
-                        <Breadcrumb.Item>
-                            <Link to={Rotas.Home}>
-                                <AiOutlineHome className="mr-1" />
-                                Início
-                            </Link>
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item>Pedido de Estoque</Breadcrumb.Item>
-                    </Breadcrumb>
-                </div>
+                <HeaderForm
+                    titulo={'Fazer pedido de Estoque'}
+                    listaCaminhos={['Pedido de Estoque']}
+                // Refatora: Retirar o marginBotton
+                />
 
                 <div className="t-right">
                     <Tooltip title="Lista de Pedidos">

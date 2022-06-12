@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Breadcrumb } from 'antd';
-import { Rotas } from '../../../../../Routes/rotas';
-
 import tabelas from '../../../../../common/Enum/tabelas';
 import service from '../../../../../service';
+import HeaderForm from '../../../../../common/components/HeaderForm/HeaderForm';
 import Grid from '../../../../../common/components/Grid/Grid';
-
-import { AiOutlineHome } from "react-icons/ai";
 
 const ChavesHistoricoDescarte = () => {
     const [descartados, setDescartados] = useState([]);
@@ -43,26 +38,10 @@ const ChavesHistoricoDescarte = () => {
 
     return (
         <div className="mt-2">
-            <div className="t-center">
-                <h1>Histórico de Chaves Descartadas</h1>
-                <Breadcrumb>
-                    <Breadcrumb.Item>
-                        <Link to={Rotas.Home}>
-                            <AiOutlineHome className="mr-1" />
-                            Início
-                            </Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>
-                        <Link to={Rotas.Chaves}>
-                            Chaves
-                            </Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>
-                        Chaves Descartadas
-                        </Breadcrumb.Item>
-                </Breadcrumb>
-            </div>
-
+            <HeaderForm
+                titulo={'Histórico de Chaves Descartadas'}
+                listaCaminhos={['Chaves', 'Histórico', 'Descarte']}
+            />
             <Grid
                 dataSource={descartados}
                 columns={columns}

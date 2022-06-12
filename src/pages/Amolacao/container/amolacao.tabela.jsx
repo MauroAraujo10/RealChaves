@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Breadcrumb, Tooltip } from 'antd';
+import { Tooltip } from 'antd';
 import { toast } from "react-toastify";
-import { Rotas } from '../../../Routes/rotas';
 import { messages } from '../../../common/Enum/messages';
-
 import service from '../../../service';
 import serviceAmolacao from '../service/amolacao.service';
 import tabelas from '../../../common/Enum/tabelas';
 import Grid from '../../../common/components/Grid/Grid';
+import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
 
 import BaixaModal from '../components/amolacao.baixa.modal';
 import EditModal from '../components/amolacao.edit.modal';
 import YesOrNoModal from '../../../common/components/yesOrNoModal/yesOrNoModal';
 
-import { AiOutlineHome, AiOutlineLike, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineLike, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
 const AmolacaoTabela = () => {
     const [produtos, setProdutos] = useState([]);
@@ -112,19 +110,11 @@ const AmolacaoTabela = () => {
 
     return (
         <div className="mt-2">
-            <div className="t-center">
-                <h1>Produtos em estoque</h1>
-                <Breadcrumb>
-                    <Breadcrumb.Item>
-                        <Link to={Rotas.Home}>
-                            <AiOutlineHome className="mr-1" />
-                            Início
-                            </Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>Amolação</Breadcrumb.Item>
-                    <Breadcrumb.Item>Estoque</Breadcrumb.Item>
-                </Breadcrumb>
-            </div>
+
+            <HeaderForm
+                titulo={'Produtos em estoque'}
+                listaCaminhos={['Amolação', 'Estoque']}
+            />
 
             <Grid
                 dataSource={produtos}

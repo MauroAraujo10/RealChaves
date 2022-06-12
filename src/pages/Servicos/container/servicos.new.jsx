@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { Form, Input, DatePicker, Switch, Breadcrumb } from 'antd';
+import { useHistory } from 'react-router-dom';
+import { Form, Input, DatePicker, Switch } from 'antd';
 import { Row, Col } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
-
 import service from '../service/servicos.service';
+import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
-
-import { AiOutlineHome } from "react-icons/ai";
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 
 const ServicosCadastro = () => {
@@ -36,28 +34,11 @@ const ServicosCadastro = () => {
     }
 
     return (
-        <div className="container">
-            <div className="t-center mb-2">
-                <h1> Cadastrar Serviço </h1>
-                <Breadcrumb>
-                    <Breadcrumb.Item>
-                        <Link to={Rotas.Home}>
-                            <AiOutlineHome className="mr-1" />
-                            Início
-                        </Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>
-                        <Link to={Rotas.Servico}>
-                            Serviço
-                        </Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>
-                        <Link>
-                            Cadastrar Serviço
-                            </Link>
-                    </Breadcrumb.Item>
-                </Breadcrumb>
-            </div>
+        <div className="container mt-2">
+            <HeaderForm
+                titulo={'Cadastrar Serviço'}
+                listaCaminhos={['Serviços', 'Cadastrar Serviço']}
+            />
 
             <Form
                 layout="vertical"

@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Breadcrumb, Tooltip, Tag } from 'antd';
-import { Link } from 'react-router-dom';
-import { Rotas } from '../../../../../Routes/rotas';
+import { Tooltip, Tag } from 'antd';
 import { TagStatusEnum } from '../../../../../common/Enum/TagStatusEnum';
-
+import HeaderForm from '../../../../../common/components/HeaderForm/HeaderForm';
 import Grid from '../../../../../common/components/Grid/Grid';
 import service from '../../../../../service';
 import tabelas from '../../../../../common/Enum/tabelas';
 
 import PedidoEstoqueHistoricoViewModal from '../components/pedidoEstoque.Historico.view.modal';
-import { AiOutlineHome, AiOutlineEye } from "react-icons/ai";
+import { AiOutlineEye } from "react-icons/ai";
 
 const ChavesHistoricoPedidoEstoque = () => {
     const [estoque, setEstoque] = useState([]);
@@ -56,7 +54,7 @@ const ChavesHistoricoPedidoEstoque = () => {
                         x.val().Status ===
                             TagStatusEnum.Completo ? <Tag color={'green'}> {TagStatusEnum.Completo} </Tag> :
                             TagStatusEnum.Incompleto ? <Tag color={'red'}> {TagStatusEnum.Incompleto} </Tag> :
-                            TagStatusEnum.Excedente ? <Tag color={'blue'}> {TagStatusEnum.Excedente} </Tag> : ''
+                                TagStatusEnum.Excedente ? <Tag color={'blue'}> {TagStatusEnum.Excedente} </Tag> : ''
                 })
                 setEstoque([]);
                 setEstoque(estoque);
@@ -70,20 +68,11 @@ const ChavesHistoricoPedidoEstoque = () => {
     }
 
     return (
-        <>
-            <div className="t-center mt-2">
-                <h1>Histórico de Baixas em pedidos de estoque</h1>
-                <Breadcrumb>
-                    <Breadcrumb.Item>
-                        <Link to={Rotas.Home}>
-                            <AiOutlineHome className="mr-1" />
-                            Início
-                        </Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>Histórico de Estoque</Breadcrumb.Item>
-                </Breadcrumb>
-            </div>
-
+        <div className="t-center mt-2">
+            <HeaderForm
+                titulo={'Histórico de Baixas em pedidos de estoque'}
+                listaCaminhos={['Chaves', 'Histórico', 'Pedidos de Estoque']}
+            />
             <Grid
                 dataSource={estoque}
                 columns={columns}
@@ -94,7 +83,7 @@ const ChavesHistoricoPedidoEstoque = () => {
                 onClose={() => setPedidoEstoqueViewModal(false)}
                 pedidoSelecionado={pedidoSelecionado}
             />
-        </>
+        </div>
     );
 }
 

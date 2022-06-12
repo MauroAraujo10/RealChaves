@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { messages } from '../../../common/Enum/messages';
-import { Breadcrumb, Tooltip } from 'antd';
-import { Rotas } from '../../../Routes/rotas';
+import { Tooltip } from 'antd';
 import { toast } from "react-toastify";
-
 import service from '../../../service';
 import servicosService from '../service/servicos.service';
 import tabelas from '../../../common/Enum/tabelas';
-
+import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
 import Grid from '../../../common/components/Grid/Grid';
 import ServicosEditModal from '../components/servicos.edit.modal';
 import YesOrNoModal from '../../../common/components/yesOrNoModal/yesOrNoModal';
-
-import { AiOutlineHome, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
 const ServicosTabela = () => {
     const [servicos, setServicos] = useState([]);
@@ -95,20 +91,10 @@ const ServicosTabela = () => {
 
     return (
         <div className="mt-2">
-            <div className="t-center">
-                <h1>Serviços Cadastrados</h1>
-                <Breadcrumb>
-                    <Breadcrumb.Item>
-                        <Link to={Rotas.Home}>
-                            <AiOutlineHome className="mr-1" />
-                            Início
-                                </Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>
-                        Serviços
-                            </Breadcrumb.Item>
-                </Breadcrumb>
-            </div>
+            <HeaderForm
+                titulo={'Tabelas de Serviços'}
+                listaCaminhos={['Serviços', 'Tabelas de Serviços']}
+            />
 
             <Grid
                 dataSource={servicos}
@@ -129,9 +115,7 @@ const ServicosTabela = () => {
                 onOk={() => deletarServico(servicoSelecionado?.Id)}
             />
         </div>
-
     );
-
 }
 
 export default ServicosTabela;

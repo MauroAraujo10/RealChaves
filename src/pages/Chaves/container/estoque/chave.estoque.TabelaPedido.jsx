@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Breadcrumb, Tooltip } from 'antd';
-import { Rotas } from '../../../../Routes/rotas';
+import { Tooltip } from 'antd';
 import { toast } from 'react-toastify';
 import { messages } from '../../../../common/Enum/messages';
 
 import Grid from '../../../../common/components/Grid/Grid';
 import service from '../../../../service';
 import tabelas from '../../../../common/Enum/tabelas';
+import HeaderForm from '../../../../common/components/HeaderForm/HeaderForm';
 
 import ChaveEstoqueViewPedidoModal from '../../components/chave.estoque.viewPedido.modal';
 import ChaveEstoqueBaixaPedidoModal from '../../components/chaves.estoque.baixaPedido.modal';
 import YesOrNoModal from '../../../../common/components/yesOrNoModal/yesOrNoModal';
 
-import { AiOutlineHome, AiOutlineLike, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineLike, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
 
 const ChaveEstoqueTabelaPedido = () => {
     const [pedidoSelecionado, setPedidoSelecionado] = useState([]);
@@ -100,18 +99,10 @@ const ChaveEstoqueTabelaPedido = () => {
 
     return (
         <div className="mt-2">
-            <div className="t-center">
-                <h1>Tabela de Pedidos de Estoque</h1>
-                <Breadcrumb>
-                    <Breadcrumb.Item>
-                        <Link to={Rotas.Home}>
-                            <AiOutlineHome className="mr-1" />
-                            Início
-                            </Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>Tabela de Pedidos de Estoque</Breadcrumb.Item>
-                </Breadcrumb>
-            </div>
+            <HeaderForm
+                titulo={'Tabela de Pedidos de Estoque'}
+                listaCaminhos={['Chaves', 'Estoque','Tabela de Pedidos de Estoque']}
+            />
             {/* Refatora: Grid Perfeita */}
             <Grid
                 dataSource={pedidosEstoque}

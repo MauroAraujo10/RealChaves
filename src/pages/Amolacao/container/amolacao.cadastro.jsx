@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { Form, Input, Select, DatePicker, Switch, Breadcrumb } from 'antd';
+import { useHistory } from 'react-router-dom';
+import { Form, Input, Select, DatePicker, Switch } from 'antd';
 import { Row, Col } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { Rotas } from '../../../Routes/rotas';
@@ -9,8 +9,9 @@ import moment from 'moment';
 
 import amolacaoService from '../service/amolacao.service';
 import BotaoCadastar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
+import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
 
-import { AiOutlineHome, AiOutlineFork, AiOutlineScissor } from "react-icons/ai";
+import { AiOutlineFork, AiOutlineScissor } from "react-icons/ai";
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import { RiKnifeLine } from "react-icons/ri";
 
@@ -36,9 +37,8 @@ const AmolacaoCadastro = () => {
             dto.DataEntrega = moment().format('DD/MM/YYYY');
             amolacaoService.postBaixaProduto(dto)
                 .then(() => {
-                    toast.success(messages.cadastradoSucesso('Produto'));
-                    // Refatora: Limpar os campos
-                    history.push(Rotas.AmolacaoCadastro);
+                    toast.success(messages.cadastradoSucesso('Produto') + ' Redirecionando para Histórico de Amolações');
+                    history.push(Rotas.AmolacaoHistoricoAmolacoes);
                 })
                 .catch(() => {
                     toast.error(messages.cadastradoErro('Produto'));
@@ -47,7 +47,7 @@ const AmolacaoCadastro = () => {
         else {
             amolacaoService.postProduto(dto)
                 .then(() => {
-                    toast.success(messages.cadastradoSucesso('Produto'));
+                    toast.success(messages.cadastradoSucesso('Produto') + ' Redirecionando para Produtos em estoque');
                     history.push(Rotas.AmolacaoEstoque);
                 })
                 .catch(() => {
@@ -55,22 +55,14 @@ const AmolacaoCadastro = () => {
                 });
         }
     }
-
+    
     return (
-        <div className="container">
-            <div className="t-center mb-2">
-                <h1> Cadastrar Produto </h1>
-                <Breadcrumb>
-                    <Breadcrumb.Item>
-                        <Link to={Rotas.Home}>
-                            <AiOutlineHome className="mr-1" />
-                            Início
-                        </Link>
-                    </Breadcrumb.Item>
-                    <Breadcrumb.Item>Amolação</Breadcrumb.Item>
-                    <Breadcrumb.Item>Cadastro</Breadcrumb.Item>
-                </Breadcrumb>
-            </div>
+        <div className="container mt-2">
+
+            <HeaderForm
+                titulo={'Cadastrar Produto'}
+                listaCaminhos={['Amolação', 'Cadastro']}
+            />
 
             <Form layout="vertical" onFinish={submitForm}>
                 <Row gutter={10}>
