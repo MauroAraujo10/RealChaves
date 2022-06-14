@@ -63,10 +63,6 @@ export default function Routes({ configuracoes }) {
     return (
         <Menu
             mode="inline"
-            style={{
-                width: '260px',
-                boxShadow: '5px 2px 3px rgb(0 0 0 / 12%), 0 1px 2px rgb(0 0 0 / 24%)'
-            }}
             theme={theme}
             openKeys={openKeys}
             onOpenChange={onOpenChange}>

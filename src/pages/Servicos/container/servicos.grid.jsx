@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import service from '../../../service';
 import servicosService from '../service/servicos.service';
 import tabelas from '../../../common/Enum/tabelas';
+import Loading from '../../../common/components/Loading/Loading';
 import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
 import Grid from '../../../common/components/Grid/Grid';
 import ServicosEditModal from '../components/servicos.edit.modal';
@@ -13,6 +14,7 @@ import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
 const ServicosTabela = () => {
     const [servicos, setServicos] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [servicoSelecionado, setServicoSelecionado] = useState();
     const [modalEditServicoVisible, setModalEditServicoVisible] = useState(false);
     const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
@@ -45,8 +47,9 @@ const ServicosTabela = () => {
     ];
 
     useEffect(() => {
+        setLoading(true);
+        let servicos = [];
         service.app.ref(tabelas.Servicos).on('value', (snapshot) => {
-            let servicos = [];
             snapshot.forEach((x) => {
                 servicos.push({
                     Id: x.key,
@@ -58,6 +61,7 @@ const ServicosTabela = () => {
                 })
             })
             setServicos(servicos);
+            setLoading(false);
         });
     }, []);
 
@@ -96,10 +100,14 @@ const ServicosTabela = () => {
                 listaCaminhos={['Serviços', 'Tabelas de Serviços']}
             />
 
-            <Grid
-                dataSource={servicos}
-                columns={columns}
-            />
+            {
+                loading ?
+                    <Loading /> :
+                    <Grid
+                        dataSource={servicos}
+                        columns={columns}
+                    />
+            }
 
             <ServicosEditModal
                 visible={modalEditServicoVisible}

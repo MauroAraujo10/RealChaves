@@ -6,6 +6,7 @@ import { messages } from '../../../../common/Enum/messages';
 import Grid from '../../../../common/components/Grid/Grid';
 import service from '../../../../service';
 import tabelas from '../../../../common/Enum/tabelas';
+import Loading from '../../../../common/components/Loading/Loading';
 import HeaderForm from '../../../../common/components/HeaderForm/HeaderForm';
 
 import ChaveEstoqueViewPedidoModal from '../../components/chave.estoque.viewPedido.modal';
@@ -15,6 +16,7 @@ import YesOrNoModal from '../../../../common/components/yesOrNoModal/yesOrNoModa
 import { AiOutlineLike, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
 
 const ChaveEstoqueTabelaPedido = () => {
+    const [loading, setLoading] = useState(false);
     const [pedidoSelecionado, setPedidoSelecionado] = useState([]);
     const [pedidosEstoque, setPedidosEstoque] = useState([]);
     const [viewProdutoModalVisible, setViewProdutoModalVisible] = useState(false);
@@ -24,6 +26,7 @@ const ChaveEstoqueTabelaPedido = () => {
     useEffect(() => {
         //REFATORA: Arrumar quais colunas vão aparecer na grid
         service.app.ref(tabelas.PedidoEstoque).on('value', (snapshot) => {
+            setLoading(true);
             let pedido = [];
             snapshot.forEach((x) => {
                 pedido.push({
@@ -36,6 +39,7 @@ const ChaveEstoqueTabelaPedido = () => {
                 })
             })
             setPedidosEstoque(pedido);
+            setLoading(false);
         })
     }, []);
 
@@ -101,13 +105,17 @@ const ChaveEstoqueTabelaPedido = () => {
         <div className="mt-2">
             <HeaderForm
                 titulo={'Tabela de Pedidos de Estoque'}
-                listaCaminhos={['Chaves', 'Estoque','Tabela de Pedidos de Estoque']}
+                listaCaminhos={['Chaves', 'Estoque', 'Tabela de Pedidos de Estoque']}
             />
-            {/* Refatora: Grid Perfeita */}
-            <Grid
-                dataSource={pedidosEstoque}
-                columns={columns}
-            />
+
+            {
+                loading ?
+                    <Loading /> :
+                    <Grid
+                        dataSource={pedidosEstoque}
+                        columns={columns}
+                    />
+            }
 
             <ChaveEstoqueViewPedidoModal
                 visible={viewProdutoModalVisible}

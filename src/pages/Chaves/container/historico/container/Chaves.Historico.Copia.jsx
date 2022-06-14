@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import tabelas from '../../../../../common/Enum/tabelas';
 import service from '../../../../../service';
 import HeaderForm from '../../../../../common/components/HeaderForm/HeaderForm';
+import Loading from '../../../../../common/components/Loading/Loading';
 import Grid from '../../../../../common/components/Grid/Grid';
 
 const ChavesHistoricoCopia = () => {
     const [chaves, setChaves] = useState([]);
+    const [loading, setLoading] = useState(false);
     const columns = [
         { title: 'Data da Cópia', dataIndex: 'Data', key: 'Data', width: '15%' },
         { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '20%' },
@@ -17,6 +19,7 @@ const ChavesHistoricoCopia = () => {
 
     useEffect(() => {
         let copia = [];
+        setLoading(true);
         service.app.ref(tabelas.CopiasChave).once('value', snap => {
             snap.forEach((copiaChave) => {
                 service.app.ref(tabelas.Chave).child(copiaChave.val().IdChave).on('value', chave => {
@@ -39,6 +42,7 @@ const ChavesHistoricoCopia = () => {
                     setChaves(copia);
                 })
             })
+            setLoading(false);
         });
     }, []);
 
@@ -48,10 +52,14 @@ const ChavesHistoricoCopia = () => {
                 titulo={'Histórico de Cópia de Chaves'}
                 listaCaminhos={['Chaves', 'Histórico', 'Cópias']}
             />
-            <Grid
-                dataSource={chaves}
-                columns={columns}
-            />
+            {
+                loading ?
+                    <Loading /> :
+                    <Grid
+                        dataSource={chaves}
+                        columns={columns}
+                    />
+            }
         </div>
     );
 

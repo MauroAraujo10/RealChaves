@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Tooltip, Tag } from 'antd';
 import { TagStatusEnum } from '../../../../../common/Enum/TagStatusEnum';
 import HeaderForm from '../../../../../common/components/HeaderForm/HeaderForm';
+import Loading from '../../../../../common/components/Loading/Loading';
 import Grid from '../../../../../common/components/Grid/Grid';
 import service from '../../../../../service';
 import tabelas from '../../../../../common/Enum/tabelas';
@@ -10,6 +11,7 @@ import PedidoEstoqueHistoricoViewModal from '../components/pedidoEstoque.Histori
 import { AiOutlineEye } from "react-icons/ai";
 
 const ChavesHistoricoPedidoEstoque = () => {
+    const [loading, setLoading] = useState(false);
     const [estoque, setEstoque] = useState([]);
     const [pedidoSelecionado, setPedidoSelecionado] = useState([]);
     const [pedidoEstoqueViewModal, setPedidoEstoqueViewModal] = useState(false);
@@ -38,6 +40,7 @@ const ChavesHistoricoPedidoEstoque = () => {
     ];
 
     useEffect(() => {
+        setLoading(true);
         service.app.ref(tabelas.BaixaPedidoChaves).on('value', snap => {
             let estoque = [];
             snap.forEach((x) => {
@@ -59,6 +62,7 @@ const ChavesHistoricoPedidoEstoque = () => {
                 setEstoque([]);
                 setEstoque(estoque);
             })
+            setLoading(false);
         });
     }, []);
 
@@ -73,11 +77,14 @@ const ChavesHistoricoPedidoEstoque = () => {
                 titulo={'Histórico de Baixas em pedidos de estoque'}
                 listaCaminhos={['Chaves', 'Histórico', 'Pedidos de Estoque']}
             />
-            <Grid
-                dataSource={estoque}
-                columns={columns}
-            />
-
+            {
+                loading ?
+                    <Loading /> :
+                    <Grid
+                        dataSource={estoque}
+                        columns={columns}
+                    />
+            }
             <PedidoEstoqueHistoricoViewModal
                 visible={pedidoEstoqueViewModal}
                 onClose={() => setPedidoEstoqueViewModal(false)}

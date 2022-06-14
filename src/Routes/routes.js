@@ -1,5 +1,6 @@
 import React from 'react';
 import Menu from './menu';
+import { Row, Col } from 'antd';
 import { Switch, Route } from 'react-router-dom';
 import { Rotas } from './rotas';
 
@@ -28,10 +29,18 @@ import EstatisticasAmolacoes from '../pages/Estatistica/Amolacoes/estatistica.Am
 import EstatisticasServicos from '../pages/Estatistica/Servicos/estatistica.servicos';
 
 export default function Routes({ configuracoes }) {
+
     return (
-        <div style={{ display: 'flex', height: '1200px' }}>
-            <Menu configuracoes={configuracoes} />
-            <div style={{ width: '100%' }}>
+        <Row>
+            <Col xs={8} sm={8} md={6} lg={6} xl={4} xxl={3}
+                style={{
+                    background: configuracoes?.DarkTheme ? '#001529' : '#FFF',
+                    height: '1500px',
+                    boxShadow: '5px 2px 3px rgb(0 0 0 / 12%), 0 1px 2px rgb(0 0 0 / 24%)'
+                }}>
+                <Menu configuracoes={configuracoes} />
+            </Col>
+            <Col xs={16} sm={16} md={18} lg={18} xl={20} xxl={21}>
                 <Switch>
                     <Route path="/" exact component={Home} />
 
@@ -58,7 +67,7 @@ export default function Routes({ configuracoes }) {
 
                     <Route path="*" component={Erro} />
                 </Switch>
-            </div>
-        </div>
+            </Col>
+        </Row>
     );
 }

@@ -1,25 +1,29 @@
 import React from 'react';
-import { Card, Avatar } from 'antd';
+import { Card } from 'antd';
 import { AiOutlineEye } from "react-icons/ai";
 
-const EstatisticaCard = ({ title, icon, hoje, esteMes, total }) => {
+const EstatisticaCard = ({ title, icon, funcao1, funcao2, funcao3, hoje, esteMes, total }) => {
     return (
-        <Card className="EstatisticaCard" title={title} extra={<AiOutlineEye size={24} />}>
+        <Card
+            actions={
+                [
+                    <AiOutlineEye key="1" size={20} onClick={funcao1} />,
+                    <AiOutlineEye key="2" size={20} onClick={funcao2} />,
+                    <AiOutlineEye key="2" size={20} onClick={funcao3} />
+                ]
+            }
+            style={{ boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)' }}
+        >
             <Card.Meta
-                avatar={
-                    <Avatar
-                        icon={icon}
-                        style={{ background: '#FFF' }}
-                        size={60}
-                    />
-                }
-                title={(
+                avatar={icon}
+                title={title}
+                description={
                     <>
-                        <span>Hoje: <b>{hoje && hoje}</b></span><br />
-                        <span>Este mês: <b>{esteMes}</b></span> <br />
-                        <span>Total: <b>{total}</b></span><br />
+                        Hoje: <b>{hoje}</b> <br />
+                        Este mês: <b>{esteMes}</b> <br />
+                        Total: <b>{total}</b>
                     </>
-                )}
+                }
             />
         </Card>
     );

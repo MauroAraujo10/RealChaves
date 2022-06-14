@@ -8,6 +8,7 @@ import ChavesDescarteModal from '../components/chaves.descarte.modal';
 import ChavesEditModal from '../components/chaves.edit.modal';
 import YesOrNoModal from '../../../common/components/yesOrNoModal/yesOrNoModal';
 
+import Loading from '../../../common/components/Loading/Loading';
 import Grid from '../../../common/components/Grid/Grid';
 import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
 import service from '../../../service';
@@ -18,6 +19,7 @@ import { AiOutlineSnippets, AiOutlineDownSquare, AiOutlineEdit, AiOutlineDelete 
 
 const ChaveTabela = () => {
     const [chaves, setChaves] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [chaveSelecionada, setChaveSelecionada] = useState([]);
     const [modalEditVisible, setModalEditVisible] = useState(false);
     const [modalVendaVisible, setModalVendaVisible] = useState(false);
@@ -25,6 +27,7 @@ const ChaveTabela = () => {
     const [modalExclusaoVisible, setModalExclusaoVisible] = useState(false);
 
     useEffect(() => {
+        setLoading(true);
         service.app.ref(tabelas.Chave).on('value', (snapshot) => {
             let chaves = [];
             snapshot.forEach((x) => {
@@ -40,6 +43,7 @@ const ChaveTabela = () => {
                 })
             })
             setChaves(chaves);
+            setLoading(false);
         });
     }, []);
 
@@ -138,10 +142,15 @@ const ChaveTabela = () => {
                 titulo={'Chaves em estoque'}
                 listaCaminhos={['Chaves']}
             />
-            <Grid
-                dataSource={chaves}
-                columns={columns}
-            />
+            {
+                loading ?
+                    <Loading /> :
+                    <Grid
+                        dataSource={chaves}
+                        columns={columns}
+                    />
+            }
+
             <ChavesEditModal
                 visible={modalEditVisible}
                 chaveSelecionada={chaveSelecionada}

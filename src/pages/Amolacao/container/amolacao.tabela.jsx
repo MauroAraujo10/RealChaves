@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Tooltip } from 'antd';
 import { toast } from "react-toastify";
 import { messages } from '../../../common/Enum/messages';
+
 import service from '../../../service';
 import serviceAmolacao from '../service/amolacao.service';
 import tabelas from '../../../common/Enum/tabelas';
+import Loading from '../../../common/components/Loading/Loading';
 import Grid from '../../../common/components/Grid/Grid';
 import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
 
@@ -15,6 +17,7 @@ import YesOrNoModal from '../../../common/components/yesOrNoModal/yesOrNoModal';
 import { AiOutlineLike, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
 const AmolacaoTabela = () => {
+    const [loading, setLoading] = useState(false);
     const [produtos, setProdutos] = useState([]);
     const [produtoSelecionado, setProdutoSelecionado] = useState([]);
     const [modalBaixarVisible, setModalBaixarVisible] = useState(false);
@@ -57,8 +60,9 @@ const AmolacaoTabela = () => {
     ];
 
     useEffect(() => {
+        setLoading(true);
+        let produtos = [];
         service.app.ref(tabelas.Amolacao).on('value', (snapshot) => {
-            let produtos = [];
             snapshot.forEach((x) => {
                 produtos.push({
                     Id: x.key,
@@ -73,7 +77,8 @@ const AmolacaoTabela = () => {
                 });
             })
             setProdutos(produtos);
-        })
+            setLoading(false);
+        });
     }, []);
 
     const funcaoAbrirModal = (dto, funcionalidade) => {
@@ -115,11 +120,14 @@ const AmolacaoTabela = () => {
                 titulo={'Produtos em estoque'}
                 listaCaminhos={['Amolação', 'Estoque']}
             />
-
-            <Grid
-                dataSource={produtos}
-                columns={columns}
-            />
+            {
+                loading ?
+                    <Loading /> :
+                    <Grid
+                        dataSource={produtos}
+                        columns={columns}
+                    />
+            }
 
             <BaixaModal
                 visible={modalBaixarVisible}

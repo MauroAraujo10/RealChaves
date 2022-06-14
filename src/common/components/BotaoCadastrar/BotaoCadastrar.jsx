@@ -17,8 +17,7 @@ const BotaoCadastrar = ({ isView, funcaoCancelar }) => {
                     <Button className="mr-1" onClick={funcaoCancelar}>
                         Cancelar
                     </Button>
-                    <Button type="primary" htmlType="submit">
-                        <AiOutlineSave className="mr-1" size={16} />
+                    <Button type="primary" htmlType="submit" icon={<AiOutlineSave size={18} className="mr-1" />}>
                         Salvar
                     </Button>
                 </>

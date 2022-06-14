@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import tabelas from '../../../../../common/Enum/tabelas';
 import service from '../../../../../service';
+import Loading from '../../../../../common/components/Loading/Loading';
 import HeaderForm from '../../../../../common/components/HeaderForm/HeaderForm';
 import Grid from '../../../../../common/components/Grid/Grid';
 
 const ChavesHistoricoDescarte = () => {
     const [descartados, setDescartados] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const columns = [
         { title: 'Data do Descarte', dataIndex: 'Data', key: 'Data', width: '10%' },
@@ -16,6 +18,7 @@ const ChavesHistoricoDescarte = () => {
     ];
 
     useEffect(() => {
+        setLoading(true);
         let descartados = [];
         service.app.ref(tabelas.Descarte).once('value', snap => {
             snap.forEach((descarte) => {
@@ -33,6 +36,7 @@ const ChavesHistoricoDescarte = () => {
                     setDescartados(descartados);
                 })
             })
+            setLoading(false);
         });
     }, []);
 
@@ -42,10 +46,14 @@ const ChavesHistoricoDescarte = () => {
                 titulo={'Histórico de Chaves Descartadas'}
                 listaCaminhos={['Chaves', 'Histórico', 'Descarte']}
             />
-            <Grid
-                dataSource={descartados}
-                columns={columns}
-            />
+            {
+                loading ?
+                    <Loading /> :
+                    <Grid
+                        dataSource={descartados}
+                        columns={columns}
+                    />
+            }
         </div>
     );
 }

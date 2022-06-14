@@ -2,7 +2,6 @@ import service from '../../../service';
 import tabelas from '../../../common/Enum/tabelas';
 
 const Methods = {
-
     async postProduto(dto) {
         let id = Number(Date.now());
         return await service.app.ref(tabelas.Amolacao).child(id).set({

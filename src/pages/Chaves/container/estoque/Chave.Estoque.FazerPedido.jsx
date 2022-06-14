@@ -6,6 +6,7 @@ import tabelas from '../../../../common/Enum/tabelas';
 import Grid from '../../../../common/components/Grid/Grid';
 import HeaderForm from '../../../../common/components/HeaderForm/HeaderForm';
 import ChavesEstoquePedidoModal from '../../components/chaves.estoque.pedido.modal';
+import Loading from '../../../../common/components/Loading/Loading';
 import { AiOutlineShoppingCart, AiOutlineDoubleLeft, AiOutlineMinus, AiOutlinePlus, AiOutlineDelete } from "react-icons/ai";
 
 import Plana from '../../assets/Plana.jpg';
@@ -27,12 +28,15 @@ class ChaveEstoqueFazerPedido extends Component {
             chaves: [],
             listaPedidos: [],
             quantidadeTotal: 0,
+            loading: false,
             drawerVisible: false,
             pedidoModalVisible: false
         };
     }
 
     componentDidMount() {
+        this.setState({ loading: true });
+
         service.app.ref(tabelas.Chave).once('value', (snapshot) => {
             let chaves = [];
             snapshot.forEach((x) => {
@@ -48,8 +52,12 @@ class ChaveEstoqueFazerPedido extends Component {
                     ListaNumeroSerie: x.val().ListaNumeroSerie ? x.val().ListaNumeroSerie : [],
                 })
             })
-            this.setState({ chaves })
-            this.setState({ listaPedidos: [] })
+
+            this.setState({
+                chaves,
+                listaPedidos: [],
+                loading: false
+            });
         });
     }
 
@@ -140,7 +148,6 @@ class ChaveEstoqueFazerPedido extends Component {
                 <HeaderForm
                     titulo={'Fazer pedido de Estoque'}
                     listaCaminhos={['Pedido de Estoque']}
-                // Refatora: Retirar o marginBotton
                 />
 
                 <div className="t-right">
@@ -154,10 +161,14 @@ class ChaveEstoqueFazerPedido extends Component {
                     </Tooltip>
                 </div>
 
-                <Grid
-                    dataSource={this.state.chaves}
-                    columns={columns}
-                />
+                {
+                    this.state.loading ?
+                        <Loading /> :
+                        <Grid
+                            dataSource={this.state.chaves}
+                            columns={columns}
+                        />
+                }
 
                 <Drawer
                     title="Lista do Pedido"

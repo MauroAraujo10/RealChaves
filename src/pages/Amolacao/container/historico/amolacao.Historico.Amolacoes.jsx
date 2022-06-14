@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Grid from '../../../../common/components/Grid/Grid';
-
+import Loading from '../../../../common/components/Loading/Loading';
 import service from '../../../../service';
 import tabelas from '../../../../common/Enum/tabelas';
 import HeaderForm from '../../../../common/components/HeaderForm/HeaderForm';
 
 const AmolacaoHistoricoAmolacoes = () => {
     const [produtos, setProdutos] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const columns = [
         { title: 'Cliente', dataIndex: 'Cliente', key: 'Cliente', width: '20%' },
@@ -19,6 +20,7 @@ const AmolacaoHistoricoAmolacoes = () => {
     ];
 
     useEffect(() => {
+        setLoading(true);
         service.app.ref(tabelas.ProdutosAmolados).on('value', (snapshot) => {
             let produtos = [];
             snapshot.forEach((x) => {
@@ -35,6 +37,7 @@ const AmolacaoHistoricoAmolacoes = () => {
                 });
             })
             setProdutos(produtos);
+            setLoading(false);
         })
     }, []);
 
@@ -46,10 +49,15 @@ const AmolacaoHistoricoAmolacoes = () => {
                 listaCaminhos={['Histórico', 'Produtos Amolados']}
             />
 
-            <Grid
-                dataSource={produtos}
-                columns={columns}
-            />
+            {
+                loading ?
+                    <Loading /> :
+                    <Grid
+                        dataSource={produtos}
+                        columns={columns}
+                    />
+            }
+
         </div>
     );
 }
