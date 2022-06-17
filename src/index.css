@@ -151,15 +151,6 @@ svg:hover{
   color: #FFF !important;
 }
 
-.EstatisticaCard{
-  border-top: 5px solid #004878 !important;
-  background-color: #e4f3fd !important;
-  border-radius: 5px;
-  margin: 10px;
-  padding: 10px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-}
-
 .ant-list-header{
   background: #004878 !important;
   color: #FFF;
@@ -174,4 +165,17 @@ svg:hover{
   position: absolute;
   left: 50%;
   top: 50%;
+}
+
+.ant-card-meta-description{
+  color: #000 !important;
+  font-size: 18px;
+}
+
+.ant-card-actions{
+  background: #EEE !important;
+}
+
+.ant-progress-text{
+  color: #000 !important;
 }

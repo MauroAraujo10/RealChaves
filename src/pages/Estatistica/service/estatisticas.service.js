@@ -12,6 +12,7 @@ const methods = {
 
         await service.app.ref(tabelas.CopiasChave).once('value', (snapshot) => {
             let copias = [];
+            let datasConvertidas = [];
             let copiasFeitasHoje = 0;
             let copiasFeitasEsteMes = 0;
             let copiasFeitasTotal = 0;
@@ -42,9 +43,11 @@ const methods = {
 
                 copiasFeitasTotal = copiasFeitasTotal + x.val().Quantidade;
                 valorCopiasFeitasTotal = valorCopiasFeitasTotal + x.val().Valor;
+                datasConvertidas.push(new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])));
             })
             dto = {
                 Copias: copias,
+                DatasConvertidas: datasConvertidas,
                 CopiasFeitasHoje: copiasFeitasHoje,
                 CopiasFeitasEsteMes: copiasFeitasEsteMes,
                 CopiasFeitasTotal: copiasFeitasTotal,
@@ -53,7 +56,6 @@ const methods = {
                 ValorCopiasFeitasTotal: valorCopiasFeitasTotal
             }
         })
-
         return dto;
     },
     async getEstatisticaDescartes() {
@@ -61,6 +63,7 @@ const methods = {
 
         await service.app.ref(tabelas.Descarte).once('value', (snapshot) => {
             let descartes = [];
+            let datasConvertidas = [];
             let chavesDescartadasHoje = 0;
             let chavesDescartadasEsteMes = 0;
             let chavesDescartadasTotal = 0;
@@ -81,9 +84,11 @@ const methods = {
                     chavesDescartadasEsteMes = chavesDescartadasEsteMes + x.val().Quantidade;
 
                 chavesDescartadasTotal = chavesDescartadasTotal + x.val().Quantidade;
+                datasConvertidas.push(new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])));
             })
             dto = {
                 Descartes: descartes,
+                DatasConvertidas: datasConvertidas,
                 ChavesDescartadasHoje: chavesDescartadasHoje,
                 ChavesDescartadasEsteMes: chavesDescartadasEsteMes,
                 ChavesDescartadasTotal: chavesDescartadasTotal
@@ -117,7 +122,7 @@ const methods = {
                     pedidosBaixadosHoje++;
                     valorBaixadosHoje = valorBaixadosHoje + x.val().Valor;
                 }
-                
+
                 if (dataSplit[1] === mesAtual && dataSplit[2] === anoAtual) {
                     pedidosBaixadosEsteMes++;
                     valorBaixadosEsteMes = valorBaixadosEsteMes + x.val().Valor;
