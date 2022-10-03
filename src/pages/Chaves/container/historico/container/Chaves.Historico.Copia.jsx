@@ -30,7 +30,7 @@ const ChavesHistoricoCopia = () => {
                         NumeroSerie: chave.val()?.NumeroSerie,
                         Data: copiaChave.val()?.Data,
                         Quantidade: copiaChave.val()?.Quantidade,
-                        Valor: copiaChave.val()?.Valor,
+                        Valor: copiaChave.val()?.Valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
                         TipoPagamento:
                             copiaChave.val()?.TipoPagamento === 'Dinheiro' ? 'Dinheiro' :
                                 copiaChave.val()?.TipoPagamento === 'CartaoCredito' ? 'Cartão de Crédito' :

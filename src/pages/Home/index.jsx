@@ -4,78 +4,146 @@ import moment from 'moment';
 import tabelas from '../../common/Enum/tabelas';
 
 import service from '../../service';
-import { FcFaq, FcKindle, FcSupport } from "react-icons/fc";
+import { FcFaq, FcReuse, FcBusiness, FcKindle, FcSupport } from "react-icons/fc";
+
+import HomeCard from '../../common/components/HomeCard/HomeCard';
+import Loading from '../../common/components/Loading/Loading';
 
 const Home = () => {
-    const [chavesVendidasHoje, setChavesVendidasHoje] = useState(0);
+    const [copiasChavesFeitasHoje, setCopiasChavesFeitasHoje] = useState(0);
+    const [descarteChavesFeitosHoje, setDescarteChavesFeitosHoje] = useState(0);
+    const [pedidoEstoqueFeitosHoje, setPedidoEstoqueFeitosHoje] = useState(0);
     const [alicatesAmoladoHoje, setAlicatesAmoladoHoje] = useState(0);
     const [servicosRealizadosHoje, setServicosRealizadosHoje] = useState(0);
+
+    const [loading, setLoading] = useState(false);
     const dataAtual = moment().format('DD/MM/yyyy');
 
     useEffect(() => {
+        setLoading(true);
 
-        function getChaves() {
-            service.app.ref(tabelas.CopiasChave).once('value', (snapshot) => {
-                let numeroChavesVendidasHoje = 0;
+        const getCopiasChaves = async () => {
+            await service.app.ref(tabelas.CopiasChave).once('value', (snapshot) => {
+                let numerocopiasChavesFeitasHoje = 0;
                 snapshot.forEach((x) => {
                     if (x.val().Data === dataAtual)
-                        numeroChavesVendidasHoje = numeroChavesVendidasHoje + x.val().Quantidade;
+                        numerocopiasChavesFeitasHoje = numerocopiasChavesFeitasHoje + x.val().Quantidade;
                 })
-                setChavesVendidasHoje(numeroChavesVendidasHoje);
+                setCopiasChavesFeitasHoje(numerocopiasChavesFeitasHoje);
             })
         }
 
-        function getAlicates() {
-            service.app.ref(tabelas.Amolacao).once('value', (snapshot) => {
-                let numeroAlicatesAmoladosHoje = 0;
+        const getDescarteChaves = async () => {
+            await service.app.ref(tabelas.Descarte).once('value', (snapshot) => {
+                let numeroDescarteChavesFeitosHoje = 0;
                 snapshot.forEach((x) => {
                     if (x.val().Data === dataAtual)
+                        numeroDescarteChavesFeitosHoje = numeroDescarteChavesFeitosHoje + x.val().Quantidade;
+                })
+                setDescarteChavesFeitosHoje(numeroDescarteChavesFeitosHoje);
+            })
+        }
+
+        const getPedidoEstoque = async () => {
+            await service.app.ref(tabelas.PedidoEstoque).once('value', (snapshot) => {
+                let numeropedidoEstoqueFeitosHoje = 0;
+                snapshot.forEach((x) => {
+                    if (x.val().DataPedido === dataAtual)
+                        numeropedidoEstoqueFeitosHoje++;
+                })
+                setPedidoEstoqueFeitosHoje(numeropedidoEstoqueFeitosHoje);
+            })
+        }
+
+        const getProdutosAmolados = async () => {
+            await service.app.ref(tabelas.ProdutosAmolados).once('value', (snapshot) => {
+                let numeroAlicatesAmoladosHoje = 0;
+                snapshot.forEach((x) => {
+                    if (x.val().DataEntrega === dataAtual)
                         numeroAlicatesAmoladosHoje++;
                 })
                 setAlicatesAmoladoHoje(numeroAlicatesAmoladosHoje);
             })
         }
 
-        function getServicos() {
-            service.app.ref(tabelas.Servicos).once('value', (snapshot) => {
+        const getServicos = async () => {
+            await service.app.ref(tabelas.Servicos).once('value', (snapshot) => {
                 let numeroServicosRealizadosHoje = 0;
                 snapshot.forEach((x) => {
                     if (x.val().Data === dataAtual)
                         numeroServicosRealizadosHoje++;
                 })
                 setServicosRealizadosHoje(numeroServicosRealizadosHoje);
+                setLoading(false);
             })
         }
 
-        getChaves();
-        getAlicates();
+        getCopiasChaves();
+        getDescarteChaves();
+        getPedidoEstoque();
+        getProdutosAmolados();
         getServicos();
-
     }, [dataAtual]);
 
     return (
         <>
-            <Row style={{ display: "flex", justifyContent: 'space-around' }} className="mt-2">
-                <Col md={6} xs={20} className="container t-center">
-                    <div>
-                        <FcFaq size={40} />
-                    </div>
-                    <h1>Venda de Chaves: {chavesVendidasHoje}</h1>
-                    <h4 style={{ color: 'gray' }}>Número de chaves que foram vendidas hoje</h4>
-                </Col>
+            {loading ? <Loading /> :
+                <>
+                    <Row style={{ display: "flex", justifyContent: 'space-around' }} className="mt-2">
 
-                <Col md={6} xs={20} className="container t-center">
-                    <FcKindle size={40} />
-                    <h1>Alicates amolados: {alicatesAmoladoHoje}</h1>
-                    <h4 style={{ color: 'gray' }}>Número de Alicates que foram amolados hoje</h4>
-                </Col>
+                        <Col xs={22} sm={22} md={22} lg={7} xl={7} xxl={7}>
+                            <HomeCard
+                                icon={<FcFaq size={40} />}
+                                title='Cópias de Chaves'
+                                value={copiasChavesFeitasHoje}
+                                color="#808080"
+                                text="Número de cópias que foram feitas hoje"
+                            />
+                        </Col>
+                        <Col xs={22} sm={22} md={22} lg={7} xl={7} xxl={7}>
+                            <HomeCard
+                                icon={<FcReuse size={40} />}
+                                title='Descarte de Chaves'
+                                value={descarteChavesFeitosHoje}
+                                color="#808080"
+                                text="Número de chaves que foram descartadas hoje"
+                            />
+                        </Col>
+                        <Col xs={22} sm={22} md={22} lg={7} xl={7} xxl={7}>
+                            <HomeCard
+                                icon={<FcBusiness size={40} />}
+                                title='Pedido de Estoque'
+                                value={pedidoEstoqueFeitosHoje}
+                                color="#808080"
+                                text="Número de pedidos de estoque que foram descartadas hoje"
+                            />
+                        </Col>
+                    </Row>
 
-                <Col md={6} xs={20} className="container t-center">
-                    <FcSupport size={40} />
-                    <h1>Serviços Realizados: {servicosRealizadosHoje}</h1>
-                    <h4 style={{ color: 'gray' }}>Número de serviços que foram reaizados hoje</h4>
-                </Col>
-            </Row>
+                    <Row style={{ display: "flex", justifyContent: 'space-around' }} className="mt-2">
+
+                        <Col xs={22} sm={22} md={22} lg={7} xl={7} xxl={7}>
+                            <HomeCard
+                                icon={<FcKindle size={40} />}
+                                title='Produtos amolados'
+                                value={alicatesAmoladoHoje}
+                                color="#808080"
+                                text="Número de Produtos que foram amolados hoje"
+                            />
+                        </Col>
+
+                        <Col xs={22} sm={22} md={22} lg={7} xl={7} xxl={7}>
+                            <HomeCard
+                                icon={<FcSupport size={40} />}
+                                title='Serviços Realizados'
+                                value={servicosRealizadosHoje}
+                                color="#808080"
+                                text="Número de serviços que foram realizados hoje"
+                            />
+                        </Col>
+                    </Row>
+                </>
+            }
         </>
     );
 }

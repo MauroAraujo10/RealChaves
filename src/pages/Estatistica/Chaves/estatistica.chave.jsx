@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Form, Input } from 'antd';
-import { ResponsiveContainer, BarChart, Bar, Tooltip, CartesianGrid, XAxis, YAxis, Legend } from 'recharts';
+import { Row, Col } from 'antd';
 
 import estatisticaService from '../service/estatisticas.service';
 
@@ -17,25 +16,12 @@ const EstatisticaChave = () => {
     const [dtoListaPedidoEstoque, setDtoListaPedidoEstoque] = useState([]);
 
     const [loading, setLoading] = useState(false);
-    const [chartData, setChartData] = useState([
-        { name: 'Janeiro', valor: 53 },
-        { name: 'Fevereiro', valor: 100 },
-        { name: 'Março', valor: 30 },
-        { name: 'Abril', valor: 53 },
-        { name: 'Maio', valor: 73 },
-        { name: 'Junho', valor: 23 },
-        { name: 'Julho', valor: 66 },
-        { name: 'Agosto', valor: 66 },
-        { name: 'Setembro', valor: 70 },
-        { name: 'Outubro', valor: 52 },
-        { name: 'Novembro', valor: 93 },
-        { name: 'Dezembro', valor: 233 },
-    ]);
 
     useEffect(() => {
         setLoading(true);
         function getEstatisticasCopias() {
-            estatisticaService.getEstatisticaCopias().then((dtoListCopia) => { setDtoListaCopia(dtoListCopia); })
+            estatisticaService.getEstatisticaCopias().then((dtoListCopia) => { setDtoListaCopia(dtoListCopia);  })
+            setLoading(false);
         }
 
         function getEstatisticasDescartes() {
@@ -43,21 +29,13 @@ const EstatisticaChave = () => {
         }
 
         function getEstatisticasPedidoEstoque() {
-            estatisticaService.getEstatisticasPedidoEstoque()
-                .then((dtoPedidoEstoque) => {
-                    setDtoListaPedidoEstoque(dtoPedidoEstoque);
-                    setLoading(false);
-                })
+            estatisticaService.getEstatisticasPedidoEstoque().then((dtoPedidoEstoque) => {setDtoListaPedidoEstoque(dtoPedidoEstoque);})
         }
 
         getEstatisticasCopias();
         getEstatisticasDescartes();
         getEstatisticasPedidoEstoque();
     }, []);
-
-    const testeFuncao = (x) => {
-        alert(x.name);
-    }
 
     return (
         <div className="mt-2">
@@ -72,11 +50,14 @@ const EstatisticaChave = () => {
                         <Col xs={24} sm={24} md={24} lg={8} xl={8} xxl={8} className="mb-1">
                             <EstatisticaCard
                                 title={'Cópias de chaves feitas'}
-                                icon={<img src={keyIcon} alt={'aa'} width={60} height={60} />}
+                                icon={<img src={keyIcon} alt={'icon'} width={60} height={60} />}
                                 arrayInformacoes={dtoListaCopia}
-                                hoje={dtoListaCopia?.CopiasFeitasHoje}
-                                esteMes={dtoListaCopia?.CopiasFeitasEsteMes}
-                                total={dtoListaCopia?.CopiasFeitasTotal}
+                                quantidadeHoje={dtoListaCopia?.CopiasFeitasHoje}
+                                quantidadeEsteMes={dtoListaCopia?.CopiasFeitasEsteMes}
+                                quantidadeTotal={dtoListaCopia?.CopiasFeitasTotal}
+                                valorHoje={dtoListaCopia?.ValorCopiasFeitasHoje}
+                                valorEsteMes={dtoListaCopia?.ValorCopiasFeitasEsteMes}
+                                valorTotal={dtoListaCopia?.ValorCopiasFeitasTotal}
                             />
                         </Col>
 
@@ -85,9 +66,10 @@ const EstatisticaChave = () => {
                                 title={'Chaves descartadas'}
                                 icon={<FcDeployment size={60} />}
                                 arrayInformacoes={dtoListaDescarte}
-                                hoje={dtoListaDescarte?.ChavesDescartadasHoje}
-                                esteMes={dtoListaDescarte?.ChavesDescartadasEsteMes}
-                                total={dtoListaDescarte?.ChavesDescartadasTotal}
+                                quantidadeHoje={dtoListaDescarte?.ChavesDescartadasHoje}
+                                quantidadeEsteMes={dtoListaDescarte?.ChavesDescartadasEsteMes}
+                                quantidadeTotal={dtoListaDescarte?.ChavesDescartadasTotal}
+                                valorHoje={null}
                             />
                         </Col>
 
@@ -96,48 +78,13 @@ const EstatisticaChave = () => {
                                 title={'Pedidos de estoque feitos'}
                                 icon={<FcFilingCabinet size={60} />}
                                 arrayInformacoes={{dtoListaPedidoEstoque}}
-                                hoje={7}
-                                esteMes={73}
-                                total={80}
+                                hoje={dtoListaPedidoEstoque?.PedidosEstoqueBaixadosHoje}
+                                esteMes={dtoListaPedidoEstoque?.PedidosEstoqueBaixadosEsteMes}
+                                total={dtoListaPedidoEstoque?.PedidosEstoqueBaixadosTotal}
                             />
                         </Col>
                     </Row>
             }
-
-            <div className="container">
-                <Form layout={'horizontal'}>
-                    <Row style={{ background: '' }}>
-                        <Col md={4}>
-                            <Form.Item
-                                label="Ano"
-                                name="ano"
-                            >
-                                <Input
-                                    type="number"
-                                    placeholder="Quantidade"
-                                    min={1}
-                                    max={999}
-                                />
-                            </Form.Item>
-                        </Col>
-                    </Row>
-                </Form>
-                <ResponsiveContainer height={500} style={{ margin: '20px' }}>
-                    <BarChart data={chartData}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar
-                            dataKey="valor"
-                            fill="#004878"
-                            label={{ position: 'top' }}
-                            onClick={testeFuncao}
-                        />
-                    </BarChart>
-                </ResponsiveContainer>
-            </div>
         </div >
     );
 }

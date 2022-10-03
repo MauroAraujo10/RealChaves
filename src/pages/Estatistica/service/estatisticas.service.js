@@ -11,25 +11,28 @@ const methods = {
         let dto = {};
 
         await service.app.ref(tabelas.CopiasChave).once('value', (snapshot) => {
+            
             let copias = [];
-            let datasConvertidas = [];
+
             let copiasFeitasHoje = 0;
             let copiasFeitasEsteMes = 0;
             let copiasFeitasTotal = 0;
+
             let valorCopiasFeitasHoje = 0;
             let valorCopiasFeitasEsteMes = 0;
             let valorCopiasFeitasTotal = 0;
 
             snapshot.forEach((x) => {
-                copias.push({
-                    Id: x.val().key,
-                    key: x.val().key,
-                    Quantidade: x.val().Quantidade,
-                    Valor: x.val().Valor,
-                    Data: x.val().Data
-                })
 
                 let dataSplit = x.val().Data.split('/');
+
+                copias.push({
+                    datasConvertida: {
+                        Data: new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])),
+                        Quantidade: x.val().Quantidade,
+                        Valor: x.val().Valor
+                    }
+                })
 
                 if (x.val().Data === dataAtual) {
                     copiasFeitasHoje = copiasFeitasHoje + x.val().Quantidade;
@@ -43,17 +46,15 @@ const methods = {
 
                 copiasFeitasTotal = copiasFeitasTotal + x.val().Quantidade;
                 valorCopiasFeitasTotal = valorCopiasFeitasTotal + x.val().Valor;
-                datasConvertidas.push(new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])));
             })
             dto = {
-                Copias: copias,
-                DatasConvertidas: datasConvertidas,
+                Vetor: copias,
                 CopiasFeitasHoje: copiasFeitasHoje,
                 CopiasFeitasEsteMes: copiasFeitasEsteMes,
                 CopiasFeitasTotal: copiasFeitasTotal,
                 ValorCopiasFeitasHoje: valorCopiasFeitasHoje,
                 ValorCopiasFeitasEsteMes: valorCopiasFeitasEsteMes,
-                ValorCopiasFeitasTotal: valorCopiasFeitasTotal
+                ValorCopiasFeitasTotal: valorCopiasFeitasTotal,
             }
         })
         return dto;
@@ -62,84 +63,83 @@ const methods = {
         let dto = {};
 
         await service.app.ref(tabelas.Descarte).once('value', (snapshot) => {
+
             let descartes = [];
             let datasConvertidas = [];
+
             let chavesDescartadasHoje = 0;
             let chavesDescartadasEsteMes = 0;
             let chavesDescartadasTotal = 0;
 
             snapshot.forEach((x) => {
-                descartes.push({
-                    key: x.val().key,
-                    Data: x.val().Data,
-                    Quantidade: x.val().Quantidade,
-                });
 
                 let dataSplit = x.val().Data.split('/');
 
-                if (x.val().Data === dataAtual)
-                    chavesDescartadasHoje = chavesDescartadasHoje + x.val().Quantidade;
+                descartes.push({
+                    datasConvertida: {
+                        Data: new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])),
+                        Quantidade: x.val().Quantidade
+                    }
+                })
 
-                if (dataSplit[1] === mesAtual && dataSplit[2] === anoAtual)
+                if (x.val().Data === dataAtual){
+                    chavesDescartadasHoje = chavesDescartadasHoje + x.val().Quantidade;
+                }
+
+                if (dataSplit[1] === mesAtual && dataSplit[2] === anoAtual){
                     chavesDescartadasEsteMes = chavesDescartadasEsteMes + x.val().Quantidade;
+                }
 
                 chavesDescartadasTotal = chavesDescartadasTotal + x.val().Quantidade;
-                datasConvertidas.push(new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])));
             })
+
             dto = {
-                Descartes: descartes,
+                Vetor: descartes,
                 DatasConvertidas: datasConvertidas,
                 ChavesDescartadasHoje: chavesDescartadasHoje,
                 ChavesDescartadasEsteMes: chavesDescartadasEsteMes,
                 ChavesDescartadasTotal: chavesDescartadasTotal
             };
         })
-
         return dto;
     },
     async getEstatisticasPedidoEstoque() {
         let dto = {};
 
         await service.app.ref(tabelas.BaixaPedidoChaves).once('value', (snapshot) => {
+           
             let pedidosEstoque = [];
-            let pedidosBaixadosHoje = 0;
-            let pedidosBaixadosEsteMes = 0;
-            let pedidosBaixadosTotal = 0;
-            let valorBaixadosHoje = 0;
-            let valorBaixadosEsteMes = 0;
-            let valorBaixadosTotal = 0;
+            let datasConvertidas = [];
+            let pedidosEstoqueBaixadosHoje = 0;
+            let pedidosEstoqueBaixadosEsteMes = 0;
+            let pedidosEstoqueBaixadosTotal = 0;
 
             snapshot.forEach((x) => {
                 pedidosEstoque.push({
                     key: x.val().key,
-                    DataBaixa: x.val().DataBaixa,
-                    QuantidadeRecebidaTotal: x.val().QuantidadeRecebidaTotal,
-                })
+                    Data: x.val().DataBaixa,
+                });
 
-                let dataSplit = x.val().DataBaixa.split('/');
+            let dataSplit = x.val().DataBaixa.split('/');
 
-                if (x.val().DataBaixa === dataAtual) {
-                    pedidosBaixadosHoje++;
-                    valorBaixadosHoje = valorBaixadosHoje + x.val().Valor;
-                }
+                if (x.val().DataBaixa === dataAtual)
+                pedidosEstoqueBaixadosHoje++;
 
-                if (dataSplit[1] === mesAtual && dataSplit[2] === anoAtual) {
-                    pedidosBaixadosEsteMes++;
-                    valorBaixadosEsteMes = valorBaixadosEsteMes + x.val().Valor;
-                }
+                if (dataSplit[1] === mesAtual && dataSplit[2] === anoAtual)
+                pedidosEstoqueBaixadosEsteMes++;
 
-                pedidosBaixadosTotal++;
-                valorBaixadosTotal = valorBaixadosTotal + x.val().Valor;
-            });
+                pedidosEstoqueBaixadosTotal++;
+                datasConvertidas.push({
+                    Data: new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])),
+                    Quantidade: x.val().Quantidade
+                    });
+            })
 
-            dto = {
-                PedidosBaixa: pedidosEstoque,
-                PedidosBaixadosHoje: pedidosBaixadosHoje,
-                PedidosBaixadosEsteMes: pedidosBaixadosEsteMes,
-                PedidosBaixadosTotal: pedidosBaixadosTotal,
-                valorBaixadosHoje: valorBaixadosHoje,
-                valorBaixadosEsteMes: valorBaixadosEsteMes,
-                valorBaixadosTotal: valorBaixadosTotal
+            dto = {                
+                PedidosEstoque: pedidosEstoque,
+                PedidosEstoqueBaixadosHoje: pedidosEstoqueBaixadosHoje,
+                PedidosEstoqueBaixadosEsteMes: pedidosEstoqueBaixadosEsteMes,
+                PedidosEstoqueBaixadosTotal: pedidosEstoqueBaixadosTotal
             }
         })
         return dto;

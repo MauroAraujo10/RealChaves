@@ -61,8 +61,8 @@ const AmolacaoTabela = () => {
 
     useEffect(() => {
         setLoading(true);
-        let produtos = [];
         service.app.ref(tabelas.Amolacao).on('value', (snapshot) => {
+            let produtos = [];
             snapshot.forEach((x) => {
                 produtos.push({
                     Id: x.key,

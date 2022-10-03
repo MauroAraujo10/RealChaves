@@ -8,8 +8,8 @@ const methods = {
             key: id,
             Servico: dto.Servico,
             Data: dto.Data,
-            Pago: dto.Pago,
-            Valor: dto.Valor
+            Pago: dto.Pago ?? false,
+            Valor: dto.Pago ? dto.Valor : null
         });
     },
     async update(dto) {

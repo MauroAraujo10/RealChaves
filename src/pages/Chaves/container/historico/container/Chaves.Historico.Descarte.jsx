@@ -19,8 +19,8 @@ const ChavesHistoricoDescarte = () => {
 
     useEffect(() => {
         setLoading(true);
-        let descartados = [];
         service.app.ref(tabelas.Descarte).once('value', snap => {
+            let descartados = [];
             snap.forEach((descarte) => {
                 service.app.ref(tabelas.Chave).child(descarte.val().IdChave).on('value', chave => {
                     descartados.push({

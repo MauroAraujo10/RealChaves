@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Form, DatePicker, Row, Col, Button, Progress } from 'antd';
+import { Modal, Form, DatePicker, Row, Col, Button } from 'antd';
 import { toast } from "react-toastify";
 
 import Loading from '../../../common/components/Loading/Loading';
 import TituloModal from '../../../common/components/TituloModal/TituloModal'
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
-import { messages } from '../../../common/Enum/messages'
+import { messages } from '../../../common/Enum/messages';
 
 const EstatisticasDetalhesModal = ({ visible, onClose, arrayInformacoes }) => {
     const [loading, setLoading] = useState(false);
@@ -15,16 +15,27 @@ const EstatisticasDetalhesModal = ({ visible, onClose, arrayInformacoes }) => {
 
     useEffect(() => {
         setValorCoincidente(null);
-        console.log(arrayInformacoes);
     }, [arrayInformacoes]);
 
+    const closeModal = () => {
+        setValorCoincidente(null);
+    }
+
     const handleChangeData = (funcionalidade, date) => {
-        if (funcionalidade === 'dataInicial') {
+        if (date){
+            date = date.set({
+                hour:0,
+                minute:0,
+                second:0,
+                millisecond:0
+            });
+        }
+
+        if (funcionalidade === 'dataInicial') 
             setDataInicial(date);
-        }
-        else {
-            setDataFinal(date);
-        }
+        else 
+            setDataFinal(date); 
+
         setValorCoincidente(null);
     }
 
@@ -34,22 +45,24 @@ const EstatisticasDetalhesModal = ({ visible, onClose, arrayInformacoes }) => {
             return;
         }
 
+        debugger;
+
+        let quantidadeCoincidente = 0;
         let dataInicialConvertida = dataInicial.toDate();
         let dataFinalConvertida = dataFinal.toDate();
 
         if (dataInicialConvertida > dataFinalConvertida) {
-            toast.error('Data Inicial não pode ser maior do que a data final !');
+            toast.warning('Data Inicial não pode ser maior do que a data final !');
             return;
         }
 
         setLoading(true);
+        arrayInformacoes.Vetor.forEach((x) => {
+            if (x.datasConvertida.Data >= dataInicialConvertida && x.datasConvertida.Data <= dataFinalConvertida)
+                quantidadeCoincidente += x.datasConvertida.Quantidade
+        });
 
-        const valoresCoincidentes =
-            arrayInformacoes.DatasConvertidas
-                .filter(x => x >= dataInicialConvertida && x <= dataFinalConvertida)
-                .length;
-
-        setValorCoincidente(valoresCoincidentes);
+        setValorCoincidente(quantidadeCoincidente);
         setLoading(false);
     }
 
@@ -58,7 +71,8 @@ const EstatisticasDetalhesModal = ({ visible, onClose, arrayInformacoes }) => {
             visible={visible}
             onCancel={onClose}
             footer={null}
-            destroyOnClose
+            destroyOnClose={true}
+            afterClose={() => closeModal()}
         >
             <TituloModal
                 titulo={'Busca Detalhada'}
@@ -82,6 +96,7 @@ const EstatisticasDetalhesModal = ({ visible, onClose, arrayInformacoes }) => {
                         >
                             <DatePicker
                                 format={'DD/MM/YYYY'}
+                                disabledTime
                                 onChange={(date, dateString) => handleChangeData('dataInicial', date)}
                             />
                         </Form.Item>
@@ -115,18 +130,10 @@ const EstatisticasDetalhesModal = ({ visible, onClose, arrayInformacoes }) => {
                         <Loading /> :
                         <>
                             {
-                                valorCoincidente &&
                                 <div className="t-center">
-                                    <Progress
-                                        type="circle"
-                                        strokeColor={{
-                                            '0%': '#004878',
-                                            '100%': '#004878',
-                                        }}
-                                        showInfo
-                                        percent={100}
-                                        format={() => `${valorCoincidente === 0 ? valorCoincidente : 0}`}
-                                    />
+                                    <h1>
+                                        { valorCoincidente}
+                                    </h1>
                                 </div>
                             }
                         </>

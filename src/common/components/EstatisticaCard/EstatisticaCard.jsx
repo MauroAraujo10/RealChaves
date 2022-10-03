@@ -1,16 +1,26 @@
 import React, { useState } from 'react';
 import { Card, Tooltip } from 'antd';
-import { FcSearch, FcList, FcLike } from "react-icons/fc";
+import { FcSearch, FcBarChart, FcLike } from "react-icons/fc";
 
 import EstatisticasDetalhesModal from '../../../pages/Estatistica/components/estatisticas.detalhes.modal';
+import EstatisticasGraficoValoresModal from '../../../pages/Estatistica/components/estatisticas.graficoValor.modal';
 
-const EstatisticaCard = ({ title, icon, arrayInformacoes, hoje, esteMes, total }) => {
+const EstatisticaCard = ({ 
+    title, icon, arrayInformacoes, 
+    quantidadeHoje, quantidadeEsteMes, quantidadeTotal,
+    valorHoje, valorEsteMes, valorTotal
+ }) => {
+
     const [detalhesModalVisible, setDetalhesModalVisible] = useState(false);
+    const [graficoValoresModalVisible, setGraficoValoresModalVisible] = useState(false);
 
     const handleFuncaoModal = (funcionalidade) => {
         switch (funcionalidade) {
             case 'busca':
                 setDetalhesModalVisible(true);
+                break;
+            case 'graficoValores':
+                setGraficoValoresModalVisible(true);
                 break;
             default:
                 break;
@@ -29,10 +39,12 @@ const EstatisticaCard = ({ title, icon, arrayInformacoes, hoje, esteMes, total }
                                 onClick={() => handleFuncaoModal('busca')}
                             />
                         </Tooltip>,
-                        <Tooltip title={'Lista de valores'}>
-                            <FcList
+                        <Tooltip title={'Gráfico de Valores'}>
+                            <FcBarChart
                                 key="2"
-                                size={20}/>
+                                size={20}
+                                onClick={() => handleFuncaoModal('graficoValores')}
+                            />
                         </Tooltip>,
                         <Tooltip>
                             <FcLike
@@ -47,17 +59,38 @@ const EstatisticaCard = ({ title, icon, arrayInformacoes, hoje, esteMes, total }
                     avatar={icon}
                     title={title}
                     description={
-                        <>
-                            Hoje: <b>{hoje}</b> <br />
-                            Este mês: <b>{esteMes}</b> <br />
-                            Total: <b>{total}</b>
-                        </>
+                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                <h5>
+                                    <small>Quantidade</small> <br/>
+                                    Hoje: <b>{quantidadeHoje}</b> <br />
+                                    Este mês: <b>{quantidadeEsteMes}</b> <br />
+                                    Total geral: <b>{quantidadeTotal}</b>
+                                </h5>
+                                {
+                                    valorHoje !== null ?
+                                     <h5>
+                                         <small>Valores</small> <br/>
+                                         Hoje: <b>{valorHoje?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} </b> <br/>
+                                         Este mês: <b>{valorEsteMes?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} </b> <br/>
+                                         Total: <b>{valorTotal?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} </b> <br/>
+                                     </h5>
+                                     :
+                                     <></>
+                                }
+
+                            </div>
                     }
                 />
             </Card>
             <EstatisticasDetalhesModal
                 visible={detalhesModalVisible}
                 onClose={() => setDetalhesModalVisible(false)}
+                arrayInformacoes={arrayInformacoes}
+            />
+
+            <EstatisticasGraficoValoresModal
+                visible={graficoValoresModalVisible}
+                onClose={() => setGraficoValoresModalVisible(false)}
                 arrayInformacoes={arrayInformacoes}
             />
         </>
