@@ -16,14 +16,26 @@ function App() {
 
   useEffect(() => {
     setLoading(true);
-    service.app.ref(tabelas.Configuracoes).on('value', (snapshot) => {
-      const congiguracao = {
-        DarkTheme: snapshot.val()?.DarkTheme ?? false,
-        Paginacao: snapshot.val()?.Paginacao ?? false
+
+    service.app.ref(tabelas.Configuracoes).once('value', snapshot => {
+
+      if (snapshot.val() === null) {
+        service.app.ref(tabelas.Configuracoes).set({
+          DarkTheme: true,
+          Paginacao: false
+        })
       }
-      setConfiguracoes(congiguracao);
+      else {
+        const congiguracao = {
+          DarkTheme: snapshot.val()?.DarkTheme ?? true,
+          Paginacao: snapshot.val()?.Paginacao ?? false
+        }
+        setConfiguracoes(congiguracao);
+      }
+
       setLoading(false);
     })
+
   }, []);
 
   return (

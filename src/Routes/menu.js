@@ -49,11 +49,12 @@ export default function Routes({ configuracoes }) {
     function changeTheme(value) {
         const dto = {
             DarkTheme: value,
-            Paginacao: false //REFATORA
+            Paginacao: false
         };
 
         service.post(dto);
-        setTheme(value ? 'dark' : 'light')
+        setTheme(value ? 'dark' : 'light');
+        window.location.reload();
     }
 
     function changePagination(value) {
