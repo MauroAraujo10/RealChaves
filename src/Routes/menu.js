@@ -146,7 +146,7 @@ export default function Routes({ configuracoes }) {
                         </Switch>
                     </div>
                 </Menu.Item>
-                <Menu.Item>
+                {/* <Menu.Item>
                     Paginação
                     <div className="f-right">
                         <Switch
@@ -155,7 +155,7 @@ export default function Routes({ configuracoes }) {
                             onChange={changePagination}>
                         </Switch>
                     </div>
-                </Menu.Item>
+                </Menu.Item> */}
             </SubMenu>
         </Menu >
     );

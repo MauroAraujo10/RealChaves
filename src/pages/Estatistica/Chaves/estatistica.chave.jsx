@@ -7,7 +7,7 @@ import Loading from '../../../common/components/Loading/Loading';
 import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
 import EstatisticaCard from '../../../common/components/EstatisticaCard/EstatisticaCard';
 
-import { FcDeployment, FcFilingCabinet } from "react-icons/fc";
+import { FcReuse, FcFilingCabinet } from "react-icons/fc";
 import keyIcon from '../assets/Key-icon.png';
 
 const EstatisticaChave = () => {
@@ -19,17 +19,22 @@ const EstatisticaChave = () => {
 
     useEffect(() => {
         setLoading(true);
+
         function getEstatisticasCopias() {
-            estatisticaService.getEstatisticaCopias().then((dtoListCopia) => { setDtoListaCopia(dtoListCopia);  })
+            estatisticaService.getEstatisticaCopias()
+                .then((dtoListCopia) => { setDtoListaCopia(dtoListCopia);  })
+                
             setLoading(false);
         }
 
         function getEstatisticasDescartes() {
-            estatisticaService.getEstatisticaDescartes().then((dtoListaDescartes) => { setDtoListaDescarte(dtoListaDescartes); })
+            estatisticaService.getEstatisticaDescartes()
+                .then((dtoListaDescartes) => { setDtoListaDescarte(dtoListaDescartes); })
         }
 
         function getEstatisticasPedidoEstoque() {
-            estatisticaService.getEstatisticasPedidoEstoque().then((dtoPedidoEstoque) => {setDtoListaPedidoEstoque(dtoPedidoEstoque);})
+            estatisticaService.getEstatisticasPedidoEstoque()
+                .then((dtoPedidoEstoque) => {setDtoListaPedidoEstoque(dtoPedidoEstoque);})
         }
 
         getEstatisticasCopias();
@@ -64,7 +69,7 @@ const EstatisticaChave = () => {
                         <Col xs={24} sm={24} md={24} lg={8} xl={8} xxl={8} className="mb-1">
                             <EstatisticaCard
                                 title={'Chaves descartadas'}
-                                icon={<FcDeployment size={60} />}
+                                icon={<FcReuse size={60} />}
                                 arrayInformacoes={dtoListaDescarte}
                                 quantidadeHoje={dtoListaDescarte?.ChavesDescartadasHoje}
                                 quantidadeEsteMes={dtoListaDescarte?.ChavesDescartadasEsteMes}
@@ -77,10 +82,11 @@ const EstatisticaChave = () => {
                             <EstatisticaCard
                                 title={'Pedidos de estoque feitos'}
                                 icon={<FcFilingCabinet size={60} />}
-                                arrayInformacoes={{dtoListaPedidoEstoque}}
-                                hoje={dtoListaPedidoEstoque?.PedidosEstoqueBaixadosHoje}
-                                esteMes={dtoListaPedidoEstoque?.PedidosEstoqueBaixadosEsteMes}
-                                total={dtoListaPedidoEstoque?.PedidosEstoqueBaixadosTotal}
+                                arrayInformacoes={dtoListaPedidoEstoque}
+                                quantidadeHoje={dtoListaPedidoEstoque?.PedidosEstoqueFeitosHoje}
+                                quantidadeEsteMes={dtoListaPedidoEstoque?.PedidosEstoqueFeitosEsteMes}
+                                quantidadeTotal={dtoListaPedidoEstoque?.PedidosEstoqueFeitosTotal}
+                                valorHoje={null}
                             />
                         </Col>
                     </Row>

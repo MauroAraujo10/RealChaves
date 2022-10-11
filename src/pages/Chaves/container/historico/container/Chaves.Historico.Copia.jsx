@@ -8,14 +8,6 @@ import Grid from '../../../../../common/components/Grid/Grid';
 const ChavesHistoricoCopia = () => {
     const [chaves, setChaves] = useState([]);
     const [loading, setLoading] = useState(false);
-    const columns = [
-        { title: 'Data da Cópia', dataIndex: 'Data', key: 'Data', width: '15%' },
-        { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '20%' },
-        { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', width: '20%' },
-        { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', width: '20%' },
-        { title: 'Valor (R$)', dataIndex: 'Valor', key: 'Valor', width: '10%' },
-        { title: 'Tipo de Pagamento', dataIndex: 'TipoPagamento', key: 'TipoPagamento', width: '15%' },
-    ];
 
     useEffect(() => {
         let copia = [];
@@ -45,6 +37,15 @@ const ChavesHistoricoCopia = () => {
             setLoading(false);
         });
     }, []);
+
+    const columns = [
+        { title: 'Data da Cópia', dataIndex: 'Data', key: 'Data', width: '15%' },
+        { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '20%' },
+        { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', width: '20%' },
+        { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', width: '20%' },
+        { title: 'Valor', dataIndex: 'Valor', key: 'Valor', width: '10%' },
+        { title: 'Tipo de Pagamento', dataIndex: 'TipoPagamento', key: 'TipoPagamento', width: '15%' },
+    ];
 
     return (
         <div className="mt-2">

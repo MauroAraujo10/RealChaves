@@ -39,8 +39,7 @@ const ChaveEstoqueViewPedidoModal = ({ visible, onClose, pedidoSelecionado }) =>
             <TituloModal titulo={'Visualizar detalhes de pedido'} />
 
             <List
-                // Refatora: Alterar Header
-                header={<div>Header</div>}
+                header={<div>Chaves</div>}
                 footer={<div>Quantidade total de chaves: <b>{pedidoSelecionado?.QuantidadePedidaTotal}</b></div>}
                 bordered
                 dataSource={data}

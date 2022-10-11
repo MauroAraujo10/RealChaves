@@ -22,30 +22,29 @@ const EstatisticasDetalhesModal = ({ visible, onClose, arrayInformacoes }) => {
     }
 
     const handleChangeData = (funcionalidade, date) => {
-        if (date){
+        if (date) {
             date = date.set({
-                hour:0,
-                minute:0,
-                second:0,
-                millisecond:0
+                hour: 0,
+                minute: 0,
+                second: 0,
+                millisecond: 0
             });
         }
 
-        if (funcionalidade === 'dataInicial') 
+        if (funcionalidade === 'dataInicial')
             setDataInicial(date);
-        else 
-            setDataFinal(date); 
+        else
+            setDataFinal(date);
 
         setValorCoincidente(null);
     }
 
     const submitForm = (form) => {
+        
         if (!dataInicial && !dataFinal) {
             toast.warning('Obrigatório preencher ao menos um dos campos !');
             return;
         }
-
-        debugger;
 
         let quantidadeCoincidente = 0;
         let dataInicialConvertida = dataInicial.toDate();
@@ -132,7 +131,7 @@ const EstatisticasDetalhesModal = ({ visible, onClose, arrayInformacoes }) => {
                             {
                                 <div className="t-center">
                                     <h1>
-                                        { valorCoincidente}
+                                        {valorCoincidente}
                                     </h1>
                                 </div>
                             }

@@ -19,11 +19,30 @@ const ServicosTabela = () => {
     const [modalEditServicoVisible, setModalEditServicoVisible] = useState(false);
     const [modalDeleteVisible, setModalDeleteVisible] = useState(false);
 
+    useEffect(() => {
+        setLoading(true);
+        service.app.ref(tabelas.Servicos).on('value', (snapshot) => {
+            let servicos = [];
+            snapshot.forEach((x) => {
+                servicos.push({
+                    Id: x.key,
+                    key: x.key,
+                    Data: x.val().Data,
+                    Servico: x.val().Servico,
+                    Valor: x.val().Valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'}),
+                    Pago: x.val().Pago ? 'Sim' : 'Não'
+                })
+            })
+            setServicos(servicos);
+            setLoading(false);
+        });
+    }, []);
+
     const columns = [
         { title: 'Serviço', dataIndex: 'Servico', key: 'Servico', width: '60%' },
         { title: 'Data do Serviço', dataIndex: 'Data', key: 'Data', width: '10%' },
         { title: 'Pago', dataIndex: 'Pago', key: 'Pago', width: '10%' },
-        { title: 'Valor (R$)', dataIndex: 'Valor', key: 'Valor', width: '10%' },
+        { title: 'Valor', dataIndex: 'Valor', key: 'Valor', width: '10%' },
         {
             title: 'Ações', key: 'acoes', width: '10%', render: (status, dto) => (
                 <div style={{ display: 'flex' }}>
@@ -46,36 +65,6 @@ const ServicosTabela = () => {
         }
     ];
 
-    useEffect(() => {
-        setLoading(true);
-        let servicos = [];
-        service.app.ref(tabelas.Servicos).on('value', (snapshot) => {
-            snapshot.forEach((x) => {
-                servicos.push({
-                    Id: x.key,
-                    key: x.key,
-                    Data: x.val().Data,
-                    Servico: x.val().Servico,
-                    Valor: x.val().Valor,
-                    Pago: x.val().Pago ? 'Sim' : 'Não'
-                })
-            })
-            setServicos(servicos);
-            setLoading(false);
-        });
-    }, []);
-
-    const deletarServico = (id) => {
-        servicosService.delete(id)
-            .then(() => {
-                toast.success(messages.exclusaoSucesso());
-                setModalDeleteVisible(false);
-            })
-            .catch(() => {
-                toast.error(messages.exclusaoErro('Serviço'));
-            })
-    }
-
     const funcaoAbrirModal = (dto, funcionalidade) => {
         switch (funcionalidade) {
             case 'Editar':
@@ -91,6 +80,17 @@ const ServicosTabela = () => {
             default:
                 break;
         }
+    }
+
+    const deletarServico = (id) => {
+        servicosService.delete(id)
+            .then(() => {
+                toast.success(messages.exclusaoSucesso());
+                setModalDeleteVisible(false);
+            })
+            .catch(() => {
+                toast.error(messages.exclusaoErro('Serviço'));
+            })
     }
 
     return (

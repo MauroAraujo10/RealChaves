@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Tooltip } from 'antd';
 import { FcSearch, FcBarChart, FcLike } from "react-icons/fc";
 
@@ -8,7 +8,7 @@ import EstatisticasGraficoValoresModal from '../../../pages/Estatistica/componen
 const EstatisticaCard = ({ 
     title, icon, arrayInformacoes, 
     quantidadeHoje, quantidadeEsteMes, quantidadeTotal,
-    valorHoje, valorEsteMes, valorTotal
+    valorHoje, valorEsteMes, valorTotal, 
  }) => {
 
     const [detalhesModalVisible, setDetalhesModalVisible] = useState(false);
@@ -60,20 +60,20 @@ const EstatisticaCard = ({
                     title={title}
                     description={
                             <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                <h5>
+                                <h6>
                                     <small>Quantidade</small> <br/>
                                     Hoje: <b>{quantidadeHoje}</b> <br />
                                     Este mês: <b>{quantidadeEsteMes}</b> <br />
                                     Total geral: <b>{quantidadeTotal}</b>
-                                </h5>
+                                </h6>
                                 {
                                     valorHoje !== null ?
-                                     <h5>
+                                     <h6>
                                          <small>Valores</small> <br/>
                                          Hoje: <b>{valorHoje?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} </b> <br/>
                                          Este mês: <b>{valorEsteMes?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} </b> <br/>
                                          Total: <b>{valorTotal?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} </b> <br/>
-                                     </h5>
+                                     </h6>
                                      :
                                      <></>
                                 }
@@ -92,6 +92,7 @@ const EstatisticaCard = ({
                 visible={graficoValoresModalVisible}
                 onClose={() => setGraficoValoresModalVisible(false)}
                 arrayInformacoes={arrayInformacoes}
+                hasValue={valorHoje ? true : false}
             />
         </>
     );

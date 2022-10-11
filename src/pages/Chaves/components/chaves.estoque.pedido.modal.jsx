@@ -2,14 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, List, Badge } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { toast } from 'react-toastify';
-import { useHistory } from 'react-router-dom';
-import { Rotas } from '../../../Routes/rotas';
 
 import chaveService from '../service/chave.service';
 import { AiOutlinePrinter } from "react-icons/ai";
 
-const ChavesEstoquePedidoModal = ({ visible, onClose, quantidadeTotal, listaPedidos }) => {
-    const history = useHistory();
+const ChavesEstoquePedidoModal = ({ visible, onClose, closeDrawer, quantidadeTotal, listaPedidos }) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -54,7 +51,7 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, quantidadeTotal, listaPedi
                 toast.success(messages.cadastradoSucesso('Pedido de estoque'));
                 listaPedidos.splice(0, listaPedidos.length);
                 onClose();
-                history.push(Rotas.ChavesEstoqueTabelaPedido);
+                closeDrawer();
             })
             .catch(() => {
                 toast.error(messages.cadastradoErro('Pedido de estoque'));

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Modal, Form, Row, Col, Select, Button, DatePicker } from 'antd';
-import { ResponsiveContainer, AreaChart, BarChart, LineChart, PieChart, Area, Bar, Line, Pie, Tooltip, CartesianGrid, XAxis, YAxis, Legend } from 'recharts';
+import { ResponsiveContainer, AreaChart, BarChart, LineChart, Area, Bar, Line, Tooltip, CartesianGrid, XAxis, YAxis, Legend } from 'recharts';
 
 import Loading from '../../../common/components/Loading/Loading';
 
@@ -8,12 +8,12 @@ import TituloModal from '../../../common/components/TituloModal/TituloModal';
 import { messages } from '../../../common/Enum/messages';
 import { toast } from 'react-toastify';
 
-const EstatisticasGraficoValorModal = ({ visible, onClose, arrayInformacoes }) => {
+const EstatisticasGraficoValorModal = ({ visible, onClose, arrayInformacoes, hasValue }) => {
     const { Option } = Select;
+    const formRef = useRef();
     const [loading, setLoading] = useState(false);
 
     const [tipoDatePicker, setTipoDatePicker] = useState(null);
-    const [date, setDate] = useState('');
     const [tipoGrafico, setTipoGrafico] = useState('');
 
     const [chartData, setChartData] = useState([]);
@@ -21,10 +21,13 @@ const EstatisticasGraficoValorModal = ({ visible, onClose, arrayInformacoes }) =
 
     const closeModal = () => {
         setTipoDatePicker(null);
-        setDate(null);
         setTipoGrafico(null);
         setChartData([]);
         setChartVisible(false);
+    }
+
+    const onChangePeriodo = (value) => {
+        setTipoDatePicker(value);
     }
 
     const submitForm = (form) => {
@@ -38,7 +41,7 @@ const EstatisticasGraficoValorModal = ({ visible, onClose, arrayInformacoes }) =
                         let sizeOfVetor = new Date(new Date().getFullYear(), selectedMonth, 0).getDate();
 
                         for (let index = 1; index <= sizeOfVetor; index++) {
-                            chartDataPerMonth.push({ name: index, valor: 0 });
+                            chartDataPerMonth.push({ name: `Dia: ${index}`, valor: 0 });
                         }
 
                         arrayInformacoes.Vetor.forEach((x) => {
@@ -125,7 +128,7 @@ const EstatisticasGraficoValorModal = ({ visible, onClose, arrayInformacoes }) =
                 subTitulo={'Preencha as informações para gerar o gráfico'}
             />
 
-            <Form layout={'vertical'} onFinish={submitForm}>
+            <Form layout={'vertical'} onFinish={submitForm} ref={formRef}>
                 <Row gutter={10}>
                     <Col md={4}>
                         <Form.Item
@@ -133,9 +136,7 @@ const EstatisticasGraficoValorModal = ({ visible, onClose, arrayInformacoes }) =
                             name={'TipoInformacao'}
                             rules={[{ required: true, message: messages.CampoObrigatorio }]}
                         >
-                            <Select
-                                defaultValue="Selecione"
-                            >
+                            <Select defaultValue="Selecione">
                                 <Option value="Quantidade">Quantidade</Option>
                                 <Option value="Valor">Valor</Option>
                             </Select>
@@ -149,7 +150,7 @@ const EstatisticasGraficoValorModal = ({ visible, onClose, arrayInformacoes }) =
                         >
                             <Select
                                 defaultValue="Selecione"
-                                onChange={(value) => setTipoDatePicker(value)}
+                                onChange={(value) => onChangePeriodo(value)}
                             >
                                 <Option value="month">Mês</Option>
                                 <Option value="year">Ano</Option>
@@ -165,7 +166,6 @@ const EstatisticasGraficoValorModal = ({ visible, onClose, arrayInformacoes }) =
                                 format={'MM'}
                                 disabled={tipoDatePicker === null}
                                 picker={tipoDatePicker}
-                                onChange={(date, dateString) => setDate(date)}
                             />
                         </Form.Item>
                     </Col>

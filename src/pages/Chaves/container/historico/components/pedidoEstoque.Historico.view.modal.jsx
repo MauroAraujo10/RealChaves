@@ -10,6 +10,7 @@ const PedidoEstoqueHistoricoViewModal = ({ visible, onClose, pedidoSelecionado }
 
     useEffect(() => {
         let listaPedidos = [];
+        
         if (pedidoSelecionado && pedidoSelecionado.ListaChaves) {
             pedidoSelecionado.ListaChaves.forEach((x, index) => {
                 listaPedidos.push(
@@ -55,9 +56,8 @@ const PedidoEstoqueHistoricoViewModal = ({ visible, onClose, pedidoSelecionado }
             <TituloModal titulo={'Visualizar detalhe sobre baixa'} />
 
             <List
-                // Refatora: Alterar o Header
-                header={<div>Header</div>}
-                footer={<div>Quantidade total de chaves: <b>{pedidoSelecionado?.QuantidadePedidaTotal}</b></div>}
+                header={<div>Chaves</div>}
+                footer={<div>Quantidade total de chaves: <b>{pedidoSelecionado?.QuantidadeRecebida}</b></div>}
                 bordered
                 dataSource={data}
                 renderItem={(item) => <List.Item>{item}</List.Item>}

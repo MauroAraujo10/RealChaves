@@ -257,6 +257,7 @@ class ChaveEstoqueFazerPedido extends Component {
                 <ChavesEstoquePedidoModal
                     visible={this.state.pedidoModalVisible}
                     onClose={() => this.setState({ pedidoModalVisible: false })}
+                    closeDrawer={() => this.setState({drawerVisible: false})}
                     quantidadeTotal={this.state.quantidadeTotal}
                     listaPedidos={this.state.listaPedidos}
                 />

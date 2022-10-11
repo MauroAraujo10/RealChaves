@@ -16,13 +16,40 @@ const ChavesHistoricoPedidoEstoque = () => {
     const [pedidoSelecionado, setPedidoSelecionado] = useState([]);
     const [pedidoEstoqueViewModal, setPedidoEstoqueViewModal] = useState(false);
 
+    useEffect(() => {
+        setLoading(true);
+        service.app.ref(tabelas.BaixaPedidoChaves).on('value', snap => {
+            let estoque = [];
+            snap.forEach((x) => {
+                estoque.push({
+                    key: x.key,
+                    DataPedido: x.val().DataPedido,
+                    DataBaixa: x.val().DataBaixa,
+                    QuantidadeSolicitada: x.val().QuantidadePedidaTotal,
+                    QuantidadeRecebida: x.val().QuantidadeRecebidaTotal,
+                    Empresa: x.val().Empresa,
+                    Valor: x.val()?.Valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                    ListaChaves: x.val().ListaChaves ? x.val().ListaChaves : [],
+                    Status:
+                        x.val().Status ===
+                            TagStatusEnum.Completo ? <Tag color={'green'}> {TagStatusEnum.Completo} </Tag> :
+                            TagStatusEnum.Incompleto ? <Tag color={'red'}> {TagStatusEnum.Incompleto} </Tag> :
+                                TagStatusEnum.Excedente ? <Tag color={'blue'}> {TagStatusEnum.Excedente} </Tag> : ''
+                })
+                setEstoque([]);
+                setEstoque(estoque);
+            })
+            setLoading(false);
+        });
+    }, []);
+
     const columns = [
         { title: 'Data do Pedido', dataIndex: 'DataPedido', key: 'DataPedido', width: '10%' },
         { title: 'Data da Baixa', dataIndex: 'DataBaixa', key: 'DataBaixa', width: '10%' },
         { title: 'Quantidade Solicitada', dataIndex: 'QuantidadeSolicitada', key: 'QuantidadeSolicitada', width: '10%' },
         { title: 'Quantidade Entregue', dataIndex: 'QuantidadeRecebida', key: 'QuantidadeRecebida', width: '10%' },
         { title: 'Empresa', dataIndex: 'Empresa', key: 'Empresa', width: '10%' },
-        { title: 'Valor (R$)', dataIndex: 'Valor', key: 'Valor', width: '10%' },
+        { title: 'Valor', dataIndex: 'Valor', key: 'Valor', width: '10%' },
         { title: 'Status', dataIndex: 'Status', key: 'Status', width: '10%' },
         {
             title: 'Ações', key: 'acoes', width: '10%', render: (status, dto) => (
@@ -38,33 +65,6 @@ const ChavesHistoricoPedidoEstoque = () => {
             )
         }
     ];
-
-    useEffect(() => {
-        setLoading(true);
-        service.app.ref(tabelas.BaixaPedidoChaves).on('value', snap => {
-            let estoque = [];
-            snap.forEach((x) => {
-                estoque.push({
-                    key: x.key,
-                    DataPedido: x.val().DataPedido,
-                    DataBaixa: x.val().DataBaixa,
-                    QuantidadeSolicitada: x.val().QuantidadePedidaTotal,
-                    QuantidadeRecebida: x.val().QuantidadeRecebidaTotal,
-                    Empresa: x.val().Empresa,
-                    Valor: x.val().Valor,
-                    ListaChaves: x.val().ListaChaves ? x.val().ListaChaves : [],
-                    Status:
-                        x.val().Status ===
-                            TagStatusEnum.Completo ? <Tag color={'green'}> {TagStatusEnum.Completo} </Tag> :
-                            TagStatusEnum.Incompleto ? <Tag color={'red'}> {TagStatusEnum.Incompleto} </Tag> :
-                                TagStatusEnum.Excedente ? <Tag color={'blue'}> {TagStatusEnum.Excedente} </Tag> : ''
-                })
-                setEstoque([]);
-                setEstoque(estoque);
-            })
-            setLoading(false);
-        });
-    }, []);
 
     const handleVisualizar = (dto) => {
         setPedidoSelecionado(dto);

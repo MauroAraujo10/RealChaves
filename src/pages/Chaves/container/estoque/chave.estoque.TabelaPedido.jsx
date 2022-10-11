@@ -24,7 +24,6 @@ const ChaveEstoqueTabelaPedido = () => {
     const [yesOrNoModalVisible, setYesOrNoModalVisible] = useState(false);
 
     useEffect(() => {
-        //REFATORA: Arrumar quais colunas vão aparecer na grid
         service.app.ref(tabelas.PedidoEstoque).on('value', (snapshot) => {
             setLoading(true);
             let pedido = [];

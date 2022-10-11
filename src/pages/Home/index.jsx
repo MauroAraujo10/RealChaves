@@ -4,10 +4,13 @@ import moment from 'moment';
 import tabelas from '../../common/Enum/tabelas';
 
 import service from '../../service';
-import { FcFaq, FcReuse, FcBusiness, FcKindle, FcSupport } from "react-icons/fc";
+import { FcFaq, FcBusiness, FcKindle, FcSupport } from "react-icons/fc";
 
 import HomeCard from '../../common/components/HomeCard/HomeCard';
 import Loading from '../../common/components/Loading/Loading';
+
+import KeyIcon from '../Estatistica/assets/Key-icon.png';
+import { FcReuse, FcFilingCabinet } from "react-icons/fc";
 
 const Home = () => {
     const [copiasChavesFeitasHoje, setCopiasChavesFeitasHoje] = useState(0);
@@ -27,7 +30,7 @@ const Home = () => {
                 let numerocopiasChavesFeitasHoje = 0;
                 snapshot.forEach((x) => {
                     if (x.val().Data === dataAtual)
-                        numerocopiasChavesFeitasHoje = numerocopiasChavesFeitasHoje + x.val().Quantidade;
+                        numerocopiasChavesFeitasHoje += x.val().Quantidade;
                 })
                 setCopiasChavesFeitasHoje(numerocopiasChavesFeitasHoje);
             })
@@ -38,7 +41,7 @@ const Home = () => {
                 let numeroDescarteChavesFeitosHoje = 0;
                 snapshot.forEach((x) => {
                     if (x.val().Data === dataAtual)
-                        numeroDescarteChavesFeitosHoje = numeroDescarteChavesFeitosHoje + x.val().Quantidade;
+                        numeroDescarteChavesFeitosHoje += x.val().Quantidade;
                 })
                 setDescarteChavesFeitosHoje(numeroDescarteChavesFeitosHoje);
             })
@@ -60,7 +63,7 @@ const Home = () => {
                 let numeroAlicatesAmoladosHoje = 0;
                 snapshot.forEach((x) => {
                     if (x.val().DataEntrega === dataAtual)
-                        numeroAlicatesAmoladosHoje++;
+                        numeroAlicatesAmoladosHoje += x.val().Quantidade;
                 })
                 setAlicatesAmoladoHoje(numeroAlicatesAmoladosHoje);
             })
@@ -93,11 +96,11 @@ const Home = () => {
 
                         <Col xs={22} sm={22} md={22} lg={7} xl={7} xxl={7}>
                             <HomeCard
-                                icon={<FcFaq size={40} />}
+                                icon={<img src={KeyIcon} alt={'icon'} width={40} height={40} />}
                                 title='Cópias de Chaves'
                                 value={copiasChavesFeitasHoje}
                                 color="#808080"
-                                text="Número de cópias que foram feitas hoje"
+                                text="Cópias que foram feitas hoje"
                             />
                         </Col>
                         <Col xs={22} sm={22} md={22} lg={7} xl={7} xxl={7}>
@@ -106,29 +109,28 @@ const Home = () => {
                                 title='Descarte de Chaves'
                                 value={descarteChavesFeitosHoje}
                                 color="#808080"
-                                text="Número de chaves que foram descartadas hoje"
+                                text="Chaves que foram descartadas hoje"
                             />
                         </Col>
                         <Col xs={22} sm={22} md={22} lg={7} xl={7} xxl={7}>
                             <HomeCard
-                                icon={<FcBusiness size={40} />}
+                                icon={<FcFilingCabinet size={40} />}
                                 title='Pedido de Estoque'
                                 value={pedidoEstoqueFeitosHoje}
                                 color="#808080"
-                                text="Número de pedidos de estoque que foram descartadas hoje"
+                                text="Pedidos de estoque que foram descartadas hoje"
                             />
                         </Col>
                     </Row>
 
                     <Row style={{ display: "flex", justifyContent: 'space-around' }} className="mt-2">
-
                         <Col xs={22} sm={22} md={22} lg={7} xl={7} xxl={7}>
                             <HomeCard
                                 icon={<FcKindle size={40} />}
                                 title='Produtos amolados'
                                 value={alicatesAmoladoHoje}
                                 color="#808080"
-                                text="Número de Produtos que foram amolados hoje"
+                                text="Produtos que foram amolados hoje"
                             />
                         </Col>
 
@@ -138,7 +140,7 @@ const Home = () => {
                                 title='Serviços Realizados'
                                 value={servicosRealizadosHoje}
                                 color="#808080"
-                                text="Número de serviços que foram realizados hoje"
+                                text="Serviços que foram realizados hoje"
                             />
                         </Col>
                     </Row>
