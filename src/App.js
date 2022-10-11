@@ -18,8 +18,8 @@ function App() {
     setLoading(true);
     service.app.ref(tabelas.Configuracoes).on('value', (snapshot) => {
       const congiguracao = {
-        DarkTheme: snapshot.val().DarkTheme,
-        Paginacao: snapshot.val().Paginacao
+        DarkTheme: snapshot.val()?.DarkTheme ?? false,
+        Paginacao: snapshot.val()?.Paginacao ?? false
       }
       setConfiguracoes(congiguracao);
       setLoading(false);
