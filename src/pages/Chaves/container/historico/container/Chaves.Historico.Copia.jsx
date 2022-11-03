@@ -7,10 +7,12 @@ import Grid from '../../../../../common/components/Grid/Grid';
 
 const ChavesHistoricoCopia = () => {
     const [chaves, setChaves] = useState([]);
+    const [quantidadeTotal, setQuantidadeTotal] = useState(0);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         let copia = [];
+        let quantidadeTotal = 0;
         setLoading(true);
         service.app.ref(tabelas.CopiasChave).once('value', snap => {
             snap.forEach((copiaChave) => {
@@ -30,10 +32,12 @@ const ChavesHistoricoCopia = () => {
                                         copiaChave.val()?.TipoPagamento === 'Pix' ? 'Pix' : ''
 
                     });
+                    quantidadeTotal = quantidadeTotal + copiaChave.val().Quantidade;
                     setChaves([]);
                     setChaves(copia);
                 })
             })
+            setQuantidadeTotal(quantidadeTotal);
             setLoading(false);
         });
     }, []);
@@ -59,6 +63,7 @@ const ChavesHistoricoCopia = () => {
                     <Grid
                         dataSource={chaves}
                         columns={columns}
+                        QuantidadeTotal={quantidadeTotal}
                     />
             }
         </div>

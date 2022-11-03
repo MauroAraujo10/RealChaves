@@ -11,8 +11,9 @@ import PedidoEstoqueHistoricoViewModal from '../components/pedidoEstoque.Histori
 import { AiOutlineEye } from "react-icons/ai";
 
 const ChavesHistoricoPedidoEstoque = () => {
-    const [loading, setLoading] = useState(false);
     const [estoque, setEstoque] = useState([]);
+    const [quantidadeTotal, setQuantidadeTotal] = useState(0);
+    const [loading, setLoading] = useState(false);
     const [pedidoSelecionado, setPedidoSelecionado] = useState([]);
     const [pedidoEstoqueViewModal, setPedidoEstoqueViewModal] = useState(false);
 
@@ -20,6 +21,7 @@ const ChavesHistoricoPedidoEstoque = () => {
         setLoading(true);
         service.app.ref(tabelas.BaixaPedidoChaves).on('value', snap => {
             let estoque = [];
+            let quantidadeTotal = 0;
             snap.forEach((x) => {
                 estoque.push({
                     key: x.key,
@@ -36,9 +38,11 @@ const ChavesHistoricoPedidoEstoque = () => {
                             TagStatusEnum.Incompleto ? <Tag color={'red'}> {TagStatusEnum.Incompleto} </Tag> :
                                 TagStatusEnum.Excedente ? <Tag color={'blue'}> {TagStatusEnum.Excedente} </Tag> : ''
                 })
+                quantidadeTotal = quantidadeTotal + x.val().QuantidadeRecebida;
                 setEstoque([]);
                 setEstoque(estoque);
             })
+            setQuantidadeTotal(quantidadeTotal);
             setLoading(false);
         });
     }, []);
@@ -83,6 +87,7 @@ const ChavesHistoricoPedidoEstoque = () => {
                     <Grid
                         dataSource={estoque}
                         columns={columns}
+                        QuantidadeTotal={quantidadeTotal}
                     />
             }
             <PedidoEstoqueHistoricoViewModal

@@ -19,6 +19,7 @@ import { AiOutlineSnippets, AiOutlineDownSquare, AiOutlineEdit, AiOutlineDelete 
 
 const ChaveTabela = () => {
     const [chaves, setChaves] = useState([]);
+    const [quantidadeTotal, setQuantidadeTotal] = useState(0);
     const [loading, setLoading] = useState(false);
     const [chaveSelecionada, setChaveSelecionada] = useState([]);
     const [modalEditVisible, setModalEditVisible] = useState(false);
@@ -30,6 +31,7 @@ const ChaveTabela = () => {
         setLoading(true);
         service.app.ref(tabelas.Chave).on('value', (snapshot) => {
             let chaves = [];
+            let quantidadeTotal = 0;
             snapshot.forEach((x) => {
                 chaves.push({
                     Id: x.key,
@@ -41,8 +43,10 @@ const ChaveTabela = () => {
                     Data: x.val().Data,
                     ListaNumeroSerie: x.val().ListaNumeroSerie ? x.val().ListaNumeroSerie : []
                 })
+                quantidadeTotal = quantidadeTotal + x.val().Quantidade;
             })
             setChaves(chaves);
+            setQuantidadeTotal(quantidadeTotal);
             setLoading(false);
         });
     }, []);
@@ -148,6 +152,7 @@ const ChaveTabela = () => {
                     <Grid
                         dataSource={chaves}
                         columns={columns}
+                        QuantidadeTotal={quantidadeTotal}
                     />
             }
 

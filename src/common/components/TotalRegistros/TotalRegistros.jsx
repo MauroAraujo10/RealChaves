@@ -1,11 +1,16 @@
 import React from 'react';
 
-export default function TotalRegistros(valor) {
+const TotalRegistros = ({ numeroRegistros, QuantidadeTotal }) => {
+
     return (
         <div className="f-right">
             <h4>
-                Número total de Registros: {valor.numeroRegistros}
+                Número de Registros: <b>{numeroRegistros}</b>
+                <br />
+                Quantidade total: <b>{QuantidadeTotal}</b>
             </h4>
         </div>
-    );
+    )
 }
+
+export default TotalRegistros;

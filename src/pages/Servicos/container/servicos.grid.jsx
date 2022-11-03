@@ -14,6 +14,7 @@ import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
 const ServicosTabela = () => {
     const [servicos, setServicos] = useState([]);
+    const [quantidadeTotal, setQuantidadeTotal] = useState(0);
     const [loading, setLoading] = useState(false);
     const [servicoSelecionado, setServicoSelecionado] = useState();
     const [modalEditServicoVisible, setModalEditServicoVisible] = useState(false);
@@ -23,6 +24,7 @@ const ServicosTabela = () => {
         setLoading(true);
         service.app.ref(tabelas.Servicos).on('value', (snapshot) => {
             let servicos = [];
+            let quantidadeTotal = 0;
             snapshot.forEach((x) => {
                 servicos.push({
                     Id: x.key,
@@ -32,8 +34,10 @@ const ServicosTabela = () => {
                     Valor: x.val().Valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'}),
                     Pago: x.val().Pago ? 'Sim' : 'Não'
                 })
+                quantidadeTotal++;
             })
             setServicos(servicos);
+            setQuantidadeTotal(quantidadeTotal);
             setLoading(false);
         });
     }, []);
@@ -106,6 +110,7 @@ const ServicosTabela = () => {
                     <Grid
                         dataSource={servicos}
                         columns={columns}
+                        QuantidadeTotal={quantidadeTotal}
                     />
             }
 

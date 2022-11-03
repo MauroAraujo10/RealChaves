@@ -7,12 +7,14 @@ import HeaderForm from '../../../../common/components/HeaderForm/HeaderForm';
 
 const AmolacaoHistoricoAmolacoes = () => {
     const [produtos, setProdutos] = useState([]);
+    const [quantidadeTotal, setQuantidadeTotal] = useState(0);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         setLoading(true);
         service.app.ref(tabelas.ProdutosAmolados).on('value', (snapshot) => {
             let produtos = [];
+            let quantidadeTotal = 0;
             snapshot.forEach((x) => {
                 produtos.push({
                     Id: x.key,
@@ -25,8 +27,10 @@ const AmolacaoHistoricoAmolacoes = () => {
                     Quantidade: x.val().Quantidade,
                     Valor: x.val().Valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'}),
                 });
+                quantidadeTotal = quantidadeTotal + x.val().Quantidade;
             })
             setProdutos(produtos);
+            setQuantidadeTotal(quantidadeTotal);
             setLoading(false);
         })
     }, []);
@@ -55,6 +59,7 @@ const AmolacaoHistoricoAmolacoes = () => {
                     <Grid
                         dataSource={produtos}
                         columns={columns}
+                        QuantidadeTotal={quantidadeTotal}
                     />
             }
 

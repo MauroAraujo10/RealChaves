@@ -16,8 +16,9 @@ import YesOrNoModal from '../../../../common/components/yesOrNoModal/yesOrNoModa
 import { AiOutlineLike, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
 
 const ChaveEstoqueTabelaPedido = () => {
-    const [loading, setLoading] = useState(false);
     const [pedidoSelecionado, setPedidoSelecionado] = useState([]);
+    const [quantidadeTotal, setQuantidadeTotal] = useState(0);
+    const [loading, setLoading] = useState(false);
     const [pedidosEstoque, setPedidosEstoque] = useState([]);
     const [viewProdutoModalVisible, setViewProdutoModalVisible] = useState(false);
     const [baixaProdutoModalVisible, setBaixaProdutoModalVisible] = useState(false);
@@ -27,6 +28,7 @@ const ChaveEstoqueTabelaPedido = () => {
         service.app.ref(tabelas.PedidoEstoque).on('value', (snapshot) => {
             setLoading(true);
             let pedido = [];
+            let quantidadeTotal = 0;
             snapshot.forEach((x) => {
                 pedido.push({
                     Id: x?.key,
@@ -36,8 +38,10 @@ const ChaveEstoqueTabelaPedido = () => {
                     DataPedido: x.val()?.DataPedido,
                     QuantidadePedidaTotal: x.val()?.QuantidadePedidaTotal
                 })
+                quantidadeTotal = quantidadeTotal + x.val().QuantidadePedidaTotal
             })
             setPedidosEstoque(pedido);
+            setQuantidadeTotal(quantidadeTotal);
             setLoading(false);
         })
     }, []);
@@ -113,6 +117,7 @@ const ChaveEstoqueTabelaPedido = () => {
                     <Grid
                         dataSource={pedidosEstoque}
                         columns={columns}
+                        QuantidadeTotal={quantidadeTotal}
                     />
             }
 

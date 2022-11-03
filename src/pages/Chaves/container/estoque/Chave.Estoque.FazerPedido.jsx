@@ -28,6 +28,7 @@ class ChaveEstoqueFazerPedido extends Component {
             chaves: [],
             listaPedidos: [],
             quantidadeTotal: 0,
+            quantidateTotalRegistros: 0,
             loading: false,
             drawerVisible: false,
             pedidoModalVisible: false
@@ -39,6 +40,7 @@ class ChaveEstoqueFazerPedido extends Component {
 
         service.app.ref(tabelas.Chave).once('value', (snapshot) => {
             let chaves = [];
+            let quantidadeTotal = 0;
             snapshot.forEach((x) => {
                 chaves.push({
                     Id: x.key,
@@ -51,11 +53,13 @@ class ChaveEstoqueFazerPedido extends Component {
                     QuantidadeSolicitada: 1,
                     ListaNumeroSerie: x.val().ListaNumeroSerie ? x.val().ListaNumeroSerie : [],
                 })
+                quantidadeTotal = quantidadeTotal + x.val().Quantidade;
             })
 
             this.setState({
                 chaves,
                 listaPedidos: [],
+                quantidateTotalRegistros: quantidadeTotal,
                 loading: false
             });
         });
@@ -166,6 +170,7 @@ class ChaveEstoqueFazerPedido extends Component {
                         <Loading /> :
                         <Grid
                             dataSource={this.state.chaves}
+                            QuantidadeTotal={this.state.quantidateTotalRegistros}
                             columns={columns}
                         />
                 }

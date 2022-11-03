@@ -17,8 +17,9 @@ import YesOrNoModal from '../../../common/components/yesOrNoModal/yesOrNoModal';
 import { AiOutlineLike, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
 const AmolacaoTabela = () => {
-    const [loading, setLoading] = useState(false);
     const [produtos, setProdutos] = useState([]);
+    const [quantidadeTotal, setQuantidadeTotal] = useState(0);
+    const [loading, setLoading] = useState(false);
     const [produtoSelecionado, setProdutoSelecionado] = useState([]);
     const [modalBaixarVisible, setModalBaixarVisible] = useState(false);
     const [modalEditarVisible, setModalEditarVisible] = useState(false);
@@ -63,6 +64,7 @@ const AmolacaoTabela = () => {
         setLoading(true);
         service.app.ref(tabelas.Amolacao).on('value', (snapshot) => {
             let produtos = [];
+            let quantidadeTotal = 0;
             snapshot.forEach((x) => {
                 produtos.push({
                     Id: x.key,
@@ -75,8 +77,10 @@ const AmolacaoTabela = () => {
                     Quantidade: x.val().Quantidade,
                     Valor: x.val().Valor,
                 });
+                quantidadeTotal = quantidadeTotal + x.val().Quantidade;
             })
             setProdutos(produtos);
+            setQuantidadeTotal(quantidadeTotal);
             setLoading(false);
         });
     }, []);
@@ -126,6 +130,7 @@ const AmolacaoTabela = () => {
                     <Grid
                         dataSource={produtos}
                         columns={columns}
+                        QuantidadeTotal={quantidadeTotal}
                     />
             }
 

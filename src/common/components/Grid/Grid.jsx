@@ -4,7 +4,7 @@ import { Input, Button, Table, Typography } from 'antd';
 import TotalRegistros from '../TotalRegistros/TotalRegistros';
 import { AiOutlineSearch } from "react-icons/ai";
 
-const Grid = ({ dataSource, columns }) => {
+const Grid = ({ dataSource, columns, QuantidadeTotal }) => {
     const { Text } = Typography;
 
     const [column, setColumn] = useState([]);
@@ -110,6 +110,7 @@ const Grid = ({ dataSource, columns }) => {
         <div className="container">
             <TotalRegistros
                 numeroRegistros={dataSource.length}
+                QuantidadeTotal={QuantidadeTotal}
             />
             <Table
                 className="Grid"

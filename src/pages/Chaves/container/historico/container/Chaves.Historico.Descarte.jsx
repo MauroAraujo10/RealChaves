@@ -7,6 +7,7 @@ import Grid from '../../../../../common/components/Grid/Grid';
 
 const ChavesHistoricoDescarte = () => {
     const [descartados, setDescartados] = useState([]);
+    const [quantidadeTotal, setQuantidadeTotal] = useState(0);
     const [loading, setLoading] = useState(false);
 
     const columns = [
@@ -21,6 +22,7 @@ const ChavesHistoricoDescarte = () => {
         setLoading(true);
         service.app.ref(tabelas.Descarte).once('value', snap => {
             let descartados = [];
+            let quantidadeTotal = 0;
             snap.forEach((descarte) => {
                 service.app.ref(tabelas.Chave).child(descarte.val().IdChave).on('value', chave => {
                     descartados.push({
@@ -32,10 +34,12 @@ const ChavesHistoricoDescarte = () => {
                         Motivo: descarte.val()?.Motivo,
                         QuantidadeDescartada: descarte.val()?.Quantidade,
                     });
+                    quantidadeTotal = quantidadeTotal + descarte.val().QuantidadeDescartada;
                     setDescartados([]);
                     setDescartados(descartados);
                 })
             })
+            setQuantidadeTotal(quantidadeTotal);
             setLoading(false);
         });
     }, []);
@@ -52,6 +56,7 @@ const ChavesHistoricoDescarte = () => {
                     <Grid
                         dataSource={descartados}
                         columns={columns}
+                        QuantidadeTotal={quantidadeTotal}
                     />
             }
         </div>
