@@ -25,9 +25,11 @@ import { useHistory } from "react-router-dom";
 export default function Routes({ configuracoes }) {
     const history = useHistory();
     const [theme, setTheme] = useState('');
+    const [outOfAir, setOutOfAir] = useState();
 
     useEffect(() => {
         setTheme(configuracoes?.DarkTheme ? 'dark' : 'light');
+        setOutOfAir(configuracoes?.OutOfAir);
     }, [configuracoes]);
 
     const { SubMenu } = Menu;
@@ -57,14 +59,11 @@ export default function Routes({ configuracoes }) {
         window.location.reload();
     }
 
-    function changePagination(value) {
-
-    }
-
     return (
         <Menu
             mode="inline"
             theme={theme}
+            disabled={outOfAir}
             openKeys={openKeys}
             onOpenChange={onOpenChange}>
             <Menu.Item key="Home" onClick={(e) => HandleClickLink(e, Rotas.Home)} icon={<AiOutlineHome />}>

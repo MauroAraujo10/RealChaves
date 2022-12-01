@@ -17,18 +17,20 @@ function App() {
   useEffect(() => {
     setLoading(true);
 
-    service.app.ref(tabelas.Configuracoes).once('value', snapshot => {
+    service.app.ref(tabelas.Configuracoes).on('value', snapshot => {
 
       if (snapshot.val() === null) {
         service.app.ref(tabelas.Configuracoes).set({
           DarkTheme: true,
-          Paginacao: false
+          Paginacao: false,
+          OutOfAir: false
         })
       }
       else {
         const congiguracao = {
           DarkTheme: snapshot.val()?.DarkTheme ?? true,
-          Paginacao: snapshot.val()?.Paginacao ?? false
+          Paginacao: snapshot.val()?.Paginacao ?? false,
+          OutOfAir: snapshot.val()?.OutOfAir ?? false
         }
         setConfiguracoes(congiguracao);
       }
@@ -45,7 +47,7 @@ function App() {
         loading ? <Loading /> :
           <>
             <Routes configuracoes={configuracoes} />
-            <ToastContainer autoClose={5000} />
+            <ToastContainer autoClose={5000}/>
           </>
       }
     </HashRouter>
