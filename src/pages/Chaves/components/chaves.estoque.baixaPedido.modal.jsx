@@ -4,6 +4,7 @@ import { Row, Col, Modal, Form, DatePicker, Input, Table } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { toast } from 'react-toastify';
 import { TagStatusEnum } from '../../../common/Enum/TagStatusEnum';
+import Loading from '../../../common/components/Loading/Loading';
 
 import chaveService from '../service/chave.service';
 
@@ -13,6 +14,7 @@ import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadas
 const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
     const [listaQuantidadesEntregues, setListaQuantidadesEntregues] = useState([]);
     const [data, setData] = useState();
+    const [loading, setLoading] = useState(false);
     const { Column } = Table;
 
     useEffect(() => {
@@ -20,6 +22,8 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
     }, [pedidoSelecionado]);
 
     const submitForm = (form) => {
+
+        setLoading(true);
         let quantidadeTotalRecebida = 0;
 
         const dto = {
@@ -57,10 +61,12 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
         chaveService.postBaixaPedidos(dto)
             .then(() => {
                 toast.success(messages.cadastradoSucesso('Baixa de Pedido'));
+                setLoading(false);
                 onClose();
             })
             .catch(() => {
                 toast.error(messages.cadastradoErro('Baixa de Pedido'));
+                setLoading(false);
             })
     }
 
@@ -82,76 +88,79 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
                 subTitulo={''}
             />
 
-            <Form onFinish={submitForm} layout='vertical'>
-                <Row gutter={4}>
-                    <Col md={8} xs={8}>
-                        <Form.Item
-                            name="DataBaixa"
-                            label="Data da Baixa"
-                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
-                        >
-                            <DatePicker
-                                format="DD/MM/YYYY"
-                                onChange={(date, dateString) => setData(dateString)}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col md={8} xs={8}>
-                        <Form.Item
-                            label="Valor"
-                            name="Valor"
-                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
-                        >
-                            <Input
-                                type="number"
-                                placeholder={'Valor'}
-                                min={0}
-                                step="0.10"
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col md={8} xs={8}>
-                        <Form.Item
-                            label="Empresa"
-                            name="Empresa"
-                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
-                        >
-                            <Input
-                                type="text"
-                                placeholder="Empresa"
-                                maxLength={20}
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row>
+            {
+                loading ?
+                    <Loading /> :
+                    <Form onFinish={submitForm} layout='vertical'>
+                        <Row gutter={4}>
+                            <Col md={8} xs={8}>
+                                <Form.Item
+                                    name="DataBaixa"
+                                    label="Data da Baixa"
+                                    rules={[{ required: true, message: messages.CampoObrigatorio }]}
+                                >
+                                    <DatePicker
+                                        format="DD/MM/YYYY"
+                                        onChange={(date, dateString) => setData(dateString)}
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col md={8} xs={8}>
+                                <Form.Item
+                                    label="Valor"
+                                    name="Valor"
+                                    rules={[{ required: true, message: messages.CampoObrigatorio }]}
+                                >
+                                    <Input
+                                        type="number"
+                                        placeholder={'Valor'}
+                                        min={0}
+                                        step="0.10"
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col md={8} xs={8}>
+                                <Form.Item
+                                    label="Empresa"
+                                    name="Empresa"
+                                    rules={[{ required: true, message: messages.CampoObrigatorio }]}
+                                >
+                                    <Input
+                                        type="text"
+                                        placeholder="Empresa"
+                                        maxLength={20}
+                                    />
+                                </Form.Item>
+                            </Col>
+                        </Row>
 
-                <Table
-                    className="Tabela-Lista-Pedidos mb-2"
-                    dataSource={pedidoSelecionado?.Chaves}
-                    pagination={false}
-                >
-                    <Column title="Marca" dataIndex="Marca" key="Marca" width={'10%'} />
-                    <Column title="Número de Série" dataIndex="NumeroSerie" key="NumeroSerie" width={'20%'} />
-                    <Column title="Quantidade Solicitada" dataIndex="QuantidadeSolicitada" key="QuantidadeSolicitada" width={'10%'} />
-                    <Column title="Quantidade Entregue" width={'10%'} render={(status, dto, index) => (
-                        <Input
-                            type="number"
-                            min={1}
-                            max={100}
-                            required
-                            onChange={(event) => changeQuantidade(status, dto, index, event)}
+                        <Table
+                            className="Tabela-Lista-Pedidos mb-2"
+                            dataSource={pedidoSelecionado?.Chaves}
+                            pagination={false}
+                        >
+                            <Column title="Marca" dataIndex="Marca" key="Marca" width={'10%'} />
+                            <Column title="Número de Série" dataIndex="NumeroSerie" key="NumeroSerie" width={'20%'} />
+                            <Column title="Quantidade Solicitada" dataIndex="QuantidadeSolicitada" key="QuantidadeSolicitada" width={'10%'} />
+                            <Column title="Quantidade Entregue" width={'10%'} render={(status, dto, index) => (
+                                <Input
+                                    type="number"
+                                    min={1}
+                                    max={100}
+                                    required
+                                    onChange={(event) => changeQuantidade(status, dto, index, event)}
+                                />
+                            )}
+                            />
+
+                        </Table>
+
+                        <BotaoCadastrar
+                            funcaoCancelar={onClose}
                         />
-                    )}
-                    />
 
-                </Table>
-
-                <BotaoCadastrar
-                    funcaoCancelar={onClose}
-                />
-
-            </Form>
-
+                    </Form>
+            }
         </Modal>
     );
 }

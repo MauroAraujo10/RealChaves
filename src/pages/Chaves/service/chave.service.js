@@ -29,7 +29,7 @@ const methods = {
         let chaveGetDto;
         await service.app.ref(tabelas.Chave).child(id).once('value', x => {
             chaveGetDto = {
-                key: x.val()?.key,
+                key: id,
                 Marca: x.val()?.Marca,
                 NumeroSerie: x.val()?.NumeroSerie,
                 Quantidade: x.val()?.Quantidade,

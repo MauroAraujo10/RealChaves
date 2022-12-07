@@ -38,7 +38,7 @@ const ChavesHistoricoPedidoEstoque = () => {
                             TagStatusEnum.Incompleto ? <Tag color={'red'}> {TagStatusEnum.Incompleto} </Tag> :
                                 TagStatusEnum.Excedente ? <Tag color={'blue'}> {TagStatusEnum.Excedente} </Tag> : ''
                 })
-                quantidadeTotal = quantidadeTotal + x.val().QuantidadeRecebida;
+                quantidadeTotal += x.val().QuantidadeRecebidaTotal;
                 setEstoque([]);
                 setEstoque(estoque);
             })
