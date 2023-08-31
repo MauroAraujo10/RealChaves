@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Card, Tooltip } from 'antd';
 import { FcSearch, FcBarChart, FcLike } from "react-icons/fc";
 

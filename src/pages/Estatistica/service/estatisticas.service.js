@@ -1,4 +1,4 @@
-import service from '../../../service';
+import service from '../../../services/index';
 import tabelas from '../../../common/Enum/tabelas';
 import moment from 'moment';
 

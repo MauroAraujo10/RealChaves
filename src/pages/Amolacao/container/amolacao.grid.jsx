@@ -3,12 +3,12 @@ import { Tooltip } from 'antd';
 import { toast } from "react-toastify";
 import { messages } from '../../../common/Enum/messages';
 
-import service from '../../../service';
-import serviceAmolacao from '../service/amolacao.service';
-import tabelas from '../../../common/Enum/tabelas';
 import Loading from '../../../common/components/Loading/Loading';
-import Grid from '../../../common/components/Grid/Grid';
 import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
+import Grid from '../../../common/components/Grid/Grid';
+import tabelas from '../../../common/Enum/tabelas';
+import Service from '../../../services/index';
+import AmolacaoService from '../../../services/amolacao.service';
 
 import BaixaModal from '../components/amolacao.baixa.modal';
 import EditModal from '../components/amolacao.edit.modal';
@@ -16,7 +16,7 @@ import YesOrNoModal from '../../../common/components/yesOrNoModal/yesOrNoModal';
 
 import { AiOutlineLike, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
-const AmolacaoTabela = () => {
+const AmolacaoGrid = () => {
     const [produtos, setProdutos] = useState([]);
     const [quantidadeTotal, setQuantidadeTotal] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -25,12 +25,48 @@ const AmolacaoTabela = () => {
     const [modalEditarVisible, setModalEditarVisible] = useState(false);
     const [modalDeletarVisible, setModalDeletarVisible] = useState(false);
 
+    useEffect(() => {
+
+        setLoading(true);
+        
+        Service.app.ref(tabelas.Amolacao).on('value', (amolacoes) => {
+            let produtos = [];
+            let quantidadeTotal = 0;
+
+            amolacoes.forEach((x) => {
+                
+                if (!x.val().Entregue){
+                    produtos.push({
+                        Id: x.key,
+                        Cliente: x.val().Cliente,
+                        Telefone: x.val().Telefone,
+                        Produto: x.val().Produto,
+                        Marca: x.val().Marca,
+                        DataRecebimento: x.val().DataRecebimento,
+                        Quantidade: x.val().Quantidade,
+                        Pago: x.val().Pago ? "Sim" : "Não",
+                        Valor: x.val().Valor,
+                        ValorGrid: x.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                    })
+
+                    quantidadeTotal += x.val().Quantidade;
+                }
+            })
+
+            setProdutos(produtos);
+            setQuantidadeTotal(quantidadeTotal);
+            setLoading(false);
+        })
+    }, []);
+
     const columns = [
-        { title: 'Cliente', dataIndex: 'Cliente', key: 'Cliente', width: '10%' },
+        { title: 'Cliente', dataIndex: 'Cliente', key: 'Cliente', width: '30%' },
         { title: 'Produto', dataIndex: 'Produto', key: 'Produto', width: '10%' },
         { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '10%' },
         { title: 'Data Recebimento', dataIndex: 'DataRecebimento', key: 'DataRecebimento', width: '10%' },
         { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', width: '10%' },
+        { title: 'Pago', dataIndex: 'Pago', key: 'Pago', width: '5%' },
+        { title: 'Valor', dataIndex: 'ValorGrid', key: 'Valor', width: '10%' },
         {
             title: 'Ações', key: 'acoes', width: '10%', render: (status, dto) => (
                 <div style={{ display: 'flex' }}>
@@ -60,31 +96,6 @@ const AmolacaoTabela = () => {
         }
     ];
 
-    useEffect(() => {
-        setLoading(true);
-        service.app.ref(tabelas.Amolacao).on('value', (snapshot) => {
-            let produtos = [];
-            let quantidadeTotal = 0;
-            snapshot.forEach((x) => {
-                produtos.push({
-                    Id: x.key,
-                    key: x.key,
-                    Cliente: x.val().Cliente,
-                    Telefone: x.val().Telefone,
-                    Produto: x.val().Produto,
-                    Marca: x.val().Marca,
-                    DataRecebimento: x.val().DataRecebimento,
-                    Quantidade: x.val().Quantidade,
-                    Valor: x.val().Valor,
-                });
-                quantidadeTotal = quantidadeTotal + x.val().Quantidade;
-            })
-            setProdutos(produtos);
-            setQuantidadeTotal(quantidadeTotal);
-            setLoading(false);
-        });
-    }, []);
-
     const funcaoAbrirModal = (dto, funcionalidade) => {
         switch (funcionalidade) {
             case 'Baixa':
@@ -99,15 +110,15 @@ const AmolacaoTabela = () => {
 
             case 'Deletar':
                 setModalDeletarVisible(true);
-                setProdutoSelecionado(dto.Id);
+                setProdutoSelecionado(dto);
                 break;
             default:
                 break;
         }
     }
 
-    const deletarProduto = (id) => {
-        serviceAmolacao.delete(id)
+    const deletarProduto = async (dto) => {
+        await AmolacaoService.Delete(dto.Id)
             .then(() => {
                 toast.success(messages.exclusaoSucesso());
                 setModalDeletarVisible(false);
@@ -157,4 +168,4 @@ const AmolacaoTabela = () => {
     );
 }
 
-export default AmolacaoTabela;
+export default AmolacaoGrid;

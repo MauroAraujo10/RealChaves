@@ -1,4 +1,4 @@
-import service from '../../service/';
+import service from '../../services';
 import tabelas from '../../common/Enum/tabelas';
 
 const methods = {

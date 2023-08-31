@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { messages } from '../../../common/Enum/messages';
 import { Tooltip } from 'antd';
 import { toast } from "react-toastify";
-import service from '../../../service';
+import service from '../../../services';
 import servicosService from '../service/servicos.service';
 import tabelas from '../../../common/Enum/tabelas';
 import Loading from '../../../common/components/Loading/Loading';
@@ -23,30 +23,32 @@ const ServicosTabela = () => {
     useEffect(() => {
         setLoading(true);
         service.app.ref(tabelas.Servicos).on('value', (snapshot) => {
+
             let servicos = [];
-            let quantidadeTotal = 0;
+            
             snapshot.forEach((x) => {
                 servicos.push({
                     Id: x.key,
                     key: x.key,
                     Data: x.val().Data,
-                    Servico: x.val().Servico,
-                    Valor: x.val().Valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'}),
+                    Descricao: x.val().Descricao,
+                    Valor: x.val().Valor,
+                    ValorGrid: x.val().Valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'}),
                     Pago: x.val().Pago ? 'Sim' : 'Não'
                 })
-                quantidadeTotal++;
             })
+
             setServicos(servicos);
-            setQuantidadeTotal(quantidadeTotal);
+            setQuantidadeTotal(servicos.length);
             setLoading(false);
         });
     }, []);
 
     const columns = [
-        { title: 'Serviço', dataIndex: 'Servico', key: 'Servico', width: '60%' },
+        { title: 'Descrição', dataIndex: 'Descricao', key: 'Descricao', width: '60%' },
         { title: 'Data do Serviço', dataIndex: 'Data', key: 'Data', width: '10%' },
         { title: 'Pago', dataIndex: 'Pago', key: 'Pago', width: '10%' },
-        { title: 'Valor', dataIndex: 'Valor', key: 'Valor', width: '10%' },
+        { title: 'Valor', dataIndex: 'ValorGrid', key: 'ValorGrid', width: '10%' },
         {
             title: 'Ações', key: 'acoes', width: '10%', render: (status, dto) => (
                 <div style={{ display: 'flex' }}>
@@ -70,15 +72,14 @@ const ServicosTabela = () => {
     ];
 
     const funcaoAbrirModal = (dto, funcionalidade) => {
+        setServicoSelecionado(dto);
         switch (funcionalidade) {
             case 'Editar':
                 setModalEditServicoVisible(true);
-                setServicoSelecionado(dto);
                 break;
 
             case 'Deletar':
                 setModalDeleteVisible(true);
-                setServicoSelecionado(dto);
                 break;
 
             default:
@@ -86,8 +87,8 @@ const ServicosTabela = () => {
         }
     }
 
-    const deletarServico = (id) => {
-        servicosService.delete(id)
+    const DeletarServico = async (id) => {
+        await servicosService.Delete(id)
             .then(() => {
                 toast.success(messages.exclusaoSucesso());
                 setModalDeleteVisible(false);
@@ -99,10 +100,11 @@ const ServicosTabela = () => {
 
     return (
         <div className="mt-2">
+
             <HeaderForm
                 titulo={'Tabelas de Serviços'}
                 listaCaminhos={['Serviços', 'Tabelas de Serviços']}
-            />
+            />  
 
             {
                 loading ?
@@ -125,7 +127,7 @@ const ServicosTabela = () => {
                 text={messages.excluirRegistro('Serviço')}
                 visible={modalDeleteVisible}
                 onClose={() => setModalDeleteVisible(false)}
-                onOk={() => deletarServico(servicoSelecionado?.Id)}
+                onOk={() => DeletarServico(servicoSelecionado?.Id)}
             />
         </div>
     );

@@ -1,29 +1,31 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Form, Input, DatePicker, Switch } from 'antd';
+import { Form, Input, Switch } from 'antd';
 import { Row, Col } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
+import moment from 'moment';
+
 import service from '../service/servicos.service';
 import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
+
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 
 const ServicosCadastro = () => {
-    const [data, setData] = useState();
     const [pago, setPago] = useState();
     const history = useHistory();
 
-    const submitForm = (form) => {
+    const submitForm = async (form) => {
         const dto = {
-            Servico: form.Servico,
-            Data: data,
-            Pago: pago,
-            Valor: pago ? parseFloat(form.Valor) : 0
+            Descricao: form.Descricao,
+            Data: moment().format('DD/MM/yyyy'),
+            Pago: pago ?? false,
+            Valor: form.Valor ? parseFloat(form.Valor) : 0
         };
 
-        service.post(dto)
+        await service.Post(dto)
             .then(() => {
                 toast.success(messages.cadastradoSucesso('Serviço'));
                 history.push(Rotas.Servico);
@@ -35,6 +37,7 @@ const ServicosCadastro = () => {
 
     return (
         <div className="container mt-2">
+
             <HeaderForm
                 titulo={'Cadastrar Serviço'}
                 listaCaminhos={['Serviços', 'Cadastrar Serviço']}
@@ -44,59 +47,54 @@ const ServicosCadastro = () => {
                 layout="vertical"
                 onFinish={submitForm}
             >
-                <Row gutter={20}>
+                <Row gutter={12}>
+
                     <Col md={12} xs={24}>
                         <Form.Item
-                            name="Servico"
                             label="Descrição do Serviço"
+                            name="Descricao"
                             rules={[{ required: true, message: messages.CampoObrigatorio, }]}
                         >
                             <Input.TextArea
                                 showCount
                                 maxLength={200}
-                                rows={5}
+                                rows={4}
                                 placeholder="Descrição do serviço"
+                                autoFocus
                             />
                         </Form.Item>
                     </Col>
-                    <Col xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+                    
+                    <Col md={2} sm={3} xs={8}>
                         <Form.Item
-                            label="Data"
-                            name="Data"
-                            rules={[{ required: true, message: messages.CampoObrigatorio }]}>
-                            <DatePicker
-                                format="DD/MM/YYYY"
-                                onChange={(date, dateString) => setData(dateString)}
-                            />
+                            label="Pago"
+                            name="Pago">
+                                <Switch
+                                    defaultChecked={false}
+                                    onChange={(value) => setPago(value)}
+                                    checkedChildren={<CheckOutlined />}
+                                    unCheckedChildren={<CloseOutlined />}
+                                    tabIndex={1}
+                                />
                         </Form.Item>
-                        <Row gutter={10}>
-                            <Col xs={8} sm={4} md={4} lg={4} xl={3} xxl={2}>
-                                <Form.Item
-                                    label="Pago"
-                                    name="Pago">
-                                    <Switch
-                                        onChange={(value) => setPago(value)}
-                                        checkedChildren={<CheckOutlined />}
-                                        unCheckedChildren={<CloseOutlined />}
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col xs={4} sm={8} md={8} lg={6} xl={4} xxl={4}>
-                                {pago &&
-                                    <Form.Item
-                                        label="Valor"
-                                        name="Valor"
-                                        rules={[{ required: pago, message: messages.CampoObrigatorio }]}>
-                                        <Input
-                                            type="number"
-                                            placeholder="Valor"
-                                            min={1}
-                                            step="0.1"
-                                        />
-                                    </Form.Item>
-                                }
-                            </Col>
-                        </Row>
+
+                    </Col>
+
+                    <Col md={4} sm={8} xs={12}>
+                        {pago &&
+                            <Form.Item
+                                label="Valor"
+                                name="Valor"
+                                rules={[{ required: pago, message: messages.CampoObrigatorio }]}>
+                                <Input
+                                    type="number"
+                                    placeholder="Valor"
+                                    min={1}
+                                    step="0.1"
+                                    tabIndex={2}
+                                />
+                            </Form.Item>
+                        }
                     </Col>
                 </Row>
 

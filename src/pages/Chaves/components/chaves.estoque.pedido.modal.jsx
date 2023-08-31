@@ -3,7 +3,7 @@ import { Modal, Button, List, Badge } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { toast } from 'react-toastify';
 
-import chaveService from '../service/chave.service';
+import chaveService from '../../../services/chave.service';
 import { AiOutlinePrinter } from "react-icons/ai";
 
 const ChavesEstoquePedidoModal = ({ visible, onClose, closeDrawer, quantidadeTotal, listaPedidos }) => {

@@ -1,16 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Input, Button, Table, Typography } from 'antd';
+import { Input, Button, Table } from 'antd';
 
 import TotalRegistros from '../TotalRegistros/TotalRegistros';
 import { AiOutlineSearch } from "react-icons/ai";
 
 const Grid = ({ dataSource, columns, QuantidadeTotal }) => {
-    const { Text } = Typography;
-
     const [column, setColumn] = useState([]);
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef(null);
-    const [searchText, setSearchText] = useState('');
 
     useEffect(() => {
         let newColumns = [];
@@ -79,31 +76,16 @@ const Grid = ({ dataSource, columns, QuantidadeTotal }) => {
             }
         },
         render: (text) =>
-            searchedColumn === dataIndex ? (
-                <></>
-                // <Highlighter
-                //     highlightStyle={{
-                //         backgroundColor: '#ffc069',
-                //         padding: 0,
-                //     }}
-                //     searchWords={[searchText]}
-                //     autoEscape
-                //     textToHighlight={text ? text.toString() : ''}
-                // />
-            ) : (
-                    text
-                ),
+            searchedColumn === dataIndex ? ( <></>) : ( text),
     });
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
-        setSearchText(selectedKeys[0]);
         setSearchedColumn(dataIndex);
     };
 
     const handleReset = (clearFilters) => {
         clearFilters();
-        setSearchText('');
     };
 
     return (

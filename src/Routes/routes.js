@@ -19,8 +19,8 @@ import ChavesHistoricoCopias from '../pages/Chaves/container/historico/container
 import ChavesHistoricoDescarte from '../pages/Chaves/container/historico/container/Chaves.Historico.Descarte';
 import ChavesHistoricoPedidoEstoque from '../pages/Chaves/container/historico/container/Chaves.Historico.PedidoEstoque';
 
-import AmolacaoCadastro from '../pages/Amolacao/container/amolacao.cadastro';
-import AmolacaoTabela from '../pages/Amolacao/container/amolacao.tabela';
+import AmolacaoGrid from '../pages/Amolacao/container/amolacao.grid';
+import AmolacaoNew from '../pages/Amolacao/container/amolacao.new';
 import AmolacaoHistoricoAmolacoes from '../pages/Amolacao/container/historico/amolacao.Historico.Amolacoes';
 
 import ServicosGrid from '../pages/Servicos/container/servicos.grid';
@@ -71,8 +71,8 @@ const Routes = ({ configuracoes }) => {
                             <Route exact path={Rotas.ChavesHistoricoDescarte} component={ChavesHistoricoDescarte} />
                             <Route exact path={Rotas.ChavesHistoricoPedidoEstoque} component={ChavesHistoricoPedidoEstoque} />
 
-                            <Route exact path={Rotas.AmolacaoCadastro} component={AmolacaoCadastro} />
-                            <Route exact path={Rotas.AmolacaoEstoque} component={AmolacaoTabela} />
+                            <Route exact path={Rotas.AmolacaoEstoque} component={AmolacaoGrid} />
+                            <Route exact path={Rotas.AmolacaoCadastro} component={AmolacaoNew} />
                             <Route exact path={Rotas.AmolacaoHistoricoAmolacoes} component={AmolacaoHistoricoAmolacoes} />
 
                             <Route exact path={Rotas.Servico} component={ServicosGrid} />

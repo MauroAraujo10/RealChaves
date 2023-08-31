@@ -20,7 +20,9 @@ const HeaderForm = ({ titulo, listaCaminhos }) => {
                 </Breadcrumb.Item>
 
                 {listaCaminhos.map((x) => (
-                    <Breadcrumb.Item>{x}</Breadcrumb.Item>
+                    <Breadcrumb.Item key={x}>
+                        {x}
+                    </Breadcrumb.Item>
                 ))}
 
             </Breadcrumb>

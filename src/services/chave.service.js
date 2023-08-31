@@ -1,31 +1,30 @@
-import service from '../../../service';
-import tabelas from '../../../common/Enum/tabelas';
+import service from '.';
+import tabelas from '../common/Enum/tabelas';
 import moment from 'moment';
 
 const methods = {
-    async post(dto) {
+    async Post(dto) {
         let id = Date.now();
-        return await service.app.ref(tabelas.Chave).child(id).set({
-            key: id,
+        await service.app.ref(tabelas.Chave).child(id).set({
             Marca: dto.Marca,
             NumeroSerie: dto.NumeroSerie,
             Data: moment().format('DD/MM/yyyy'),
             Tipo: dto.Tipo,
             Quantidade: dto.Quantidade,
-            ListaNumeroSerie: dto.ListaNumeroSerie ? dto.ListaNumeroSerie : []
+            Deletado: false
         });
     },
-    async update(dto) {
-        return await service.app.ref(tabelas.Chave).child(dto.Id).set({
+    async Update(id, dto) {
+        await service.app.ref(tabelas.Chave).child(id).set({
             Marca: dto.Marca,
             NumeroSerie: dto.NumeroSerie,
-            Quantidade: dto.Quantidade,
-            Tipo: dto.Tipo,
             Data: dto.Data,
-            ListaNumeroSerie: dto.ListaNumeroSerie ? dto.ListaNumeroSerie : []
+            Tipo: dto.Tipo,
+            Quantidade: dto.Quantidade,
+            Deletado: false
         });
     },
-    async getById(id) {
+    async GetById(id) {
         let chaveGetDto;
         await service.app.ref(tabelas.Chave).child(id).once('value', x => {
             chaveGetDto = {
@@ -40,13 +39,19 @@ const methods = {
         })
         return chaveGetDto;
     },
-    async delete(id) {
-        await service.app.ref(tabelas.Chave).child(id).remove();
+    async Delete(dto) {
+        await service.app.ref(tabelas.Chave).child(dto.Id).set({
+            Marca: dto.Marca,
+            NumeroSerie: dto.NumeroSerie,
+            Data: dto.Data,
+            Tipo: dto.Tipo,
+            Quantidade: dto.Quantidade,
+            Deletado: true
+        });
     },
-    async postCopiaChave(dto) {
+    async PostCopiaChave(dto) {
         let id = Date.now();
-        return service.app.ref(tabelas.CopiasChave).child(id).set({
-            key: id,
+        await service.app.ref(tabelas.CopiasChave).child(id).set({
             IdChave: dto.IdChave,
             Data: dto.Data,
             Quantidade: dto.Quantidade,
@@ -54,14 +59,13 @@ const methods = {
             TipoPagamento: dto.TipoPagamento
         })
     },
-    async postDescarte(dto) {
+    async PostDescarte(dto) {
         let id = Date.now();
-        return await service.app.ref(tabelas.Descarte).child(id).set({
-            key: id,
+        await service.app.ref(tabelas.Descarte).child(id).set({
             IdChave: dto.IdChave,
+            Data: dto.Data,
             Quantidade: dto.Quantidade,
-            Motivo: dto.Motivo,
-            Data: dto.Data
+            IdMotivo: dto.IdMotivo,
         });
     },
     async postPedidoEstoque(lista, quantidadeTotal) {

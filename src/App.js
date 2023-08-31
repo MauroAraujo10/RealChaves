@@ -3,7 +3,7 @@ import { HashRouter } from 'react-router-dom';
 import { ToastContainer } from "react-toastify";
 import Loading from './common/components/Loading/Loading';
 
-import service from './service';
+import service from './services/index';
 import tabelas from './common/Enum/tabelas';
 import "react-toastify/dist/ReactToastify.css";
 

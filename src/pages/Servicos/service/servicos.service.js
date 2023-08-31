@@ -1,26 +1,25 @@
-import service from '../../../service';
+import service from '../../../services/index';
 import tabelas from '../../../common/Enum/tabelas';
 
 const methods = {
-    async post(dto) {
+    async Post(dto) {
         let id = Date.now();
-        return await service.app.ref(tabelas.Servicos).child(id).set({
-            key: id,
-            Servico: dto.Servico,
-            Data: dto.Data,
-            Pago: dto.Pago ?? false,
-            Valor: dto.Pago ? dto.Valor : null
-        });
-    },
-    async update(dto) {
-        return await service.app.ref(tabelas.Servicos).child(dto.Id).set({
-            Servico: dto.Servico,
+        await service.app.ref(tabelas.Servicos).child(id).set({
+            Descricao: dto.Descricao,
             Data: dto.Data,
             Pago: dto.Pago,
             Valor: dto.Valor
         });
     },
-    async delete(id) {
+    async Update(id, dto) {
+        await service.app.ref(tabelas.Servicos).child(id).set({
+            Descricao: dto.Descricao,
+            Data: dto.Data,
+            Pago: dto.Pago,
+            Valor: dto.Valor
+        });
+    },
+    async Delete(id) {
         await service.app.ref(tabelas.Servicos).child(id).remove();
     }
 };

@@ -4,7 +4,8 @@ import { toast } from 'react-toastify';
 import { messages } from '../../../../common/Enum/messages';
 
 import Grid from '../../../../common/components/Grid/Grid';
-import service from '../../../../service';
+import Service from '../../../../services';
+import ChaveService from '../../../../services/chave.service';
 import tabelas from '../../../../common/Enum/tabelas';
 import Loading from '../../../../common/components/Loading/Loading';
 import HeaderForm from '../../../../common/components/HeaderForm/HeaderForm';
@@ -25,7 +26,7 @@ const ChaveEstoqueTabelaPedido = () => {
     const [yesOrNoModalVisible, setYesOrNoModalVisible] = useState(false);
 
     useEffect(() => {
-        service.app.ref(tabelas.PedidoEstoque).on('value', (snapshot) => {
+        Service.app.ref(tabelas.PedidoEstoque).on('value', (snapshot) => {
             setLoading(true);
             let pedido = [];
             let quantidadeTotal = 0;
@@ -60,7 +61,7 @@ const ChaveEstoqueTabelaPedido = () => {
     }
 
     const deletarPedidoEstoque = (id) => {
-        service.app.ref(tabelas.PedidoEstoque).child(id).remove()
+        ChaveService.app.ref(tabelas.PedidoEstoque).child(id).remove()
             .then(() => {
                 toast.success(messages.exclusaoSucesso);
                 setYesOrNoModalVisible(false);

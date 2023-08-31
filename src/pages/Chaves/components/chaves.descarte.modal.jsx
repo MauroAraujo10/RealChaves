@@ -1,20 +1,36 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
-import { Modal, Form, Radio, DatePicker, Space, Input } from 'antd';
+import { Modal, Form, Input, Select } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { toast } from "react-toastify";
-import { Descarte } from '../../../common/Enum/descarte'
+import moment from 'moment';
 
 import TituloModal from '../../../common/components/TituloModal/TituloModal';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
-import chaveService from '../service/chave.service';
+import ChaveService from '../../../services/chave.service';
+import ConfiguracoesService from '../../../services/configuracoes.service';
 
 const ChaveDescarteModal = ({ visible, onClose, chaveSelecionada }) => {
-    const [data, setData] = useState('');
-    const [motivo, setMotivo] = useState(Descarte.Quebrou);
 
-    const submitForm = (form) => {
+    const { Option } = Select;
+    const [arrayMotivos, setArrayMotivos] = useState([]);
+
+
+    useEffect( () => {
+
+        function GetMotivosDescarte (){
+            ConfiguracoesService.GetAllMotivosDescartes()
+            .then((x) => {
+                setArrayMotivos(x);
+            });
+        }
+
+        GetMotivosDescarte();
+        
+    }, []);
+
+    const submitForm = async (form) => {
         let novaQuantidade = chaveSelecionada.Quantidade - Number(form.Quantidade);
 
         if (novaQuantidade < 0) {
@@ -22,17 +38,18 @@ const ChaveDescarteModal = ({ visible, onClose, chaveSelecionada }) => {
             return;
         }
 
-        const dto = {
+        const dtoDescarte = {
             IdChave: chaveSelecionada.Id,
+            IdMotivo: form.Motivo,
             Quantidade: Number(form.Quantidade),
-            Motivo: motivo,
-            Data: data
+            Data: moment().format('DD/MM/yyyy'),
         };
 
-        chaveService.postDescarte(dto)
-            .then(() => {
+        await ChaveService.PostDescarte(dtoDescarte)
+            .then( async() => {
+
                 chaveSelecionada.Quantidade = novaQuantidade
-                chaveService.update(chaveSelecionada);
+                await ChaveService.Update(chaveSelecionada.Id, chaveSelecionada);
                 toast.success(messages.cadastradoSucesso('Descarte de Chave'));
                 onClose();
             })
@@ -55,18 +72,8 @@ const ChaveDescarteModal = ({ visible, onClose, chaveSelecionada }) => {
 
             <Form onFinish={submitForm} layout='vertical'>
                 <Row gutter={10}>
-                    <Col md={8} xs={10}>
-                        <Form.Item
-                            label="Data"
-                            name="Data"
-                            rules={[{ required: true, message: messages.CampoObrigatorio }]}>
-                            <DatePicker
-                                format="DD/MM/YYYY"
-                                onChange={(date, dateString) => setData(dateString)}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col md={5} xs={12}>
+
+                    <Col md={8} sm={8} xs={12}>
                         <Form.Item
                             label="Quantidade"
                             name="Quantidade"
@@ -77,21 +84,39 @@ const ChaveDescarteModal = ({ visible, onClose, chaveSelecionada }) => {
                                 min={1}
                                 max={chaveSelecionada?.Quantidade}
                                 placeholder="Quantidade"
+                                tabIndex={2}
                             />
                         </Form.Item>
                     </Col>
+
                 </Row>
-                <Radio.Group
-                    defaultValue={Descarte.Quebrou}
-                    style={{ marginBottom: '10px' }}
-                    onChange={(motivo) => setMotivo(motivo.target.value)}
-                >
-                    <Space direction="vertical">
-                        <Radio value={Descarte.Quebrou} checked>{Descarte.Quebrou}</Radio>
-                        <Radio value={Descarte.NaoFuncionou} >{Descarte.NaoFuncionou}</Radio>
-                        <Radio value={Descarte.Perda} >{Descarte.Perda}</Radio>
-                    </Space>
-                </Radio.Group>
+
+                <Row>
+
+                    <Col md={24} sm={24} xs={24}>
+                        <Form.Item
+                            label={'Selecione o motivo do descarte'}
+                            name={'Motivo'}
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
+                        >
+                            <Select 
+                                defaultValue="Selecione" 
+                                tabIndex={3}
+                            >
+                                {arrayMotivos?.map(({Index, Motivo}) => (
+                                    <Option 
+                                        key={Index} 
+                                        value={Index}
+                                    >
+                                        {Motivo}
+                                    </Option>
+                        ))}
+
+                            </Select>
+                        </Form.Item>
+                    </Col>
+
+                </Row>
 
                 <BotaoCadastrar
                     funcaoCancelar={onClose}

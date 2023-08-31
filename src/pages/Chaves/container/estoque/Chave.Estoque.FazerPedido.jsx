@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Button, Tooltip, Image, Drawer, Row, Col, Badge } from 'antd';
 import { toast } from 'react-toastify';
-import service from '../../../../service';
+import Service from '../../../../services';
 import tabelas from '../../../../common/Enum/tabelas';
 import Grid from '../../../../common/components/Grid/Grid';
 import HeaderForm from '../../../../common/components/HeaderForm/HeaderForm';
@@ -38,7 +38,7 @@ class ChaveEstoqueFazerPedido extends Component {
     componentDidMount() {
         this.setState({ loading: true });
 
-        service.app.ref(tabelas.Chave).once('value', (snapshot) => {
+        Service.app.ref(tabelas.Chave).once('value', (snapshot) => {
             let chaves = [];
             let quantidadeTotal = 0;
             snapshot.forEach((x) => {
@@ -51,7 +51,6 @@ class ChaveEstoqueFazerPedido extends Component {
                     Tipo: x.val().Tipo,
                     Data: x.val().Data,
                     QuantidadeSolicitada: 1,
-                    ListaNumeroSerie: x.val().ListaNumeroSerie ? x.val().ListaNumeroSerie : [],
                 })
                 quantidadeTotal = quantidadeTotal + x.val().Quantidade;
             })
@@ -109,6 +108,7 @@ class ChaveEstoqueFazerPedido extends Component {
     }
 
     submitForm() {
+        
         if (this.state.listaPedidos.length <= 0) {
             toast.error('Lista de pedidos de chave não pode estar vazia !');
             return;

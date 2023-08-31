@@ -1,40 +1,42 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { messages } from '../../../common/Enum/messages';
-import { Modal, Form, Input, DatePicker, Select } from 'antd';
+import { Modal, Form, Input, Select } from 'antd';
 import { Row, Col } from 'antd';
 import { toast } from 'react-toastify';
+import moment from 'moment';
 
 import TituloModal from '../../../common/components/TituloModal/TituloModal';
+import ChaveService from '../../../services/chave.service';
 import BotaoCadastar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
-import chaveService from '../service/chave.service';
 import { FaRegMoneyBillAlt } from "react-icons/fa";
 import { AiOutlineCreditCard, AiOutlineSlack } from "react-icons/ai";
 
 const ChaveCopiaModal = ({ visible, onClose, chaveSelecionada }) => {
-    const [data, setData] = useState('');
+
     const { Option } = Select;
 
-    const submitForm = (form) => {
-        let novaQuantidade = chaveSelecionada?.Quantidade - Number(form.Quantidade);
+    const submitForm = async (form) => {
+        let novaQuantidade = chaveSelecionada.Quantidade - Number(form.Quantidade);
 
-        if (novaQuantidade < 0) {
+        if (novaQuantidade < 0){
             toast.error(messages.estoqueIncorreto());
             return;
         }
 
-        const dto = {
-            IdChave: chaveSelecionada?.Id,
-            Data: data,
+        const dtoCopia = {
+            IdChave: chaveSelecionada.Id,
+            Data: moment().format('DD/MM/yyyy'),
             Quantidade: Number(form.Quantidade),
             Valor: parseFloat(form.Valor),
             TipoPagamento: form.TipoPagamento
         };
 
-        chaveService.postCopiaChave(dto)
-            .then(() => {
+        await ChaveService.PostCopiaChave(dtoCopia)
+            .then( async () => {
+                
                 chaveSelecionada.Quantidade = novaQuantidade;
-                chaveService.update(chaveSelecionada);
+                await ChaveService.Update(chaveSelecionada.Id, chaveSelecionada);
                 toast.success(messages.cadastradoSucesso('Cópia de Chave'));
                 onClose();
 
@@ -52,25 +54,15 @@ const ChaveCopiaModal = ({ visible, onClose, chaveSelecionada }) => {
             footer={null}
         >
 
-            <TituloModal titulo={'Cópia de Chave'} />
+            <TituloModal 
+                titulo={'Cópia de Chave'} 
+                subTitulo={'Preencha as informações sobre a cópia de chave'}
+            />
 
             <Form layout={'vertical'} onFinish={submitForm}>
-                <Row>
-                    <Col md={8} xs={24}>
-                        <Form.Item
-                            label="Data"
-                            name="Data"
-                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
-                        >
-                            <DatePicker
-                                format="DD/MM/YYYY"
-                                onChange={(date, dateString) => setData(dateString)}
-                            />
-                        </Form.Item>
-                    </Col>
-                </Row>
                 <Row gutter={12}>
-                    <Col md={6} xs={8}>
+
+                    <Col md={6} sm={6} xs={12}>
                         <Form.Item
                             label="Quantidade"
                             name="Quantidade"
@@ -79,14 +71,16 @@ const ChaveCopiaModal = ({ visible, onClose, chaveSelecionada }) => {
                             <Input
                                 type="number"
                                 placeholder="Quantidade"
-                                max={chaveSelecionada?.Quantidade}
+                                max={chaveSelecionada.Quantidade}
                                 min={1}
+                                tabIndex={2}
                             />
                         </Form.Item>
                     </Col>
-                    <Col md={6} xs={8}>
+
+                    <Col md={6} sm={6} xs={12}>
                         <Form.Item
-                            label="Valor"
+                            label="Valor da cópia"
                             name="Valor"
                             rules={[{ required: true, message: messages.CampoObrigatorio }]}
                         >
@@ -96,16 +90,18 @@ const ChaveCopiaModal = ({ visible, onClose, chaveSelecionada }) => {
                                 min={1}
                                 max={1000}
                                 step="0.1"
+                                tabIndex={3}
                             />
                         </Form.Item>
                     </Col>
-                    <Col md={12} xs={8}>
+
+                    <Col md={12} sm={12} xs={24}>
                         <Form.Item
-                            name="TipoPagamento"
                             label={"Tipo de Pagamento"}
+                            name="TipoPagamento"
                             rules={[{ required: true, message: messages.CampoObrigatorio }]}
                         >
-                            <Select defaultValue="Selecione">
+                            <Select defaultValue="Selecione" tabIndex={4}>
                                 <Option value="Dinheiro">
                                     <FaRegMoneyBillAlt size={16} className="mr-2" />
                                     Dinheiro

@@ -3,21 +3,21 @@ import { Tooltip } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { toast } from "react-toastify";
 
+import Loading from '../../../common/components/Loading/Loading';
+import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
+import Grid from '../../../common/components/Grid/Grid';
+import tabelas from '../../../common/Enum/tabelas';
+import Service from '../../../services';
+import ChaveService from '../../../services/chave.service';
+
 import ChavesVendaModal from '../components/chave.copia.modal';
 import ChavesDescarteModal from '../components/chaves.descarte.modal';
 import ChavesEditModal from '../components/chaves.edit.modal';
 import YesOrNoModal from '../../../common/components/yesOrNoModal/yesOrNoModal';
 
-import Loading from '../../../common/components/Loading/Loading';
-import Grid from '../../../common/components/Grid/Grid';
-import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
-import service from '../../../service';
-import chaveService from '../service/chave.service';
-import tabelas from '../../../common/Enum/tabelas';
-
 import { AiOutlineSnippets, AiOutlineDownSquare, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 
-const ChaveTabela = () => {
+const ChaveGrid = () => {
     const [chaves, setChaves] = useState([]);
     const [quantidadeTotal, setQuantidadeTotal] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -29,22 +29,26 @@ const ChaveTabela = () => {
 
     useEffect(() => {
         setLoading(true);
-        service.app.ref(tabelas.Chave).on('value', (snapshot) => {
+        Service.app.ref(tabelas.Chave).on('value', (snapshot) => {
             let chaves = [];
             let quantidadeTotal = 0;
+            
             snapshot.forEach((x) => {
-                chaves.push({
-                    Id: x.key,
-                    key: x.key,
-                    Marca: x.val().Marca,
-                    NumeroSerie: x.val().NumeroSerie,
-                    Quantidade: x.val().Quantidade,
-                    Tipo: x.val().Tipo,
-                    Data: x.val().Data,
-                    ListaNumeroSerie: x.val().ListaNumeroSerie ? x.val().ListaNumeroSerie : []
-                })
-                quantidadeTotal = quantidadeTotal + x.val().Quantidade;
+                
+                if (!x.val().Deletado){
+                    chaves.push({
+                        Id: x.key,
+                        Marca: x.val().Marca,
+                        NumeroSerie: x.val().NumeroSerie,
+                        Quantidade: x.val().Quantidade,
+                        Tipo: x.val().Tipo,
+                        Data: x.val().Data,
+                    })
+
+                    quantidadeTotal = quantidadeTotal + x.val().Quantidade;
+                }
             })
+
             setChaves(chaves);
             setQuantidadeTotal(quantidadeTotal);
             setLoading(false);
@@ -98,7 +102,7 @@ const ChaveTabela = () => {
         switch (funcionalidade) {
 
             case 'Copia':
-                if (Number(dto.Quantidade === 0)) {
+                if (dto.Quantidade === 0) {
                     toast.warning(messages.estoqueZerado);
                     return;
                 }
@@ -107,8 +111,8 @@ const ChaveTabela = () => {
                 break;
 
             case 'Descarte':
-                if (Number(dto.Quantidade === 0)) {
-                    toast.warning('Não é possível realizar esta operação pois não há chaves no estoque !');
+                if (dto.Quantidade === 0) {
+                    toast.warning(messages.estoqueZerado);
                     return;
                 }
                 setModalDescarteVisible(true);
@@ -130,22 +134,25 @@ const ChaveTabela = () => {
         }
     }
 
-    const deleteChave = (id) => {
-        chaveService.delete(id)
+    const DeletarChave = async (chaveSelecionada) => {
+        await ChaveService.Delete(chaveSelecionada)
             .then(() => {
                 toast.success(messages.exclusaoSucesso());
                 setModalExclusaoVisible(false);
             })
             .catch(() => {
-                toast.error(messages.exclusaoErro());
+                toast.error(messages.exclusaoErro('registro'));
             })
     }
+    
     return (
         <div className="mt-2">
+
             <HeaderForm
                 titulo={'Chaves em estoque'}
                 listaCaminhos={['Chaves']}
             />
+
             {
                 loading ?
                     <Loading /> :
@@ -161,26 +168,29 @@ const ChaveTabela = () => {
                 chaveSelecionada={chaveSelecionada}
                 onClose={() => setModalEditVisible(false)}
             />
+
             <ChavesVendaModal
                 visible={modalVendaVisible}
                 chaveSelecionada={chaveSelecionada}
                 onClose={() => setModalVendaVisible(false)}
             />
+
             <ChavesDescarteModal
                 visible={modalDescarteVisible}
                 chaveSelecionada={chaveSelecionada}
                 onClose={() => setModalDescarteVisible(false)}
             />
+
             <YesOrNoModal
                 title={'Exclusão de Chave'}
                 text={'Deseja realmente excluir esta chave ?'}
                 visible={modalExclusaoVisible}
                 onClose={() => setModalExclusaoVisible(false)}
-                onOk={() => deleteChave(chaveSelecionada.key)}
+                onOk={() => DeletarChave(chaveSelecionada)}
             />
         </div >
     );
 
 }
 
-export default ChaveTabela;
+export default ChaveGrid;

@@ -1,37 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Form, Col, Row, Input, Select, DatePicker, Space } from 'antd';
+import { Modal, Form, Col, Row, Input, Select, Switch } from 'antd';
 import { toast } from 'react-toastify';
 import { messages } from '../../../common/Enum/messages';
-import moment from 'moment';
 
-import service from '../service/amolacao.service';
+import AmolacaoService from '../../../services/amolacao.service';
 import TituloModal from '../../../common/components/TituloModal/TituloModal';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
 import { AiOutlineFork, AiOutlineScissor } from "react-icons/ai";
 import { RiKnifeLine } from "react-icons/ri";
+import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 
 const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
-    const [data, setData] = useState('');
+
     const { Option } = Select;
+    const [pago, setPago] = useState(false);
 
     useEffect(() => {
-        setData(produtoSelecionado?.DataRecebimento);
+        setPago(produtoSelecionado.Pago === "Sim");
     }, [produtoSelecionado]);
 
-    const submitForm = (form) => {
+    const submitForm = async (form) => {
 
         const dto = {
-            Id: produtoSelecionado.Id,
             Cliente: form.Cliente,
-            Telefone: form.Telefone,
+            Telefone: form.Telefone ?? "",
             Produto: form.Produto,
             Marca: form.Marca,
-            DataRecebimento: data,
-            Quantidade: produtoSelecionado?.Quantidade
+            DataRecebimento: produtoSelecionado.DataRecebimento,
+            Quantidade: Number(form.Quantidade),
+            Pago: pago,
+            Valor: form.Valor ? parseFloat(form.Valor) : 0,
+            Entregue: false,
         };
 
-        service.updateProduto(dto)
+        await AmolacaoService.Update(produtoSelecionado.Id, dto)
             .then(() => {
                 toast.success(messages.EditadoSucesso('Produto'));
                 onClose();
@@ -56,10 +59,10 @@ const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
                 onFinish={submitForm}
             >
                 <Row gutter={12}>
-                    <Col md={18} xs={24}>
+                    <Col md={16} xs={24}>
                         <Form.Item
-                            name="Cliente"
                             label="Cliente"
+                            name="Cliente"
                             rules={[{ required: true, message: messages.campoObrigatorio }]}
                         >
                             <Input
@@ -70,26 +73,28 @@ const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
                             />
                         </Form.Item>
                     </Col>
-                    <Col md={6} xs={24}>
+                    <Col md={8} xs={24}>
                         <Form.Item
-                            name="Telefone"
                             label="Telefone"
+                            name="Telefone"
                             rules={[{ required: false, message: messages.campoObrigatorio }]}
                         >
                             <Input
                                 type="text"
                                 maxLength={15}
                                 placeholder={"Telefone"}
+                                tabIndex={0}
                             />
                         </Form.Item>
                     </Col>
                 </Row>
 
                 <Row gutter={12}>
-                    <Col md={9} xs={24}>
+
+                    <Col md={10} xs={24}>
                         <Form.Item
-                            label="Produto"
                             name="Produto"
+                            label="Produto"
                             rules={[{ required: true, message: messages.CampoObrigatorio }]}
                         >
                             <Select defaultValue="Selecione">
@@ -109,11 +114,11 @@ const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
                         </Form.Item>
                     </Col>
 
-                    <Col md={6} xs={24}>
+                    <Col md={8} xs={24}>
                         <Form.Item
-                            name="Marca"
                             label="Marca"
-                            rules={[{ required: true, message: messages.campoObrigatorio }]}
+                            name="Marca"
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
                         >
                             <Input
                                 type="text"
@@ -122,21 +127,55 @@ const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
                             />
                         </Form.Item>
                     </Col>
-                    <Col md={8} xs={24}>
+                </Row>
+
+                <Row gutter={12}>
+
+                    <Col md={6} sm={6} xs={8}>
                         <Form.Item
-                            name="DataRecebimento"
-                            label="Data Recebimento"
-                            rules={[{ required: true, message: messages.campoObrigatorio }]}
+                            label='Quantidade'
+                            name='Quantidade'
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
                         >
-                            <Space direction="vertical">
-                                <DatePicker
-                                    format={'DD/MM/YYYY'}
-                                    onChange={(date, dateString) => setData(dateString)}
-                                    defaultValue={moment(produtoSelecionado?.DataRecebimento, 'DD/MM/YYYY')}
-                                />
-                            </Space>
+                            <Input
+                                type="number"
+                                placeholder="Quantidade"
+                                min={1}
+                                max={25}
+                                tabIndex={3}
+                            />
                         </Form.Item>
                     </Col>
+
+                    <Col md={3} sm={4} xs={4}>
+                        <Form.Item
+                            label="Pago"
+                            name="Pago">
+                            <Switch
+                                defaultChecked={produtoSelecionado.Pago === 'Sim'}
+                                onChange={(value) => setPago(value)}
+                                checkedChildren={<CheckOutlined />}
+                                unCheckedChildren={<CloseOutlined />}
+                            />
+                        </Form.Item>
+                    </Col>
+
+                    <Col md={6} sm={6} xs={9}>
+                        {pago &&
+                            <Form.Item
+                                label="Valor pago"
+                                name="Valor"
+                                rules={[{ required: true, message: messages.CampoObrigatorio }]}>
+                                <Input
+                                    type="number"
+                                    placeholder="Valor"
+                                    min="0.1"
+                                    step="0.10"
+                                />
+                            </Form.Item>
+                        }
+                    </Col>
+
                 </Row>
 
                 <BotaoCadastrar

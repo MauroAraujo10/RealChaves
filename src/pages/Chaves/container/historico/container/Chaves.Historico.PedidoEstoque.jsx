@@ -4,7 +4,7 @@ import { TagStatusEnum } from '../../../../../common/Enum/TagStatusEnum';
 import HeaderForm from '../../../../../common/components/HeaderForm/HeaderForm';
 import Loading from '../../../../../common/components/Loading/Loading';
 import Grid from '../../../../../common/components/Grid/Grid';
-import service from '../../../../../service';
+import Service from '../../../../../services';
 import tabelas from '../../../../../common/Enum/tabelas';
 
 import PedidoEstoqueHistoricoViewModal from '../components/pedidoEstoque.Historico.view.modal';
@@ -19,7 +19,7 @@ const ChavesHistoricoPedidoEstoque = () => {
 
     useEffect(() => {
         setLoading(true);
-        service.app.ref(tabelas.BaixaPedidoChaves).on('value', snap => {
+        Service.app.ref(tabelas.BaixaPedidoChaves).on('value', snap => {
             let estoque = [];
             let quantidadeTotal = 0;
             snap.forEach((x) => {

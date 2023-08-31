@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Form, Input, Select, Image, Table, Tooltip, Button, Row, Col } from 'antd';
+import { Form, Input, Select, Image, Row, Col } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
-import { AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
 
-import chaveService from '../service/chave.service';
-import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
-import ChaveAddNumeroSerieModal from '../components/chave.AddNumeroSerie.modal';
+import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
+import ChaveService from '../../../services/chave.service';
 
 import Plana from '../assets/Plana.jpg';
 import PlanaColorida from '../assets/PlanaColorida.jpg';
@@ -24,42 +22,19 @@ import Gorje from '../assets/Gorje.jpg';
 import Tubular from '../assets/Tubular.jpg';
 
 const ChaveCadastro = () => {
-    const [imgSrc, setImgSrc] = useState('');
-    const [tipo, setTipo] = useState('');
-    const [listaNumeroSerie, setListaNumeroSerie] = useState([]);
-    const [numeroSerieModalVisible, setNumeroSerieModalVisible] = useState(false);
-
     const history = useHistory();
     const { Option } = Select;
-
-    const columns = [
-        { title: 'Marca', dataIndex: 'Marca', key: 'Marca' },
-        { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie' },
-        {
-            title: 'Ações', key: 'acoes', render: (status, dto) => (
-                <div style={{ display: 'flex' }}>
-                    <Tooltip title="Deletar">
-                        <AiOutlineDelete
-                            className="iconExcluir"
-                            size={20}
-                            onClick={() => handleDeleteNumeroSerie(dto)}
-                        />
-                    </Tooltip>
-                </div>
-            )
-        }
-    ];
-
-    const submitForm = (form) => {
+    const [imgSrc, setImgSrc] = useState('');
+    
+    const submitForm = async (form) => {
         const dto = {
             Marca: form.Marca,
             NumeroSerie: Number(form.NumeroSerie),
-            Tipo: tipo,
-            Quantidade: Number(form.Quantidade),
-            ListaNumeroSerie: listaNumeroSerie ? listaNumeroSerie : []
+            Tipo: form.Tipo,
+            Quantidade: Number(form.Quantidade)
         };
 
-        chaveService.post(dto)
+        await ChaveService.Post(dto)
             .then(() => {
                 toast.success(messages.cadastradoSucesso('Chave'));
                 history.push(Rotas.Chaves);
@@ -68,26 +43,6 @@ const ChaveCadastro = () => {
                 toast.error(messages.cadastradoErro('Chave'));
             });
     };
-
-    const handleDeleteNumeroSerie = (dto) => {
-        const novaListaNumerosSerie = listaNumeroSerie.filter(x => x.key !== dto.key);
-        setListaNumeroSerie(novaListaNumerosSerie);
-    }
-
-    const addNumeroSerie = (marca, numeroSerie) => {
-        const dto = {
-            key: Date.now(),
-            Marca: marca,
-            NumeroSerie: Number(numeroSerie)
-        };
-
-        if (listaNumeroSerie.some(x => x.Marca === marca && x.NumeroSerie === numeroSerie)) {
-            toast.warning(messages.registroRepetido);
-            return
-        }
-
-        setListaNumeroSerie([...listaNumeroSerie, dto]);
-    }
 
     const handleChange = (tipo) => {
         let img = '';
@@ -106,7 +61,6 @@ const ChaveCadastro = () => {
             default: img = null; break;
         }
         setImgSrc(img);
-        setTipo(tipo);
     }
 
     return (
@@ -115,24 +69,64 @@ const ChaveCadastro = () => {
                 titulo={'Cadastrar chave'}
                 listaCaminhos={['Chaves', 'Cadastrar chave']}
             />
+
             <Form layout="vertical" onFinish={submitForm}>
+
                 <Row gutter={10} >
+
                     <Col md={4} xs={24}>
                         <Form.Item
-                            label="Marca Principal"
+                            label="Marca"
                             name="Marca"
                             rules={[{ required: true, message: messages.CampoObrigatorio }]}>
                             <Input
                                 type="text"
                                 placeholder="Marca"
                                 maxLength={20}
+                                autoFocus
+                                tabIndex={1}
                             />
                         </Form.Item>
+                    </Col>
+
+                    <Col md={3} xs={24}>
                         <Form.Item
-                            label="Tipo"
+                            label="Número de Serie"
+                            name="NumeroSerie"
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}>
+                            <Input
+                                type="number"
+                                placeholder="Número de Serie"
+                                min={1}
+                                max={99999}
+                                step={1}
+                                tabIndex={2}
+                            />
+                        </Form.Item>
+                    </Col>
+
+                    <Col md={3} xs={24}>
+                        <Form.Item
+                            label="Quantidade"
+                            name="Quantidade"
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}>
+                            <Input
+                                type="number"
+                                placeholder="Quantidade"
+                                min={1}
+                                max={999}
+                                step={1}
+                                tabIndex={3}
+                            />
+                        </Form.Item>
+                    </Col>
+
+                    <Col md={4} xs={24}>
+                        <Form.Item
+                            label="Tipo da Chave"
                             name="Tipo"
                             rules={[{ required: true, message: messages.CampoObrigatorio }]}>
-                            <Select defaultValue="Selecione" onChange={handleChange}>
+                            <Select defaultValue="Selecione" onChange={handleChange} tabIndex={4}>
                                 <Option value="Plana">Plana</Option>
                                 <Option value="PlanaColorida">Plana Colorida</Option>
                                 <Option value="AutomotivaAco">Automotiva de Aço</Option>
@@ -147,19 +141,8 @@ const ChaveCadastro = () => {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col md={3} xs={24}>
-                        <Form.Item
-                            label="Número Serie"
-                            name="NumeroSerie"
-                            rules={[{ required: true, message: messages.CampoObrigatorio }]}>
-                            <Input
-                                type="number"
-                                placeholder="Número Serie"
-                                min={1}
-                                max={999999}
-                                step="1"
-                            />
-                        </Form.Item>
+
+                    <Col md={4} xs={24}>
                         <Image.PreviewGroup>
                             {imgSrc && (
                                 <Image
@@ -171,45 +154,11 @@ const ChaveCadastro = () => {
                             )}
                         </Image.PreviewGroup>
                     </Col>
-                    <Col md={3} xs={24}>
-                        <Form.Item
-                            label="Quantidade"
-                            name="Quantidade"
-                            rules={[{ required: true, message: messages.CampoObrigatorio }]}>
-                            <Input
-                                type="number"
-                                placeholder="Quantidade"
-                                min={1}
-                                max={999}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col md={12} xs={24} offset={1}>
-                        <Button
-                            onClick={() => setNumeroSerieModalVisible(true)}
-                            className="f-right mb-1"
-                        >
-                            <AiOutlinePlusCircle className="mr-1" />
-                            Adicionar
-                        </Button>
-                        <Table
-                            className="grid-numeroSerie"
-                            bordered
-                            dataSource={listaNumeroSerie}
-                            columns={columns}
-                            pagination={false}
-                        />
-                    </Col>
+                    
                 </Row>
 
                 <BotaoCadastrar
                     funcaoCancelar={() => history.push(Rotas.Chaves)}
-                />
-
-                <ChaveAddNumeroSerieModal
-                    visible={numeroSerieModalVisible}
-                    onClose={() => setNumeroSerieModalVisible(false)}
-                    addNumeroSerie={addNumeroSerie}
                 />
 
             </Form>

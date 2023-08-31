@@ -1,35 +1,33 @@
 import React, { useState, useEffect } from 'react'
-import { Modal, Form, Input, DatePicker, Space, Switch } from 'antd';
+import { Modal, Form, Input, Switch } from 'antd';
 import { Row, Col } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { toast } from "react-toastify";
-import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
-
 import moment from 'moment';
+
 import service from '../service/servicos.service';
 import TituloModal from '../../../common/components/TituloModal/TituloModal';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
+import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
+
 const ServicoEditModal = ({ visible, onClose, servicoSelecionado }) => {
-    const [data, setData] = useState();
     const [pago, setPago] = useState(false);
 
     useEffect(() => {
-        setData(servicoSelecionado?.Data);
         setPago(servicoSelecionado?.Pago === "Sim");
     }, [servicoSelecionado]);
 
-    const submitForm = (form) => {
+    const submitForm = async (form) => {
 
         const dto = {
-            Id: servicoSelecionado.Id,
-            Servico: form.Servico,
-            Data: data,
-            Pago: pago,
-            Valor: pago ? parseFloat(form.Valor) : 0,
+            Descricao: form.Descricao,
+            Data: moment().format('DD/MM/yyyy'),
+            Pago: pago ?? false,
+            Valor: form.Valor ? parseFloat(form.Valor) : 0
         };
 
-        service.update(dto)
+        await service.Update(servicoSelecionado.Id, dto)
             .then(() => {
                 toast.success(messages.EditadoSucesso('Serviço'));
                 onClose();
@@ -46,7 +44,8 @@ const ServicoEditModal = ({ visible, onClose, servicoSelecionado }) => {
             footer={null}
             destroyOnClose
         >
-            <TituloModal titulo={'Editar Serviço'} />
+            <TituloModal 
+                titulo={'Editar Serviço'} />
 
             <Form
                 initialValues={servicoSelecionado}
@@ -54,12 +53,13 @@ const ServicoEditModal = ({ visible, onClose, servicoSelecionado }) => {
                 onFinish={submitForm}
             >
                 <Row>
+
                     <Col md={24} xs={24}>
                         <Form.Item
-                            name="Servico"
                             label="Descrição do serviço"
+                            name="Descricao"
                             rules={[
-                                { required: true, message: messages.campoObrigatorio }
+                                { required: true, message: messages.CampoObrigatorio }
                             ]}
                         >
                             <Input.TextArea
@@ -70,26 +70,15 @@ const ServicoEditModal = ({ visible, onClose, servicoSelecionado }) => {
                             />
                         </Form.Item>
                     </Col>
+
                 </Row>
+
                 <Row gutter={10}>
-                    <Col md={8} xs={8}>
-                        <Form.Item
-                            name="Data"
-                            label="Data de Cadastro"
-                            rules={[{ required: true, message: messages.campoObrigatorio }]}
-                        >
-                            <Space direction="vertical">
-                                <DatePicker
-                                    format={'DD/MM/YYYY'}
-                                    onChange={(date, dateString) => setData(dateString)}
-                                    defaultValue={moment(servicoSelecionado?.Data, 'DD/MM/YYYY')} />
-                            </Space>
-                        </Form.Item>
-                    </Col>
+                    
                     <Col md={4} xs={4}>
                         <Form.Item
-                            name="Pago"
                             label="Pago"
+                            name="Pago"
                         >
                             <Switch
                                 defaultChecked={servicoSelecionado?.Pago === 'Sim'}
@@ -101,11 +90,11 @@ const ServicoEditModal = ({ visible, onClose, servicoSelecionado }) => {
                     </Col>
                     {
                         pago &&
-                        <Col md={8} xs={8}>
+                        <Col md={6} xs={8}>
                             <Form.Item
-                                name="Valor"
                                 label="Valor"
-                                rules={[{ required: pago, message: messages.campoObrigatorio }]}
+                                name="Valor"
+                                rules={[{ required: pago, message: messages.CampoObrigatorio }]}
                             >
                                 <Input
                                     type="number"

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Grid from '../../../../common/components/Grid/Grid';
 import Loading from '../../../../common/components/Loading/Loading';
-import service from '../../../../service';
+import service from '../../../../services/index';
 import tabelas from '../../../../common/Enum/tabelas';
 import HeaderForm from '../../../../common/components/HeaderForm/HeaderForm';
 
@@ -11,28 +11,34 @@ const AmolacaoHistoricoAmolacoes = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+
         setLoading(true);
-        service.app.ref(tabelas.ProdutosAmolados).on('value', (snapshot) => {
-            let produtos = [];
-            let quantidadeTotal = 0;
-            snapshot.forEach((x) => {
-                produtos.push({
-                    Id: x.key,
-                    key: x.key,
-                    Cliente: x.val().Cliente,
-                    Produto: x.val().Produto,
-                    Marca: x.val().Marca,
-                    DataRecebimento: x.val().DataRecebimento,
-                    DataEntrega: x.val().DataEntrega,
-                    Quantidade: x.val().Quantidade,
-                    Valor: x.val().Valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'}),
+        let arrayProdutos = [];
+        let quantidadeTotal = 0;
+
+        service.app.ref(tabelas.ProdutosAmolados).once('value')
+            .then((snapshot) => {
+                snapshot.forEach((produtoAmolado) => {
+                    service.app.ref(tabelas.Amolacao).child(produtoAmolado.val().IdProduto).once('value')
+                        .then((produto) => {
+                            arrayProdutos.push({
+                                Id: produtoAmolado.key,
+                                Cliente: produto.val().Cliente,
+                                Produto: produto.val().Produto,
+                                Marca: produto.val().Marca,
+                                DataRecebimento: produto.val().DataRecebimento,
+                                DataEntrega: produtoAmolado.val().DataEntrega,
+                                Quantidade: produtoAmolado.val().Quantidade,
+                                Valor: produtoAmolado.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                            })
+                            quantidadeTotal += produtoAmolado.val().Quantidade;
+                            setQuantidadeTotal(quantidadeTotal);
+                            setProdutos([]);
+                            setProdutos(arrayProdutos);
+                        })
+                    })
                 });
-                quantidadeTotal = quantidadeTotal + x.val().Quantidade;
-            })
-            setProdutos(produtos);
-            setQuantidadeTotal(quantidadeTotal);
-            setLoading(false);
-        })
+        setLoading(false);
     }, []);
 
     const columns = [

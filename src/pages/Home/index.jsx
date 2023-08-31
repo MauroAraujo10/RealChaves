@@ -3,7 +3,7 @@ import { Row, Col } from 'antd';
 import moment from 'moment';
 import tabelas from '../../common/Enum/tabelas';
 
-import service from '../../service';
+import service from '../../services/index';
 import { FcKindle, FcSupport } from "react-icons/fc";
 
 import HomeCard from '../../common/components/HomeCard/HomeCard';

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { TagStatusEnum } from '../../../common/Enum/TagStatusEnum';
 import Loading from '../../../common/components/Loading/Loading';
 
-import chaveService from '../service/chave.service';
+import ChaveService from '../../../services/chave.service';
 
 import TituloModal from '../../../common/components/TituloModal/TituloModal';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
@@ -58,7 +58,7 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
 
         dto.QuantidadeTotalRecebida = quantidadeTotalRecebida;
 
-        chaveService.postBaixaPedidos(dto)
+        ChaveService.postBaixaPedidos(dto)
             .then(() => {
                 toast.success(messages.cadastradoSucesso('Baixa de Pedido'));
                 setLoading(false);
