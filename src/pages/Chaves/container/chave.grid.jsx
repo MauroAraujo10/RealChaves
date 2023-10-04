@@ -149,7 +149,7 @@ const ChaveGrid = () => {
         <div className="mt-2">
 
             <HeaderForm
-                titulo={'Chaves em estoque'}
+                titulo={'Estoque de Chaves'}
                 listaCaminhos={['Chaves']}
             />
 

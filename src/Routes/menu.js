@@ -61,102 +61,107 @@ export default function Routes({ configuracoes }) {
 
     return (
         <Menu
-            mode="inline"
-            theme={theme}
-            disabled={outOfAir}
-            openKeys={openKeys}
-            onOpenChange={onOpenChange}>
-            <Menu.Item key="Home" onClick={(e) => HandleClickLink(e, Rotas.Home)} icon={<AiOutlineHome />}>
-                Início
-            </Menu.Item>
-            <SubMenu key="Chaves" icon={<VscKey />} title="Chaves">
-                <Menu.Item key="Chaves.Grid" onClick={(e) => HandleClickLink(e, Rotas.Chaves)} icon={<AiOutlineTable />}>
-                    Tabela
-                </Menu.Item>
-                <Menu.Item key="Chaves.Cadastro" onClick={(e) => HandleClickLink(e, Rotas.ChavesCadastro)} icon={<AiOutlinePlusSquare />}>
-                    Cadastro
-                </Menu.Item>
+         mode="horizontal"
+         theme={theme}>
 
-                <SubMenu key="Chaves.Estoque" icon={<AiOutlineFileDone />} title="Estoque">
-                    <Menu.Item key="Chaves.Estoque.Pedido" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoquePedido)} >
-                        Fazer pedido
-                    </Menu.Item>
-                    <Menu.Item key="Chaves.Estoque.TabelaPedido" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoqueTabelaPedido)} >
-                        Tabela de Pedidos
-                    </Menu.Item>
-                </SubMenu>
+        </Menu>
+        // <Menu
+        //     mode="inline"
+        //     theme={theme}
+        //     disabled={outOfAir}
+        //     openKeys={openKeys}
+        //     onOpenChange={onOpenChange}>
+        //     <Menu.Item key="Home" onClick={(e) => HandleClickLink(e, Rotas.Home)} icon={<AiOutlineHome />}>
+        //         Início
+        //     </Menu.Item>
+        //     <SubMenu key="Chaves" icon={<VscKey />} title="Chaves">
+        //         <Menu.Item key="Chaves.Grid" onClick={(e) => HandleClickLink(e, Rotas.Chaves)} icon={<AiOutlineTable />}>
+        //             Tabela
+        //         </Menu.Item>
+        //         <Menu.Item key="Chaves.Cadastro" onClick={(e) => HandleClickLink(e, Rotas.ChavesCadastro)} icon={<AiOutlinePlusSquare />}>
+        //             Cadastro
+        //         </Menu.Item>
 
-                <SubMenu key="Chaves.Historico" icon={<AiOutlineRead />} title="Histórico">
-                    <Menu.Item key="Chaves.Historico.Copia" onClick={(e) => HandleClickLink(e, Rotas.ChavesHistoricoCopias)} icon={<AiOutlineSnippets />}>
-                        Cópias
-                    </Menu.Item>
-                    <Menu.Item key="Chaves.Historico.Descarte" onClick={(e) => HandleClickLink(e, Rotas.ChavesHistoricoDescarte)} icon={<AiOutlineDownSquare />}>
-                        Descarte
-                    </Menu.Item>
-                    <Menu.Item key="Chaves.Historico.PedidoEstoque" onClick={(e) => HandleClickLink(e, Rotas.ChavesHistoricoPedidoEstoque)} icon={<AiOutlineHdd />}>
-                        Pedido Estoque
-                    </Menu.Item>
-                </SubMenu>
-            </SubMenu>
+        //         <SubMenu key="Chaves.Estoque" icon={<AiOutlineFileDone />} title="Estoque">
+        //             <Menu.Item key="Chaves.Estoque.Pedido" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoquePedido)} >
+        //                 Fazer pedido
+        //             </Menu.Item>
+        //             <Menu.Item key="Chaves.Estoque.TabelaPedido" onClick={(e) => HandleClickLink(e, Rotas.ChavesEstoqueTabelaPedido)} >
+        //                 Tabela de Pedidos
+        //             </Menu.Item>
+        //         </SubMenu>
 
-            <SubMenu key="Amolacao" icon={<AiOutlineFork />} title="Amolação">
-                <Menu.Item key="Amolacao.Estoque" onClick={(e) => HandleClickLink(e, Rotas.AmolacaoEstoque)} icon={<AiOutlineTable />}>
-                    Estoque
-                </Menu.Item>
-                <Menu.Item key="Amolacao.Cadastro" onClick={(e) => HandleClickLink(e, Rotas.AmolacaoCadastro)} icon={<AiOutlinePlusSquare />}>
-                    Cadastro
-                </Menu.Item>
-                <SubMenu key="Amolacao.Historico" icon={<AiOutlineRead />} title="Histórico">
-                    <Menu.Item key="Amolacao.Historico.Amolacoes" onClick={(e) => HandleClickLink(e, Rotas.AmolacaoHistoricoAmolacoes)} icon={<AiOutlineSnippets />}>
-                        Amolações
-                    </Menu.Item>
-                </SubMenu>
-            </SubMenu>
+        //         <SubMenu key="Chaves.Historico" icon={<AiOutlineRead />} title="Histórico">
+        //             <Menu.Item key="Chaves.Historico.Copia" onClick={(e) => HandleClickLink(e, Rotas.ChavesHistoricoCopias)} icon={<AiOutlineSnippets />}>
+        //                 Cópias
+        //             </Menu.Item>
+        //             <Menu.Item key="Chaves.Historico.Descarte" onClick={(e) => HandleClickLink(e, Rotas.ChavesHistoricoDescarte)} icon={<AiOutlineDownSquare />}>
+        //                 Descarte
+        //             </Menu.Item>
+        //             <Menu.Item key="Chaves.Historico.PedidoEstoque" onClick={(e) => HandleClickLink(e, Rotas.ChavesHistoricoPedidoEstoque)} icon={<AiOutlineHdd />}>
+        //                 Pedido Estoque
+        //             </Menu.Item>
+        //         </SubMenu>
+        //     </SubMenu>
 
-            <SubMenu key="Servicos" icon={<AiOutlineTool />} title="Serviços">
-                <Menu.Item key="Servicos.Grid" onClick={(e) => HandleClickLink(e, Rotas.Servico)} icon={<AiOutlineTable />}>
-                    Tabela
-                </Menu.Item>
-                <Menu.Item key="Servicos.New" onClick={(e) => HandleClickLink(e, Rotas.ServicoNew)} icon={<AiOutlinePlusSquare />}>
-                    Cadastro
-                </Menu.Item>
-            </SubMenu>
+        //     <SubMenu key="Amolacao" icon={<AiOutlineFork />} title="Amolação">
+        //         <Menu.Item key="Amolacao.Estoque" onClick={(e) => HandleClickLink(e, Rotas.AmolacaoEstoque)} icon={<AiOutlineTable />}>
+        //             Estoque
+        //         </Menu.Item>
+        //         <Menu.Item key="Amolacao.Cadastro" onClick={(e) => HandleClickLink(e, Rotas.AmolacaoCadastro)} icon={<AiOutlinePlusSquare />}>
+        //             Cadastro
+        //         </Menu.Item>
+        //         <SubMenu key="Amolacao.Historico" icon={<AiOutlineRead />} title="Histórico">
+        //             <Menu.Item key="Amolacao.Historico.Amolacoes" onClick={(e) => HandleClickLink(e, Rotas.AmolacaoHistoricoAmolacoes)} icon={<AiOutlineSnippets />}>
+        //                 Amolações
+        //             </Menu.Item>
+        //         </SubMenu>
+        //     </SubMenu>
 
-            <SubMenu key="Estatisticas" icon={<AiOutlineLineChart />} title="Estatísticas">
-                <Menu.Item key="Estatisticas.Chave" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasChave)} icon={<VscKey />}>
-                    Chaves
-                </Menu.Item>
-                <Menu.Item key="Estatisticas.Alicate" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasAmolacoes)} icon={<AiOutlineFork />}>
-                    Amolações
-                </Menu.Item>
-                <Menu.Item key="Estatisticas.servico" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasServicos)} icon={<AiOutlineTool />}>
-                    Serviços
-                </Menu.Item>
-            </SubMenu>
+        //     <SubMenu key="Servicos" icon={<AiOutlineTool />} title="Serviços">
+        //         <Menu.Item key="Servicos.Grid" onClick={(e) => HandleClickLink(e, Rotas.Servico)} icon={<AiOutlineTable />}>
+        //             Tabela
+        //         </Menu.Item>
+        //         <Menu.Item key="Servicos.New" onClick={(e) => HandleClickLink(e, Rotas.ServicoNew)} icon={<AiOutlinePlusSquare />}>
+        //             Cadastro
+        //         </Menu.Item>
+        //     </SubMenu>
 
-            <SubMenu key="Configuracoes" icon={<AiOutlineSetting />} title={"Configurações"}>
-                <Menu.Item key="Theme">
-                    Tema
-                        <div className="f-right">
-                        <Switch
-                            defaultChecked={configuracoes?.DarkTheme}
-                            checkedChildren="Dark"
-                            unCheckedChildren="Light"
-                            onChange={changeTheme}>
-                        </Switch>
-                    </div>
-                </Menu.Item>
-                {/* <Menu.Item>
-                    Paginação
-                    <div className="f-right">
-                        <Switch
-                            checkedChildren="Sim"
-                            unCheckedChildren="Não"
-                            onChange={changePagination}>
-                        </Switch>
-                    </div>
-                </Menu.Item> */}
-            </SubMenu>
-        </Menu >
+        //     <SubMenu key="Estatisticas" icon={<AiOutlineLineChart />} title="Estatísticas">
+        //         <Menu.Item key="Estatisticas.Chave" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasChave)} icon={<VscKey />}>
+        //             Chaves
+        //         </Menu.Item>
+        //         <Menu.Item key="Estatisticas.Alicate" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasAmolacoes)} icon={<AiOutlineFork />}>
+        //             Amolações
+        //         </Menu.Item>
+        //         <Menu.Item key="Estatisticas.servico" onClick={(e) => HandleClickLink(e, Rotas.EstatisticasServicos)} icon={<AiOutlineTool />}>
+        //             Serviços
+        //         </Menu.Item>
+        //     </SubMenu>
+
+        //     <SubMenu key="Configuracoes" icon={<AiOutlineSetting />} title={"Configurações"}>
+        //         <Menu.Item key="Theme">
+        //             Tema
+        //                 <div className="f-right">
+        //                 <Switch
+        //                     defaultChecked={configuracoes?.DarkTheme}
+        //                     checkedChildren="Dark"
+        //                     unCheckedChildren="Light"
+        //                     onChange={changeTheme}>
+        //                 </Switch>
+        //             </div>
+        //         </Menu.Item>
+        //         {/* <Menu.Item>
+        //             Paginação
+        //             <div className="f-right">
+        //                 <Switch
+        //                     checkedChildren="Sim"
+        //                     unCheckedChildren="Não"
+        //                     onChange={changePagination}>
+        //                 </Switch>
+        //             </div>
+        //         </Menu.Item> */}
+        //     </SubMenu>
+        // </Menu >
     );
 }

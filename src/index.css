@@ -15,6 +15,14 @@ code {
     monospace;
 }
 
+.container-form{
+  background-color: #FFF;
+  border-radius: 5px;
+  padding: 20px !important;
+  margin: 20px !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
 .container{
   background-color: #FFF;
   border-radius: 5px;
@@ -28,15 +36,6 @@ code {
   border-radius: 5px;
   margin-bottom: 20px;
   padding: 10px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-}
-
-.estatistica-card{
-  display: flex;
-  flex-direction: column; 
-  border-radius: 7px;
-  padding: 10px;
-  background: #fff;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
@@ -62,6 +61,10 @@ svg:hover{
   margin-top: 20px;
 }
 
+.mt-100{
+  margin-top: 100px;
+}
+
 .mr-1{
   margin-right: 10px;
 }
@@ -83,11 +86,6 @@ svg:hover{
   color: #FFF !important;
 }
 
-.grid-numeroSerie th{
-  background-color: #94A1A6 !important;
-  color: #FFF !important;
-}
-
 .t-center{
   text-align: center;
 }
@@ -102,10 +100,6 @@ svg:hover{
 
 .iconDescarte{
   color: #df6706;
-}
-
-.iconPedidoEstoque{
-  color: rgb(12, 41, 31);
 }
 
 .iconEdit{
@@ -133,18 +127,9 @@ svg:hover{
   color: #FFF !important;
 }
 
-/* .anticon{
-  color: #000 !important;
-}
-
-.anticon :hover{
-  color: #888 !important;
-} */
-
 .color-white{
   color: #FFF !important;
 }
-
 
 .Tabela-Lista-Pedidos th{
   background-color: #004878 !important;

@@ -64,13 +64,18 @@ const ChaveCadastro = () => {
     }
 
     return (
-        <div className="container mt-2">
+        <div className="mt-2">
+
             <HeaderForm
                 titulo={'Cadastrar chave'}
                 listaCaminhos={['Chaves', 'Cadastrar chave']}
             />
 
-            <Form layout="vertical" onFinish={submitForm}>
+            <Form 
+                layout="vertical" 
+                onFinish={submitForm}
+                className='container-form'
+            >
 
                 <Row gutter={10} >
 
@@ -147,6 +152,7 @@ const ChaveCadastro = () => {
                             {imgSrc && (
                                 <Image
                                     width={200}
+                                    height={100}
                                     alt="Imagem da Chave"
                                     preview={{ visible: false }}
                                     style={{ border: '1px dashed #CCC' }}

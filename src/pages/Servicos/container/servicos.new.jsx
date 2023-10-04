@@ -36,7 +36,7 @@ const ServicosCadastro = () => {
     }
 
     return (
-        <div className="container mt-2">
+        <div className="mt-2">
 
             <HeaderForm
                 titulo={'Cadastrar Serviço'}
@@ -46,6 +46,7 @@ const ServicosCadastro = () => {
             <Form
                 layout="vertical"
                 onFinish={submitForm}
+                className='container-form'
             >
                 <Row gutter={12}>
 
@@ -65,7 +66,7 @@ const ServicosCadastro = () => {
                         </Form.Item>
                     </Col>
                     
-                    <Col md={2} sm={3} xs={8}>
+                    <Col md={1} sm={3} xs={8}>
                         <Form.Item
                             label="Pago"
                             name="Pago">
@@ -80,7 +81,7 @@ const ServicosCadastro = () => {
 
                     </Col>
 
-                    <Col md={4} sm={8} xs={12}>
+                    <Col md={2} sm={8} xs={12}>
                         {pago &&
                             <Form.Item
                                 label="Valor"

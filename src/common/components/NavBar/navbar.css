@@ -1,0 +1,117 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    text-transform: capitalize;
+    text-decoration: none;
+}
+
+header{
+    position: fixed;
+    top: 0; left: 0; right: 0;   
+    background: rgb(0, 21, 41);;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+    padding: 5px 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+}
+
+header .navbar-logo{
+    font-weight: bold;
+    font-size: 15px;
+    color: #FFF; 
+}
+
+header .navbar ul{
+    list-style: none;
+}
+
+header .navbar ul li{
+    position: relative;
+    float: left;
+}
+
+header .navbar ul li a{
+    font-size: 13px;
+    padding: 20px;
+    color: #FFF;
+    display: block;
+}
+
+header .navbar ul li a:hover{
+    background: #CCC;
+    color: #000;
+}
+
+header .navbar ul li ul{
+    position: absolute;
+    left: 0;
+    width: 200px;
+    background: rgb(0, 21, 41);;
+    display: none;
+}
+
+header .navbar ul li ul li{
+    width: 100%;
+    border-top: 1px solid rgba(0, 0, 0, .1);
+    color: #FFF;
+}
+
+header .navbar ul li ul li ul{
+    left: 200px;
+    top: 0;
+}
+
+header .navbar ul li:hover > ul{
+    display: initial;
+}
+
+#menu-bar{
+    display: none;
+}
+
+header label{
+    font-size: 15px;
+    color:#FFF;
+    cursor: pointer;
+    display: none;
+}
+
+
+@media(max-width:991px){
+    header{
+        padding: 20px;
+    }
+
+    header label{
+        display: initial;
+    }
+
+    header .navbar{
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        background: #FFF;
+        border-top: 1px solid rgba(0,0,0,.1);
+        display: none;
+    }
+
+    header .navbar ul li {
+        width: 100%;
+        background: rgb(0, 21, 41);
+    }
+    header .navbar ul li ul{
+        position: relative;
+        width: 100%;
+    }
+   
+    header .navbar ul li ul li ul{
+        width: 100%;
+        left: 0;
+    }
+    #menu-bar:checked ~ .navbar{
+        display: initial;
+    }
+}

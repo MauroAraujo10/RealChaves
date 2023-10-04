@@ -41,14 +41,18 @@ const AmolacaoCadastro = () => {
     }
     
     return (
-        <div className="container mt-2">
+        <div className="mt-2">
 
             <HeaderForm
                 titulo={'Cadastrar Produto'}
                 listaCaminhos={['Amolação', 'Cadastro']}
             />
 
-            <Form layout="vertical" onFinish={submitForm}>
+            <Form 
+                layout="vertical" 
+                onFinish={submitForm}
+                className='container-form'
+            >
 
                 <Row gutter={10}>
 

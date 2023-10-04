@@ -6,11 +6,11 @@ import { AiOutlineHome } from 'react-icons/ai'
 
 const HeaderForm = ({ titulo, listaCaminhos }) => {
     return (
-        <div className="t-center">
+        <div className="t-center mt-100">
 
             <h1>{titulo}</h1>
 
-            <Breadcrumb style={{ marginBottom: '20px' }}>
+            <Breadcrumb className='mb-2'>
 
                 <Breadcrumb.Item>
                     <Link to={Rotas.Home}>

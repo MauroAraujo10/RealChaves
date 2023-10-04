@@ -7,7 +7,7 @@ import service from './services/index';
 import tabelas from './common/Enum/tabelas';
 import "react-toastify/dist/ReactToastify.css";
 
-import Header from './header';
+import NavBar from './common/components/NavBar/NavBar';
 import Routes from './Routes/routes';
 
 function App() {
@@ -42,7 +42,7 @@ function App() {
 
   return (
     <HashRouter>
-      <Header />
+      <NavBar />
       {
         loading ? <Loading /> :
           <>

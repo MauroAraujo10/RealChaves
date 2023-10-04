@@ -92,9 +92,9 @@ const Home = () => {
         <>
             {loading ? <Loading /> :
                 <>
-                    <Row style={{ display: "flex", justifyContent: 'space-around' }} className="mt-2">
+                    <Row style={{ display: "flex", justifyContent: 'space-around', marginTop: '100px'}}>
 
-                        <Col xs={22} sm={22} md={22} lg={7} xl={7} xxl={7}>
+                        <Col xs={24} sm={24} md={24} lg={8} xl={7} xxl={8}>
                             <HomeCard
                                 icon={<img src={KeyIcon} alt={'icon'} width={40} height={40} />}
                                 title='Cópias de Chaves'
@@ -103,7 +103,7 @@ const Home = () => {
                                 text="Cópias que foram feitas hoje"
                             />
                         </Col>
-                        <Col xs={22} sm={22} md={22} lg={7} xl={7} xxl={7}>
+                        <Col xs={24} sm={24} md={24} lg={8} xl={7} xxl={8}>
                             <HomeCard
                                 icon={<FcReuse size={40} />}
                                 title='Descarte de Chaves'
@@ -112,7 +112,7 @@ const Home = () => {
                                 text="Chaves que foram descartadas hoje"
                             />
                         </Col>
-                        <Col xs={22} sm={22} md={22} lg={7} xl={7} xxl={7}>
+                        <Col xs={24} sm={24} md={24} lg={8} xl={7} xxl={8}>
                             <HomeCard
                                 icon={<FcFilingCabinet size={40} />}
                                 title='Pedido de Estoque'
@@ -124,7 +124,7 @@ const Home = () => {
                     </Row>
 
                     <Row style={{ display: "flex", justifyContent: 'space-around' }} className="mt-2">
-                        <Col xs={22} sm={22} md={22} lg={7} xl={7} xxl={7}>
+                        <Col xs={24} sm={24} md={24} lg={8} xl={7} xxl={8}>
                             <HomeCard
                                 icon={<FcKindle size={40} />}
                                 title='Produtos amolados'
@@ -134,7 +134,7 @@ const Home = () => {
                             />
                         </Col>
 
-                        <Col xs={22} sm={22} md={22} lg={7} xl={7} xxl={7}>
+                        <Col xs={24} sm={24} md={24} lg={8} xl={7} xxl={8}>
                             <HomeCard
                                 icon={<FcSupport size={40} />}
                                 title='Serviços Realizados'
