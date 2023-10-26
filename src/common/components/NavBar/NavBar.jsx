@@ -6,9 +6,9 @@ import './navbar.css';
 import { VscKey } from "react-icons/vsc";
 import {
     AiOutlineTable,
-    AiOutlinePlusSquare,
     AiOutlineTool,
     AiOutlinePlus,
+    AiOutlineDatabase,
     AiOutlineAppstore,
     AiOutlineKey,
     AiOutlineMenu
@@ -46,7 +46,18 @@ const NavBar = () => {
                                 </Link> 
                             </li>
                             <li> 
-                                <Link>Estoque</Link>
+                                <Link to={Rotas.ChavePedidoEstoque}>
+                                    <AiOutlineDatabase size={16} className='mr-1' />
+                                    Pedidos de estoque
+                                </Link>
+                                <ul>
+                                    <li>
+                                        <Link to={Rotas.ChavePedidoEstoqueCadastro}>
+                                            <AiOutlinePlus size={16} className='mr-1'/>
+                                            Novo pedido 
+                                        </Link>
+                                    </li>
+                                </ul>
                                 
                             </li>
                         </ul>
@@ -73,13 +84,13 @@ const NavBar = () => {
                         <ul>
                             <li>
                                 <Link to={Rotas.Servico}>
-                                <AiOutlineTable size={20} className='mr-1'/> 
+                                <AiOutlineTable size={16} className='mr-1'/> 
                                     Tabela
                                 </Link>
                             </li>
                             <li>
                                 <Link to={Rotas.ServicoNew}>
-                                <AiOutlinePlusSquare size={20} className='mr-1'/> 
+                                <AiOutlinePlus size={16} className='mr-1'/> 
                                     Cadastrar
                                 </Link>
                             </li>
@@ -90,26 +101,26 @@ const NavBar = () => {
                         <ul>
                             <li>
                                 <Link to={Rotas.EstatisticasChave}>
-                                <AiOutlineKey size={20} className='mr-1'/> 
+                                <AiOutlineKey size={16} className='mr-1'/> 
                                     Chaves
                                 </Link>
                             </li>
                             <li>
                                 <Link to={Rotas.EstatisticasAmolacoes}>
-                                <AiOutlineAppstore size={20} className='mr-1'/> 
+                                <AiOutlineAppstore size={16} className='mr-1'/> 
                                     Produtos
                                 </Link>
                             </li>
                             <li>
                                 <Link to={Rotas.EstatisticasServicos}>
-                                <AiOutlineTool size={20} className='mr-1'/> 
+                                <AiOutlineTool size={16} className='mr-1'/> 
                                     Serviços
                                 </Link>
                             </li>
                         </ul>
                 </li>
                 <li>
-                    <Link>Configurações</Link>
+                    <Link to={Rotas.Configuracoes}>Configurações</Link>
                 </li>
                 </ul>
             </nav>

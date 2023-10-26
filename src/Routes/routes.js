@@ -10,8 +10,8 @@ import OutofAir from '../pages/Erro/outOfAir';
 import ChavesGrid from '../pages/Chaves/container/chave.grid';
 import ChavesNew from '../pages/Chaves/container/chave.new';
 
-import ChaveEstoqueFazerPedido from '../pages/Chaves/container/estoque/Chave.Estoque.FazerPedido';
-import ChaveEstoqueTabelaPedido from '../pages/Chaves/container/estoque/chave.estoque.TabelaPedido';
+import ChavePedidoEstoque from '../pages/Chaves/container/estoque/Chave.PedidoEstoque.Grid';
+import ChavePedidoEstoqueCadastro from '../pages/Chaves/container/estoque/Chave.PedidoEstoque.New';
 
 import ChavesHistoricoCopias from '../pages/Chaves/container/historico/container/Chaves.Historico.Copia';
 import ChavesHistoricoDescarte from '../pages/Chaves/container/historico/container/Chaves.Historico.Descarte';
@@ -27,6 +27,8 @@ import ServicosNew from '../pages/Servicos/container/servicos.new';
 import EstatisticasChaves from '../pages/Estatistica/Chaves/estatistica.chave';
 import EstatisticasAmolacoes from '../pages/Estatistica/Amolacoes/estatistica.Amolacoes';
 import EstatisticasServicos from '../pages/Estatistica/Servicos/estatistica.servicos';
+
+import Configuracoes from '../pages/Configuracao/configuracao';
 
 const Routes = ({ configuracoes }) => {
     const [outOfAir, setOutOfAir] = useState();
@@ -50,8 +52,10 @@ const Routes = ({ configuracoes }) => {
 
                      <Route exact path={Rotas.Chaves} component={ChavesGrid} />
                      <Route exact path={Rotas.ChavesCadastro} component={ChavesNew} />
-                     <Route exact path={Rotas.ChavesEstoqueTabelaPedido} component={ChaveEstoqueTabelaPedido} />
-                     <Route exact path={Rotas.ChavesEstoquePedido} component={ChaveEstoqueFazerPedido} />
+
+                     <Route exact path={Rotas.ChavePedidoEstoque} component={ChavePedidoEstoque} />
+                     <Route exact path={Rotas.ChavePedidoEstoqueCadastro} component={ChavePedidoEstoqueCadastro} />
+
                      <Route exact path={Rotas.ChavesHistoricoCopias} component={ChavesHistoricoCopias} />
                      <Route exact path={Rotas.ChavesHistoricoDescarte} component={ChavesHistoricoDescarte} />
                      <Route exact path={Rotas.ChavesHistoricoPedidoEstoque} component={ChavesHistoricoPedidoEstoque} />
@@ -66,6 +70,8 @@ const Routes = ({ configuracoes }) => {
                      <Route exact path={Rotas.EstatisticasChave} component={EstatisticasChaves} />
                      <Route exact path={Rotas.EstatisticasAmolacoes} component={EstatisticasAmolacoes} />
                      <Route exact path={Rotas.EstatisticasServicos} component={EstatisticasServicos} />
+
+                     <Route exact path={Rotas.Configuracoes} component={Configuracoes} />
                      
                      <Route path="*" component={Erro} />
                  </Switch>

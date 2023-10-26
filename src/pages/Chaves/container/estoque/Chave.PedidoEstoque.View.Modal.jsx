@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, List, Badge } from 'antd'
 
-import TituloModal from '../../../common/components/TituloModal/TituloModal';
-import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
+import TituloModal from '../../../../common/components/TituloModal/TituloModal';
+import BotaoCadastrar from '../../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
 const ChaveEstoqueViewPedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
     const [data, setData] = useState([]);
@@ -17,7 +17,9 @@ const ChaveEstoqueViewPedidoModal = ({ visible, onClose, pedidoSelecionado }) =>
                             <Badge count={index + 1} />
                         </div>
                         <div>
-                            Marca: <b>{x.Marca}</b> - Número de Série: <b>{x.NumeroSerie}</b>
+                            Marca: <b>{x.Marca}</b>
+                            <br />
+                            Número de Série: <b>{x.NumeroSerie}</b>
                             <br />
                             Quantidade solicitada: <b>{x.QuantidadeSolicitada}</b>
                         </div>

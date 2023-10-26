@@ -1,17 +1,105 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Input, Button, Table } from 'antd';
 
 import TotalRegistros from '../TotalRegistros/TotalRegistros';
 import { AiOutlineSearch } from "react-icons/ai";
 
+import Highlighter from 'react-highlight-words';
+import { Button, Input, Space, Table } from 'antd';
+
 const Grid = ({ dataSource, columns, QuantidadeTotal }) => {
-    const [column, setColumn] = useState([]);
+    const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
+    const [column, setColumn] = useState([]);
     const searchInput = useRef(null);
+
+    const handleSearch = (selectedKeys, confirm, dataIndex) => {
+        confirm();
+        setSearchText(selectedKeys[0]);
+        setSearchedColumn(dataIndex);
+      };
+
+      const handleReset = (clearFilters) => {
+        clearFilters();
+        setSearchText('');
+      };
+
+      const getColumnSearchProps = (dataIndex) => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+          <div
+            style={{
+              padding: 8,
+            }}
+            onKeyDown={(e) => e.stopPropagation()}
+          >
+            <Input
+              ref={searchInput}
+              placeholder={`Buscar ${dataIndex}`}
+              value={selectedKeys[0]}
+              onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+              onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+              style={{
+                marginBottom: 8,
+                display: 'block',
+              }}
+            />
+            <Space>
+              <Button
+                type="primary"
+                onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+                icon={<AiOutlineSearch />}
+                size="small"
+                style={{
+                  width: 90,
+                }}
+              >
+                Buscar
+              </Button>
+              <Button
+                onClick={() => clearFilters && handleReset(clearFilters)}
+                size="small"
+                style={{
+                  width: 90,
+                }}
+              >
+                Resetar
+              </Button>
+            </Space>
+          </div>
+        ),
+        filterIcon: (filtered) => (
+          <AiOutlineSearch
+            style={{
+              color: filtered ? '#1677ff' : undefined,
+            }}
+          />
+        ),
+        onFilter: (value, record) =>
+          record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+        onFilterDropdownOpenChange: (visible) => {
+          if (visible) {
+            setTimeout(() => searchInput.current?.select(), 100);
+          }
+        },
+        render: (text) =>
+        searchedColumn === dataIndex ? (
+          <Highlighter
+            highlightStyle={{
+              backgroundColor: '#ffc069',
+              padding: 0,
+            }}
+            searchWords={[searchText]}
+            autoEscape
+            textToHighlight={text ? text.toString() : ''}
+          />
+        ) : (
+          text
+        ),
+      });
+
 
     useEffect(() => {
         let newColumns = [];
-        columns.map((x, index) => {
+        columns.forEach((x) => {
             if (x.key === 'acoes')
                 newColumns.push({
                     title: x.title,
@@ -28,65 +116,7 @@ const Grid = ({ dataSource, columns, QuantidadeTotal }) => {
                 });
         })
         setColumn(newColumns);
-    }, [dataSource]);
-
-    const getColumnSearchProps = (dataIndex) => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-            <div style={{ padding: 8 }} >
-                <Input
-                    ref={searchInput}
-                    placeholder={`Buscar  ${dataIndex}`}
-                    value={selectedKeys[0]}
-                    onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                    style={{
-                        marginBottom: 8,
-                        display: 'block',
-                    }}
-                />
-                <Button
-                    type="primary"
-                    onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                    icon={<AiOutlineSearch className="mr-1" size={16} />}
-                    size="small"
-                    style={{ width: 90, marginRight: '10px' }}
-                >
-                    Buscar
-              </Button>
-                <Button
-                    onClick={() => clearFilters && handleReset(clearFilters)}
-                    size="small"
-                    style={{ width: 90 }}
-                >
-                    Resetar Filtros
-              </Button>
-            </div>
-        ),
-        filterIcon: (filtered) => (
-            <AiOutlineSearch
-                size={16}
-                style={{ color: filtered ? '#FFF' : undefined }}
-            />
-        ),
-        onFilter: (value, record) =>
-            record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-        onFilterDropdownVisibleChange: (visible) => {
-            if (visible) {
-                setTimeout(() => searchInput.current?.select(), 100);
-            }
-        },
-        render: (text) =>
-            searchedColumn === dataIndex ? ( <></>) : ( text),
-    });
-
-    const handleSearch = (selectedKeys, confirm, dataIndex) => {
-        confirm();
-        setSearchedColumn(dataIndex);
-    };
-
-    const handleReset = (clearFilters) => {
-        clearFilters();
-    };
+    },[]);
 
     return (
         <div className="container">
@@ -99,7 +129,6 @@ const Grid = ({ dataSource, columns, QuantidadeTotal }) => {
                 bordered
                 dataSource={dataSource}
                 columns={column}
-                pagination={true}
             />
         </div>
     );

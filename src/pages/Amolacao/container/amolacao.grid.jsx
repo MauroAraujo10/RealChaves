@@ -132,8 +132,8 @@ const AmolacaoGrid = () => {
         <div className="mt-2">
 
             <HeaderForm
-                titulo={'Produtos em estoque'}
-                listaCaminhos={['Amolação', 'Estoque']}
+                titulo={'Tabela de Amolações'}
+                listaCaminhos={['Amolação']}
             />
             {
                 loading ?

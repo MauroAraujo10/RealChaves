@@ -7,7 +7,6 @@ import Grid from '../../../../../common/components/Grid/Grid';
 import Service from '../../../../../services';
 import tabelas from '../../../../../common/Enum/tabelas';
 
-import PedidoEstoqueHistoricoViewModal from '../components/pedidoEstoque.Historico.view.modal';
 import { AiOutlineEye } from "react-icons/ai";
 
 const ChavesHistoricoPedidoEstoque = () => {
@@ -27,8 +26,8 @@ const ChavesHistoricoPedidoEstoque = () => {
                     key: x.key,
                     DataPedido: x.val().DataPedido,
                     DataBaixa: x.val().DataBaixa,
-                    QuantidadeSolicitada: x.val().QuantidadePedidaTotal,
-                    QuantidadeRecebida: x.val().QuantidadeRecebidaTotal,
+                    QuantidadeTotalSolicitada: x.val().QuantidadeTotalSolicitada,
+                    QuantidadeTotalRecebida: x.val().QuantidadeTotalRecebida,
                     Empresa: x.val().Empresa,
                     Valor: x.val()?.Valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
                     ListaChaves: x.val().ListaChaves ? x.val().ListaChaves : [],
@@ -50,8 +49,8 @@ const ChavesHistoricoPedidoEstoque = () => {
     const columns = [
         { title: 'Data do Pedido', dataIndex: 'DataPedido', key: 'DataPedido', width: '10%' },
         { title: 'Data da Baixa', dataIndex: 'DataBaixa', key: 'DataBaixa', width: '10%' },
-        { title: 'Quantidade Solicitada', dataIndex: 'QuantidadeSolicitada', key: 'QuantidadeSolicitada', width: '10%' },
-        { title: 'Quantidade Entregue', dataIndex: 'QuantidadeRecebida', key: 'QuantidadeRecebida', width: '10%' },
+        { title: 'Quantidade Solicitada', dataIndex: 'QuantidadeTotalSolicitada', key: 'QuantidadeTotalSolicitada', width: '10%' },
+        { title: 'Quantidade Entregue', dataIndex: 'QuantidadeTotalRecebida', key: 'QuantidadeTotalRecebida', width: '10%' },
         { title: 'Empresa', dataIndex: 'Empresa', key: 'Empresa', width: '10%' },
         { title: 'Valor', dataIndex: 'Valor', key: 'Valor', width: '10%' },
         { title: 'Status', dataIndex: 'Status', key: 'Status', width: '10%' },
@@ -72,11 +71,14 @@ const ChavesHistoricoPedidoEstoque = () => {
 
     const handleVisualizar = (dto) => {
         setPedidoSelecionado(dto);
-        setPedidoEstoqueViewModal(true);
+        //setPedidoEstoqueViewModal(true);
+        // To Do: Arrumar isso
+        alert('Indisponivel no momento');
     }
 
     return (
-        <div className="t-center mt-2">
+        <div className="mt-2">
+
             <HeaderForm
                 titulo={'Histórico de Baixas em pedidos de estoque'}
                 listaCaminhos={['Chaves', 'Histórico', 'Pedidos de Estoque']}
@@ -90,11 +92,11 @@ const ChavesHistoricoPedidoEstoque = () => {
                         QuantidadeTotal={quantidadeTotal}
                     />
             }
-            <PedidoEstoqueHistoricoViewModal
+            {/* <PedidoEstoqueHistoricoViewModal
                 visible={pedidoEstoqueViewModal}
                 onClose={() => setPedidoEstoqueViewModal(false)}
                 pedidoSelecionado={pedidoSelecionado}
-            />
+            /> */}
         </div>
     );
 }

@@ -5,13 +5,13 @@ import { messages } from '../../../../common/Enum/messages';
 
 import Grid from '../../../../common/components/Grid/Grid';
 import Service from '../../../../services';
-import ChaveService from '../../../../services/chave.service';
+import PedidoEstoqueService from '../../../../services/pedido.estoque.service';
 import tabelas from '../../../../common/Enum/tabelas';
 import Loading from '../../../../common/components/Loading/Loading';
 import HeaderForm from '../../../../common/components/HeaderForm/HeaderForm';
 
-import ChaveEstoqueViewPedidoModal from '../../components/chave.estoque.viewPedido.modal';
-import ChaveEstoqueBaixaPedidoModal from '../../components/chaves.estoque.baixaPedido.modal';
+import ChavePedidoEstoqueViewModal from './Chave.PedidoEstoque.View.Modal';
+import ChavePedidoEstoqueBaixaModal from '../../components/Chave.PedidoEstoque.Baixa.Modal';
 import YesOrNoModal from '../../../../common/components/yesOrNoModal/yesOrNoModal';
 
 import { AiOutlineLike, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
@@ -31,15 +31,19 @@ const ChaveEstoqueTabelaPedido = () => {
             let pedido = [];
             let quantidadeTotal = 0;
             snapshot.forEach((x) => {
-                pedido.push({
-                    Id: x?.key,
-                    key: x?.key,
-                    Chaves: x.val()?.Chaves,
-                    Modelos: x.val()?.Chaves.length ? x.val().Chaves.length : 0,
-                    DataPedido: x.val()?.DataPedido,
-                    QuantidadePedidaTotal: x.val()?.QuantidadePedidaTotal
-                })
-                quantidadeTotal = quantidadeTotal + x.val().QuantidadePedidaTotal
+
+                if (!x.val().Entregue) {
+
+                    pedido.push({
+                        Id: x?.key,
+                        Chaves: x.val()?.Chaves,
+                        Modelos: x.val()?.Chaves.length ? x.val().Chaves.length : 0,
+                        DataPedido: x.val()?.DataPedido,
+                        QuantidadeTotal: x.val()?.QuantidadeTotal
+                    })
+                    quantidadeTotal = quantidadeTotal + x.val().QuantidadePedidaTotal
+
+                }
             })
             setPedidosEstoque(pedido);
             setQuantidadeTotal(quantidadeTotal);
@@ -60,8 +64,8 @@ const ChaveEstoqueTabelaPedido = () => {
         }
     }
 
-    const deletarPedidoEstoque = (id) => {
-        ChaveService.app.ref(tabelas.PedidoEstoque).child(id).remove()
+    const deletarPedidoEstoque = async (id) => {
+        await PedidoEstoqueService.HardDeletePedidoEstoque(id)
             .then(() => {
                 toast.success(messages.exclusaoSucesso);
                 setYesOrNoModalVisible(false);
@@ -74,7 +78,7 @@ const ChaveEstoqueTabelaPedido = () => {
     const columns = [
         { title: 'Data do Pedido', dataIndex: 'DataPedido', key: 'DataPedido', width: '10%' },
         { title: 'Modelos', dataIndex: 'Modelos', key: 'Modelos', width: '10%' },
-        { title: 'Quantidade Total', dataIndex: 'QuantidadePedidaTotal', key: 'QuantidadePedidaTotal', width: '10%' },
+        { title: 'Quantidade Total', dataIndex: 'QuantidadeTotal', key: 'QuantidadeTotal', width: '10%' },
         {
             title: 'Ações', key: 'acoes', width: '10%', render: (status, pedido) => (
                 <div style={{ display: 'flex' }}>
@@ -107,9 +111,10 @@ const ChaveEstoqueTabelaPedido = () => {
 
     return (
         <div className="mt-2">
+
             <HeaderForm
-                titulo={'Tabela de Pedidos de Estoque'}
-                listaCaminhos={['Chaves', 'Estoque', 'Tabela de Pedidos de Estoque']}
+                titulo={'Pedidos de Estoque'}
+                listaCaminhos={['Chaves', 'Pedidos de Estoque']}
             />
 
             {
@@ -122,13 +127,13 @@ const ChaveEstoqueTabelaPedido = () => {
                     />
             }
 
-            <ChaveEstoqueViewPedidoModal
+            <ChavePedidoEstoqueViewModal
                 visible={viewProdutoModalVisible}
                 onClose={() => setViewProdutoModalVisible(false)}
                 pedidoSelecionado={pedidoSelecionado}
             />
 
-            <ChaveEstoqueBaixaPedidoModal
+            <ChavePedidoEstoqueBaixaModal
                 visible={baixaProdutoModalVisible}
                 onClose={() => setBaixaProdutoModalVisible(false)}
                 pedidoSelecionado={pedidoSelecionado}

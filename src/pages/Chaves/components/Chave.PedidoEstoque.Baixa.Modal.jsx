@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 
-import { Row, Col, Modal, Form, DatePicker, Input, Table } from 'antd';
+import { Row, Col, Modal, Form, Input, Table } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { toast } from 'react-toastify';
 import { TagStatusEnum } from '../../../common/Enum/TagStatusEnum';
 import Loading from '../../../common/components/Loading/Loading';
 
 import ChaveService from '../../../services/chave.service';
+import PedidoEstoqueService from '../../../services/pedido.estoque.service';
 
 import TituloModal from '../../../common/components/TituloModal/TituloModal';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
 const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
     const [listaQuantidadesEntregues, setListaQuantidadesEntregues] = useState([]);
-    const [data, setData] = useState();
     const [loading, setLoading] = useState(false);
     const { Column } = Table;
 
@@ -21,45 +21,46 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
         setListaQuantidadesEntregues([]);
     }, [pedidoSelecionado]);
 
-    const submitForm = (form) => {
-
+    const submitForm = async (form) => {
         setLoading(true);
-        let quantidadeTotalRecebida = 0;
 
-        const dto = {
-            Id: pedidoSelecionado?.Id,
-            key: pedidoSelecionado?.Id,
-            DataPedido: pedidoSelecionado?.DataPedido,
-            DataBaixa: data,
-            QuantidadePedidaTotal: pedidoSelecionado?.QuantidadePedidaTotal,
-            Valor: parseFloat(form.Valor),
+        const dtoBaixaPedido = {
+            IdPedidoEstoque: pedidoSelecionado.Id,
+            DataPedido: pedidoSelecionado.DataPedido,
             Empresa: form.Empresa,
+            Valor: parseFloat(form.Valor),
             Status: TagStatusEnum.Completo,
-            ListaChaves: [],
-            Chaves: pedidoSelecionado?.Chaves,
+            QuantidadeTotalRecebida: 0,
+            QuantidadeTotalSolicitada: 0,
+            Chaves: pedidoSelecionado.Chaves
         };
 
-        listaQuantidadesEntregues.forEach((quantidadeRecebida, index) => {
-            let quantidadeSolicitada = pedidoSelecionado?.Chaves[index].QuantidadeSolicitada;
-            quantidadeTotalRecebida = quantidadeTotalRecebida + quantidadeRecebida;
+        listaQuantidadesEntregues.forEach(async (quantidadeRecebida, index) => {
+            let chave = pedidoSelecionado.Chaves[index];
 
-            dto.ListaChaves.push({
-                key: Date.now(),
-                Marca: pedidoSelecionado?.Chaves[index].Marca,
-                NumeroSerie: pedidoSelecionado?.Chaves[index].NumeroSerie,
-                QuantidadeSolicitada: quantidadeSolicitada,
-                QuantidadeRecebida: quantidadeRecebida
-            });
+            let chaveAtualizada = {
+                Marca: chave.Marca,
+                NumeroSerie: chave.NumeroSerie,
+                Data: chave.Data,
+                Tipo: chave.Tipo,
+                Quantidade: chave.QuantidadeEmEstoque + quantidadeRecebida
+            };
 
-            if (quantidadeSolicitada > quantidadeRecebida)
-                dto.Status = TagStatusEnum.Incompleto
+            if (chave.QuantidadeSolicitada > quantidadeRecebida) 
+                dtoBaixaPedido.Status = TagStatusEnum.Incompleto;
+            else 
+            if (chave.QuantidadeSolicitada < quantidadeRecebida) 
+                dtoBaixaPedido.Status = TagStatusEnum.Excedente;
 
+            dtoBaixaPedido.QuantidadeTotalSolicitada += chave.QuantidadeSolicitada;
+            dtoBaixaPedido.QuantidadeTotalRecebida += quantidadeRecebida;
+
+            await ChaveService.Update(chave.IdChave, chaveAtualizada);
         })
 
-        dto.QuantidadeTotalRecebida = quantidadeTotalRecebida;
-
-        ChaveService.postBaixaPedidos(dto)
-            .then(() => {
+        await PedidoEstoqueService.PostBaixaPedidoEstoque(dtoBaixaPedido)
+            .then(async () => {
+                await PedidoEstoqueService.SoftDeletePedidoEstoque(pedidoSelecionado);
                 toast.success(messages.cadastradoSucesso('Baixa de Pedido'));
                 setLoading(false);
                 onClose();
@@ -67,10 +68,10 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
             .catch(() => {
                 toast.error(messages.cadastradoErro('Baixa de Pedido'));
                 setLoading(false);
-            })
+            });
     }
 
-    const changeQuantidade = (status, dto, index, event, aa) => {
+    const changeQuantidade = (status, dto, index, event) => {
         let quantidadesEntregues = listaQuantidadesEntregues;
         quantidadesEntregues[index] = Number(event.target.value);
     }
@@ -85,27 +86,30 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
 
             <TituloModal
                 titulo={'Baixa de Lista de Pedidos'}
-                subTitulo={''}
+                subTitulo={'preencha as informações para dar baixa no pedido'}
             />
 
             {
                 loading ?
                     <Loading /> :
                     <Form onFinish={submitForm} layout='vertical'>
-                        <Row gutter={4}>
-                            <Col md={8} xs={8}>
+                        <Row gutter={10}>
+                            <Col md={10} xs={12}>
                                 <Form.Item
-                                    name="DataBaixa"
-                                    label="Data da Baixa"
+                                    label="Empresa responsável"
+                                    name="Empresa"
                                     rules={[{ required: true, message: messages.CampoObrigatorio }]}
                                 >
-                                    <DatePicker
-                                        format="DD/MM/YYYY"
-                                        onChange={(date, dateString) => setData(dateString)}
+                                    <Input
+                                        type="text"
+                                        placeholder="Nome da empresa"
+                                        maxLength={50}
+                                        autoFocus
+                                        tabIndex={1}
                                     />
                                 </Form.Item>
                             </Col>
-                            <Col md={8} xs={8}>
+                            <Col md={6} xs={6}>
                                 <Form.Item
                                     label="Valor"
                                     name="Valor"
@@ -116,19 +120,7 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
                                         placeholder={'Valor'}
                                         min={0}
                                         step="0.10"
-                                    />
-                                </Form.Item>
-                            </Col>
-                            <Col md={8} xs={8}>
-                                <Form.Item
-                                    label="Empresa"
-                                    name="Empresa"
-                                    rules={[{ required: true, message: messages.CampoObrigatorio }]}
-                                >
-                                    <Input
-                                        type="text"
-                                        placeholder="Empresa"
-                                        maxLength={20}
+                                        tabIndex={2}
                                     />
                                 </Form.Item>
                             </Col>
@@ -146,7 +138,8 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
                                 <Input
                                     type="number"
                                     min={1}
-                                    max={100}
+                                    max={999}
+                                    placeholder='0'
                                     required
                                     onChange={(event) => changeQuantidade(status, dto, index, event)}
                                 />
