@@ -6,14 +6,8 @@ export const Rotas = {
     ChavePedidoEstoque: '/Chaves/PedidosEstoque',
     ChavePedidoEstoqueCadastro: '/Chaves/PedidosEstoque/Cadastro',
 
-    ChavesHistoricoCopias: '/Chaves/Historico/Copias',
-    ChavesHistoricoDescarte: '/Chaves/Historico/Descarte',
-    ChavesHistoricoPedidoEstoque: '/Chaves/Historico/PedidoEstoque',
-
     AmolacaoEstoque: '/Amolacao',
     AmolacaoCadastro: '/Amolacao/Cadastro',
-
-    AmolacaoHistoricoAmolacoes: '/Amolacao/Historico/Amolacoes',
 
     Servico: '/Servico',
     ServicoNew: '/Servico/Cadastro',
@@ -21,6 +15,8 @@ export const Rotas = {
     EstatisticasChave: '/Estatistica/Chaves',
     EstatisticasAmolacoes: '/Estatistica/Amolacoes',
     EstatisticasServicos: '/Estatistica/Servicos',
+
+    Historicos: '/Historicos/',
 
     Configuracoes: '/Configuracoes',
 }

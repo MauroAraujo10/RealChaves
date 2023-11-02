@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Tooltip } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { toast } from "react-toastify";
+import { Rotas } from '../../../Routes/rotas';
 
 import Loading from '../../../common/components/Loading/Loading';
 import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
 import Grid from '../../../common/components/Grid/Grid';
+import ButtonNovoRegistro from '../../../common/components/ButtonNovoRegistro/ButtonNovoRegistro';
 import tabelas from '../../../common/Enum/tabelas';
 import Service from '../../../services';
 import ChaveService from '../../../services/chave.service';
@@ -15,7 +17,13 @@ import ChavesDescarteModal from '../components/chaves.descarte.modal';
 import ChavesEditModal from '../components/chaves.edit.modal';
 import YesOrNoModal from '../../../common/components/yesOrNoModal/yesOrNoModal';
 
-import { AiOutlineSnippets, AiOutlineDownSquare, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import {
+    AiOutlineSnippets,
+    AiOutlineDownSquare,
+    AiOutlineEdit,
+    AiOutlineDelete,
+    AiOutlinePlus
+} from "react-icons/ai";
 
 const ChaveGrid = () => {
     const [chaves, setChaves] = useState([]);
@@ -32,10 +40,10 @@ const ChaveGrid = () => {
         Service.app.ref(tabelas.Chave).on('value', (snapshot) => {
             let chaves = [];
             let quantidadeTotal = 0;
-            
+
             snapshot.forEach((x) => {
-                
-                if (!x.val().Deletado){
+
+                if (!x.val().Deletado) {
                     chaves.push({
                         Id: x.key,
                         Marca: x.val().Marca,
@@ -144,13 +152,20 @@ const ChaveGrid = () => {
                 toast.error(messages.exclusaoErro('registro'));
             })
     }
-    
+
     return (
         <div className="mt-2">
 
             <HeaderForm
                 titulo={'Tabela de Chaves'}
                 listaCaminhos={['Chaves']}
+            />
+
+            <ButtonNovoRegistro
+                tooltipTitle={'Cadastrar uma nova chave'}
+                route={Rotas.ChavesCadastro}
+                icon={<AiOutlinePlus size={16} className='mr-1' />}
+                buttonText={'Nova Chave'}
             />
 
             {

@@ -13,16 +13,13 @@ import ChavesNew from '../pages/Chaves/container/chave.new';
 import ChavePedidoEstoque from '../pages/Chaves/container/estoque/Chave.PedidoEstoque.Grid';
 import ChavePedidoEstoqueCadastro from '../pages/Chaves/container/estoque/Chave.PedidoEstoque.New';
 
-import ChavesHistoricoCopias from '../pages/Chaves/container/historico/container/Chaves.Historico.Copia';
-import ChavesHistoricoDescarte from '../pages/Chaves/container/historico/container/Chaves.Historico.Descarte';
-import ChavesHistoricoPedidoEstoque from '../pages/Chaves/container/historico/container/Chaves.Historico.PedidoEstoque';
-
 import AmolacaoGrid from '../pages/Amolacao/container/amolacao.grid';
 import AmolacaoNew from '../pages/Amolacao/container/amolacao.new';
-import AmolacaoHistoricoAmolacoes from '../pages/Amolacao/container/historico/amolacao.Historico.Amolacoes';
 
 import ServicosGrid from '../pages/Servicos/container/servicos.grid';
 import ServicosNew from '../pages/Servicos/container/servicos.new';
+
+import Historicos from '../pages/Historico/Historico.Index';
 
 import EstatisticasChaves from '../pages/Estatistica/Chaves/estatistica.chave';
 import EstatisticasAmolacoes from '../pages/Estatistica/Amolacoes/estatistica.Amolacoes';
@@ -56,16 +53,14 @@ const Routes = ({ configuracoes }) => {
                      <Route exact path={Rotas.ChavePedidoEstoque} component={ChavePedidoEstoque} />
                      <Route exact path={Rotas.ChavePedidoEstoqueCadastro} component={ChavePedidoEstoqueCadastro} />
 
-                     <Route exact path={Rotas.ChavesHistoricoCopias} component={ChavesHistoricoCopias} />
-                     <Route exact path={Rotas.ChavesHistoricoDescarte} component={ChavesHistoricoDescarte} />
-                     <Route exact path={Rotas.ChavesHistoricoPedidoEstoque} component={ChavesHistoricoPedidoEstoque} />
 
                      <Route exact path={Rotas.AmolacaoEstoque} component={AmolacaoGrid} />
                      <Route exact path={Rotas.AmolacaoCadastro} component={AmolacaoNew} />
-                     <Route exact path={Rotas.AmolacaoHistoricoAmolacoes} component={AmolacaoHistoricoAmolacoes} />
 
                      <Route exact path={Rotas.Servico} component={ServicosGrid} />
                      <Route exact path={Rotas.ServicoNew} component={ServicosNew} />
+
+                     <Route exact path={Rotas.Historicos} component={Historicos} />
 
                      <Route exact path={Rotas.EstatisticasChave} component={EstatisticasChaves} />
                      <Route exact path={Rotas.EstatisticasAmolacoes} component={EstatisticasAmolacoes} />

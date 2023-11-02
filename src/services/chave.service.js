@@ -3,6 +3,21 @@ import tabelas from '../common/Enum/tabelas';
 import moment from 'moment';
 
 const methods = {
+    async GetAllCopias(){
+        let copiasChaves = [];
+
+        await Service.app.ref(tabelas.CopiasChave).once('value', snapshot => {
+            snapshot.forEach((x) => {
+                if (!x.val().Deletado) {
+                    copiasChaves.push({
+                        Data: x.val().Data
+                    });
+                }
+            });
+        });
+
+        return copiasChaves;
+    },
     async GetAllNumeroSerie(){
         let chaves = [];
         await Service.app.ref(tabelas.Chave).once('value', snapshot => {

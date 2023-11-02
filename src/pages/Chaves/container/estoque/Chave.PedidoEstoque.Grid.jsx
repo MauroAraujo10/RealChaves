@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Tooltip } from 'antd';
 import { toast } from 'react-toastify';
 import { messages } from '../../../../common/Enum/messages';
+import {Rotas} from '../../../../Routes/rotas';
 
 import Grid from '../../../../common/components/Grid/Grid';
 import Service from '../../../../services';
 import PedidoEstoqueService from '../../../../services/pedido.estoque.service';
+import ButtonNovoRegistro from '../../../../common/components/ButtonNovoRegistro/ButtonNovoRegistro';
 import tabelas from '../../../../common/Enum/tabelas';
 import Loading from '../../../../common/components/Loading/Loading';
 import HeaderForm from '../../../../common/components/HeaderForm/HeaderForm';
@@ -14,7 +16,7 @@ import ChavePedidoEstoqueViewModal from './Chave.PedidoEstoque.View.Modal';
 import ChavePedidoEstoqueBaixaModal from '../../components/Chave.PedidoEstoque.Baixa.Modal';
 import YesOrNoModal from '../../../../common/components/yesOrNoModal/yesOrNoModal';
 
-import { AiOutlineLike, AiOutlineEye, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineLike, AiOutlineEye, AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
 
 const ChaveEstoqueTabelaPedido = () => {
     const [pedidoSelecionado, setPedidoSelecionado] = useState([]);
@@ -115,6 +117,13 @@ const ChaveEstoqueTabelaPedido = () => {
             <HeaderForm
                 titulo={'Pedidos de Estoque'}
                 listaCaminhos={['Chaves', 'Pedidos de Estoque']}
+            />
+
+            <ButtonNovoRegistro
+                tooltipTitle={'Cadastrar um pedido de estoque'}
+                route={Rotas.ChavePedidoEstoqueCadastro}
+                icon={<AiOutlinePlus size={16} className='mr-1' />}
+                buttonText={'Novo pedido de estoque'}
             />
 
             {
