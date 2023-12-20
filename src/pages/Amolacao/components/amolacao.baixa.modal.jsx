@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Form, Col, Row, Input } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { toast } from 'react-toastify';
-import moment from 'moment'
 
 import AmolacaoService from '../../../services/amolacao.service';
 import TituloModal from '../../../common/components/TituloModal/TituloModal';
@@ -17,66 +16,38 @@ const AmolacaoBaixaModal = ({ visible, onClose, produtoSelecionado }) => {
 
     const submitForm = async (form) => {
 
-        let dtoAmolacao = {};
-        let dto = {};
+        const novaQuantidade = pago ? 0 : produtoSelecionado.QuantidadeEstoque - Number(form.Quantidade);
 
+        const dtoProduto = {
+            Cliente: produtoSelecionado.Cliente,
+            Telefone: produtoSelecionado.Telefone,
+            Tipo: produtoSelecionado.Tipo,
+            Marca: produtoSelecionado.Marca,
+            DataRecebimento: produtoSelecionado.DataRecebimento,
+            QuantidadeEstoque: novaQuantidade,
+            Pago: novaQuantidade === 0,
+            Entregue: novaQuantidade === 0
+        };
 
-        if (pago){
-            dtoAmolacao = {
-                IdProduto: produtoSelecionado.Id,
-                DataEntrega: moment().format('DD/MM/yyyy'),
-                Quantidade: produtoSelecionado.Quantidade,
-                Valor:  parseFloat(produtoSelecionado.Valor)
-            };
+        await AmolacaoService.Update(produtoSelecionado.Id, dtoProduto)
+            .then(async () => {
+                if (!pago) {
+                    const dtoPagamento = {
+                        IdProduto: produtoSelecionado.Id,
+                        Quantidade: Number(form.Quantidade),
+                        Valor: parseFloat(form.Valor)
+                    };
 
-            dto = {
-                Cliente: produtoSelecionado.Cliente,
-                Telefone: produtoSelecionado.Telefone,
-                Produto: produtoSelecionado.Produto,
-                Marca: produtoSelecionado.Marca,
-                DataRecebimento: produtoSelecionado.DataRecebimento,
-                Quantidade: 0,
-                Pago: true,
-                Valor: parseFloat(produtoSelecionado.Valor),
-                Entregue: true
-            };
-        }
-        else{
-            dtoAmolacao = {
-                IdProduto: produtoSelecionado.Id,
-                DataEntrega: moment().format('DD/MM/yyyy'),
-                Quantidade: Number(form.Quantidade),
-                Valor:  parseFloat(form.Valor)
-            };
+                    await AmolacaoService.PostPagamento(dtoPagamento);
+                }
 
-            let novaQuantidade = produtoSelecionado.Quantidade - Number(form.Quantidade);
-
-            dto = {
-                Cliente: produtoSelecionado.Cliente,
-                Telefone: produtoSelecionado.Telefone,
-                Produto: produtoSelecionado.Produto,
-                Marca: produtoSelecionado.Marca,
-                DataRecebimento: produtoSelecionado.DataRecebimento,
-                Quantidade: novaQuantidade,
-                Pago: novaQuantidade <= 0,
-                Valor: novaQuantidade <= 0 ? parseFloat(form.Valor) : parseFloat(produtoSelecionado.Valor),
-                Entregue: novaQuantidade <= 0
-            };
-        }
-
-        await AmolacaoService.PostBaixaProduto(dtoAmolacao)
-            .then(async() => {
-                await AmolacaoService.Update(produtoSelecionado.Id, dto)
-                    .then(() => {
-                        toast.success(`Baixa de ${produtoSelecionado.Produto} realizada com sucesso`);
-                        onClose();
-                    })
+                toast.success(`Baixa de ${produtoSelecionado.Produto} realizada com sucesso`);
+                onClose();
             })
             .catch(() => {
                 toast.error(`Erro ao realizar essa operação`);
             })
     }
-
 
     return (
         <Modal
@@ -86,19 +57,19 @@ const AmolacaoBaixaModal = ({ visible, onClose, produtoSelecionado }) => {
             destroyOnClose
         >
 
-            <TituloModal 
-                titulo={'Baixa de Produto'} 
-                subTitulo={'Preencha as informações para dar baixa no produto'}/>
+            <TituloModal
+                titulo={'Baixa de Produto'}
+                subTitulo={'Preencha as informações para dar baixa no produto'} />
 
             <Form layout="vertical" onFinish={submitForm}>
                 <Row gutter={12}>
 
                     {
-                        pago && <p>Este(a) <b>{produtoSelecionado.Produto}</b> ja está pago, deseja confirmar a entrega ?</p>
+                        pago && <p>Este(a) <b>{produtoSelecionado.Tipo}</b> ja está pago, deseja confirmar a baixa ?</p>
                     }
 
-                    { 
-                    !pago &&
+                    {
+                        !pago &&
                         <>
                             <Col md={8} sm={8} xs={12}>
                                 <Form.Item
@@ -106,29 +77,29 @@ const AmolacaoBaixaModal = ({ visible, onClose, produtoSelecionado }) => {
                                     name="Quantidade"
                                     rules={[{ required: true, message: messages.CampoObrigatorio }]}
                                 >
-                                <Input
-                                    type="number"
-                                    placeholder="Quantidade"
-                                    min={1}
-                                    max={produtoSelecionado?.Quantidade}
-                                />
+                                    <Input
+                                        type="number"
+                                        placeholder="Quantidade"
+                                        min={1}
+                                        max={produtoSelecionado.QuantidadeEstoque}
+                                    />
                                 </Form.Item>
                             </Col>
-                            
+
                             <Col md={6} xs={10}>
                                 <Form.Item
                                     label="Valor Pago"
                                     name="Valor"
                                     rules={[{ required: true, message: messages.CampoObrigatorio }]}
                                 >
-                                <Input
-                                    type="number"
-                                    placeholder="Valor"
-                                    max={999}
-                                    min="0.1"
-                                    step="0.1"
-                                />
-                            </Form.Item>
+                                    <Input
+                                        type="number"
+                                        placeholder="Valor"
+                                        max={999}
+                                        min="0.1"
+                                        step="0.1"
+                                    />
+                                </Form.Item>
                             </Col>
                         </>
                     }

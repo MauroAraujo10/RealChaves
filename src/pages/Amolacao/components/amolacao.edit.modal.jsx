@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Form, Col, Row, Input, Select, Switch } from 'antd';
+import React from 'react';
+import { Modal, Form, Col, Row, Input, Select } from 'antd';
 import { toast } from 'react-toastify';
 import { messages } from '../../../common/Enum/messages';
 
@@ -9,29 +9,22 @@ import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadas
 
 import { AiOutlineFork, AiOutlineScissor } from "react-icons/ai";
 import { RiKnifeLine } from "react-icons/ri";
-import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 
 const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
 
     const { Option } = Select;
-    const [pago, setPago] = useState(false);
-
-    useEffect(() => {
-        setPago(produtoSelecionado.Pago === "Sim");
-    }, [produtoSelecionado]);
 
     const submitForm = async (form) => {
 
         const dto = {
             Cliente: form.Cliente,
             Telefone: form.Telefone ?? "",
-            Produto: form.Produto,
+            Tipo: form.Tipo,
             Marca: form.Marca,
             DataRecebimento: produtoSelecionado.DataRecebimento,
-            Quantidade: Number(form.Quantidade),
-            Pago: pago,
-            Valor: form.Valor ? parseFloat(form.Valor) : 0,
-            Entregue: false,
+            QuantidadeEstoque: produtoSelecionado.QuantidadeEstoque,
+            Pago: produtoSelecionado.Pago === "Sim",
+            Entregue: false
         };
 
         await AmolacaoService.Update(produtoSelecionado.Id, dto)
@@ -93,8 +86,8 @@ const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
 
                     <Col md={10} xs={24}>
                         <Form.Item
-                            name="Produto"
                             label="Produto"
+                            name="Tipo"
                             rules={[{ required: true, message: messages.CampoObrigatorio }]}
                         >
                             <Select defaultValue="Selecione">
@@ -127,55 +120,6 @@ const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
                             />
                         </Form.Item>
                     </Col>
-                </Row>
-
-                <Row gutter={12}>
-
-                    <Col md={6} sm={6} xs={8}>
-                        <Form.Item
-                            label='Quantidade'
-                            name='Quantidade'
-                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
-                        >
-                            <Input
-                                type="number"
-                                placeholder="Quantidade"
-                                min={1}
-                                max={25}
-                                tabIndex={3}
-                            />
-                        </Form.Item>
-                    </Col>
-
-                    <Col md={3} sm={4} xs={4}>
-                        <Form.Item
-                            label="Pago"
-                            name="Pago">
-                            <Switch
-                                defaultChecked={produtoSelecionado.Pago === 'Sim'}
-                                onChange={(value) => setPago(value)}
-                                checkedChildren={<CheckOutlined />}
-                                unCheckedChildren={<CloseOutlined />}
-                            />
-                        </Form.Item>
-                    </Col>
-
-                    <Col md={6} sm={6} xs={9}>
-                        {pago &&
-                            <Form.Item
-                                label="Valor pago"
-                                name="Valor"
-                                rules={[{ required: true, message: messages.CampoObrigatorio }]}>
-                                <Input
-                                    type="number"
-                                    placeholder="Valor"
-                                    min="0.1"
-                                    step="0.10"
-                                />
-                            </Form.Item>
-                        }
-                    </Col>
-
                 </Row>
 
                 <BotaoCadastrar

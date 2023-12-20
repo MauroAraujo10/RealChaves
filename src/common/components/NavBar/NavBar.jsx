@@ -11,8 +11,7 @@ import {
     AiOutlineDatabase,
     AiOutlineAppstore,
     AiOutlineKey,
-    AiOutlineMenu,
-    AiOutlineFileDone
+    AiOutlineMenu
 } from 'react-icons/ai';
 
 

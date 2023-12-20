@@ -1,57 +1,187 @@
 import React, { useState } from 'react';
-import { Button, Select } from 'antd';
-import { toast } from 'react-toastify';
+import { Button, Select, Table, Row, Col } from 'antd';
 
 import HeaderForm from '../../common/components/HeaderForm/HeaderForm';
+import Tabelas from '../../common/Enum/tabelas';
 
-import ChaveService from '../../services/chave.service';
-import PedidoEstoqueService from '../../services/pedido.estoque.service';
-import AmolacaoService from '../../services/amolacao.service';
-//import ServicosService from '../../services/ser'
-import Grid from '../../common/components/Grid/Grid';
+import Services from '../../services';
+import ServicosService from '../../services/servicos.service';
+import ConfiguracoesService from '../../services/configuracoes.service';
+
 import Loading from '../../common/components/Loading/Loading';
 
 const HistoricoIndex = () => {
     const { Option } = Select;
-    const [data, setData] = useState([]);
-    const [columns, setColumns] = useState([]);
-    const [selectedValue, setSelectedValue] = useState();
+    const [isGridVisible, setIsGridVisible] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const handleEscolherHistorico = async() => {
+    const [selectedValue, setSelectedValue] = useState();
+    const [data, setData] = useState([]);
+    const [columns, setColumns] = useState([]);
 
-        setLoading(false);
+    const handleEscolherHistorico = async () => {
+
+        setLoading(true);
+        setData([]);
 
         switch (selectedValue) {
             case 'Copias':
-                    await ChaveService.GetAllCopias()
-                        .then((copias) => {
-                            debugger;
-                            let columns = [
-                                { title: 'Data da Cópia', dataIndex: 'Data', key: 'Data', width: '15%' },
-                                { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '20%' },
-                                { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', width: '20%' },
-                                { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', width: '20%' },
-                                { title: 'Valor', dataIndex: 'Valor', key: 'Valor', width: '10%' },
-                                { title: 'Tipo de Pagamento', dataIndex: 'TipoPagamento', key: 'TipoPagamento', width: '15%' },
-                            ];
+                let arrayChaves = [];
+                const columnChaves = [
+                    { title: 'Data da Cópia', dataIndex: 'DataCopia', key: 'DataCopia', width: '15%' },
+                    { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '20%' },
+                    { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', width: '20%' },
+                    { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', width: '10%' },
+                    { title: 'TipoPagamento', dataIndex: 'TipoPagamento', key: 'TipoPagamento', width: '20%' },
+                    { title: 'Valor', dataIndex: 'Valor', key: 'Valor', width: '10%' },
+                ];
 
-                            setLoading(false);
-                            setColumns(columns);
-                            setData(copias);
+                await Services.app.ref(Tabelas.CopiasChave).once('value')
+                    .then((snapshot) => {
+                        snapshot.forEach((copia) => {
+                            Services.app.ref(Tabelas.Chave).child(copia.val().IdChave).once('value')
+                                .then((chave) => {
+                                    arrayChaves.push({
+                                        DataCopia: copia.val().Data,
+                                        Marca: chave.val().Marca,
+                                        NumeroSerie: chave.val().NumeroSerie,
+                                        Quantidade: copia.val().Quantidade,
+                                        TipoPagamento: copia.val().TipoPagamento,
+                                        Valor: copia.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                                    });
+                                    setIsGridVisible(true);
+                                    setColumns(columnChaves);
+                                    setData([]);
+                                    setData(arrayChaves);
+                                })
                         })
-
+                        setLoading(false);
+                    });
                 break;
             case 'Descarte':
+                await ConfiguracoesService.GetAllMotivosDescartes()
+                    .then(async (motivos) => {
+
+                        let arrayDescartes = [];
+                        const columnDescartes = [
+                            { title: 'Data do descarte', dataIndex: 'Data', key: 'Data', width: '10%' },
+                            { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '10%' },
+                            { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', width: '10%' },
+                            { title: 'Motivo', dataIndex: 'Motivo', key: 'Motivo', width: '20%' },
+                            { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', width: '20%' },
+                        ];
+
+                        await Services.app.ref(Tabelas.Descarte).once('value')
+                            .then((snapshot) => {
+                                snapshot.forEach((descarte) => {
+                                    Services.app.ref(Tabelas.Chave).child(descarte.val().IdChave).once('value')
+                                        .then((chave) => {
+                                            var motivo = motivos.find(x => x.Index === descarte.val().IdMotivo);
+                                            arrayDescartes.push({
+                                                Marca: chave.val().Marca,
+                                                NumeroSerie: chave.val().NumeroSerie,
+                                                Data: descarte.val().Data,
+                                                Motivo: motivo.Motivo,
+                                                Quantidade: descarte.val().Quantidade
+                                            });
+                                            setIsGridVisible(true);
+                                            setColumns(columnDescartes);
+                                            setData([]);
+                                            setData(arrayDescartes);
+                                        });
+                                })
+                            })
+                        setLoading(false);
+                    })
                 break;
             case 'PedidosEstoque':
+                let arrayPedidosEstoque = [];
+                const columnPedidoEstoque = [
+                    { title: 'Data do Pedido', dataIndex: 'DataPedido', key: 'DataPedido', width: '10%' },
+                    { title: 'Data da Baixa', dataIndex: 'DataBaixa', key: 'DataBaixa', width: '10%' },
+                    { title: 'Quantidade Solicitada', dataIndex: 'QuantidadePedida', key: 'QuantidadePedida', width: '10%' },
+                    { title: 'Quantidade Recebida', dataIndex: 'QuantidadeRecebida', key: 'QuantidadeRecebida', width: '10%' },
+                    { title: 'Empresa', dataIndex: 'Empresa', key: 'Empresa', width: '20%' },
+                    { title: 'Status', dataIndex: 'Status', key: 'Status', width: '15%' },
+                    { title: 'Valor', dataIndex: 'Valor', key: 'Valor', width: '15%' },
+                ];
+
+                await Services.app.ref(Tabelas.BaixaPedidoChaves).once('value')
+                    .then((snapshot) => {
+                        snapshot.forEach((baixa) => {
+                            Services.app.ref(Tabelas.PedidoEstoque).child(baixa.val().IdPedidoEstoque).once('value')
+                                .then((pedido) => {
+                                    arrayPedidosEstoque.push({
+                                        DataPedido: pedido.val().DataPedido,
+                                        DataBaixa: baixa.val().DataBaixa,
+                                        QuantidadePedida: pedido.val().QuantidadeTotal,
+                                        QuantidadeRecebida: baixa.val().QuantidadeTotalRecebida,
+                                        Empresa: baixa.val().Empresa,
+                                        Status: baixa.val().Status,
+                                        Valor: baixa.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                                    });
+                                    setIsGridVisible(true);
+                                    setColumns(columnPedidoEstoque);
+                                    setData([]);
+                                    setData(arrayPedidosEstoque);
+                                })
+                        })
+                        setLoading(false);
+                    });
                 break;
             case 'Amolacoes':
+                let arrayProdutos = [];
+
+                const columns = [
+                    { title: 'Data Recebimento', dataIndex: 'DataRecebimento', key: 'DataRecebimento', width: '10%' },
+                    { title: 'Data Pagamento', dataIndex: 'DataPagamento', key: 'DataPagamento', width: '10%' },
+                    { title: 'Cliente', dataIndex: 'Cliente', key: 'Cliente', width: '20%' },
+                    { title: 'Tipo produto', dataIndex: 'Tipo', key: 'Tipo', width: '10%' },
+                    { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', width: '5%' },
+                    { title: 'Valor', dataIndex: 'ValorGrid', key: 'ValorGrid', width: '5%' },
+                ];
+
+                await Services.app.ref(Tabelas.Pagamentos).once('value')
+                    .then((snapshot) => {
+                        snapshot.forEach((pagamento) => {
+                            Services.app.ref(Tabelas.Produtos).child(pagamento.val().IdProduto).once('value')
+                                .then((produto) => {
+                                    arrayProdutos.push({
+                                        IdProduto: pagamento.val().IdProduto,
+                                        Cliente: produto.val().Cliente,
+                                        DataRecebimento: produto.val().DataRecebimento,
+                                        DataPagamento: pagamento.val().DataPagamento,
+                                        Tipo: produto.val().Tipo,
+                                        Quantidade: pagamento.val().Quantidade,
+                                        ValorGrid: pagamento.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                                    })
+                                    setIsGridVisible(true);
+                                    setColumns(columns);
+                                    setData([]);
+                                    setData(arrayProdutos);
+                                })
+                        })
+                        setLoading(false);
+                    });
+
                 break;
             case 'Servicos':
+                await ServicosService.GetAllServicos()
+                    .then((servicos) => {
+                        const columns = [
+                            { title: 'Data', dataIndex: 'Data', key: 'Data', width: '10%' },
+                            { title: 'Descrição', dataIndex: 'Descricao', key: 'Descricao', width: '30%' },
+                            { title: 'Valor', dataIndex: 'Valor', key: 'Valor', width: '15%' },
+                        ];
+
+                        setIsGridVisible(true);
+                        setLoading(false);
+                        setColumns(columns);
+                        setData(servicos);
+                    })
                 break;
             default:
-                toast.warning('Selecione um valor');
+                setLoading(false);
                 break;
         }
     }
@@ -64,40 +194,48 @@ const HistoricoIndex = () => {
                 listaCaminhos={['Históricos']}
             />
 
-            <div className='container t-center'>
-                <Select
-                    style={{ width: '1000px', marginRight: '20px' }}
-                    defaultValue="Selecione"
-                    onChange={(value) => setSelectedValue(value)}
-                    tabIndex={0}
-                >
-                    <Option value="Copias">Cópias de chaves</Option>
-                    <Option value="Descarte">Descarte de chaves</Option>
-                    <Option value="PedidosEstoque">Pedidos de Estoque</Option>
-                    <Option value="Amolacoes">Amolações</Option>
-                    <Option value="Servicos">Serviços</Option>
-                </Select>
-                <Button
-                    type={'primary'}
-                    onClick={() => handleEscolherHistorico()}
-                >
-                    Selecionar
-                </Button>
-
-                {
-                    loading ? 
-                        <Loading />
-                    :
-                    <Grid
-                        dataSource={data}
-                        columns={columns}
-                        QuantidadeTotal={data.length}
-                    />
-                }
-
+            <div className='container'>
+                <Row gutter={10}>
+                    <Col xs={16} sm={20}>
+                        <Select
+                            className='Select-Historico'
+                            style={{ width: '100%' }}
+                            defaultValue="Selecione"
+                            onChange={(value) => setSelectedValue(value)}
+                            tabIndex={0}
+                        >
+                            <Option value="Copias">Cópias de chaves</Option>
+                            <Option value="Descarte">Descarte de chaves</Option>
+                            <Option value="PedidosEstoque">Pedidos de Estoque</Option>
+                            <Option value="Amolacoes">Amolações</Option>
+                            <Option value="Servicos">Serviços</Option>
+                        </Select>
+                    </Col>
+                    <Col xs={2} sm={2}>
+                        <Button
+                            type={'primary'}
+                            onClick={() => handleEscolherHistorico()}
+                        >
+                            Selecionar
+                        </Button>
+                    </Col>
+                </Row>
             </div>
 
-        </div>
+            {
+                loading ?
+                    <Loading />
+                    :
+                    isGridVisible ?
+                        <Table
+                            className='Grid container'
+                            dataSource={data}
+                            columns={columns}
+                        />
+                        :
+                        <></>
+            }
+        </div >
     );
 }
 

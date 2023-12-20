@@ -3,6 +3,25 @@ import Tabelas from '../common/Enum/tabelas';
 import moment from 'moment';
 
 const methods = {
+    async GetAllPedidosEntregues(){
+        let pediodosEntregues = [];
+
+        await Service.app.ref(Tabelas.BaixaPedidoChaves).once('value', snapshot => {
+            snapshot.forEach((x) => {
+                pediodosEntregues.push({
+                    DataPedido: x.val().DataPedido,
+                    DataBaixa: x.val().DataBaixa,
+                    Empresa: x.val().Empresa,
+                    QuantidadeTotalRecebida: x.val().QuantidadeTotalRecebida,
+                    QuantidadeTotalSolicitada: x.val().QuantidadeTotalSolicitada,
+                    Valor: x.val().Valor,
+                    Status: x.val().Status,
+                });
+            });
+        });
+
+        return pediodosEntregues;
+    },
     async PostPedidoEstoque(dto){
         let id = Date.now();
         await Service.app.ref(Tabelas.PedidoEstoque).child(id).set({

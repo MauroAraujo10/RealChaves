@@ -41,35 +41,35 @@ const Routes = ({ configuracoes }) => {
                 outOfAir ?
                     <Switch>
                         <Route path="/" exact component={OutofAir} />
-                            {history.push(Rotas.Home)}
+                        {history.push(Rotas.Home)}
                     </Switch>
-                        :
-                 <Switch>
-                     <Route path="/" exact component={Home} />
+                    :
+                    <Switch>
+                        <Route path="/" exact component={Home} />
 
-                     <Route exact path={Rotas.Chaves} component={ChavesGrid} />
-                     <Route exact path={Rotas.ChavesCadastro} component={ChavesNew} />
+                        <Route exact path={Rotas.Chaves} component={ChavesGrid} />
+                        <Route exact path={Rotas.ChavesCadastro} component={ChavesNew} />
 
-                     <Route exact path={Rotas.ChavePedidoEstoque} component={ChavePedidoEstoque} />
-                     <Route exact path={Rotas.ChavePedidoEstoqueCadastro} component={ChavePedidoEstoqueCadastro} />
+                        <Route exact path={Rotas.ChavePedidoEstoque} component={ChavePedidoEstoque} />
+                        <Route exact path={Rotas.ChavePedidoEstoqueCadastro} component={ChavePedidoEstoqueCadastro} />
 
 
-                     <Route exact path={Rotas.AmolacaoEstoque} component={AmolacaoGrid} />
-                     <Route exact path={Rotas.AmolacaoCadastro} component={AmolacaoNew} />
+                        <Route exact path={Rotas.AmolacaoEstoque} component={AmolacaoGrid} />
+                        <Route exact path={Rotas.AmolacaoCadastro} component={AmolacaoNew} />
 
-                     <Route exact path={Rotas.Servico} component={ServicosGrid} />
-                     <Route exact path={Rotas.ServicoNew} component={ServicosNew} />
+                        <Route exact path={Rotas.Servico} component={ServicosGrid} />
+                        <Route exact path={Rotas.ServicoNew} component={ServicosNew} />
 
-                     <Route exact path={Rotas.Historicos} component={Historicos} />
+                        <Route exact path={Rotas.Historicos} component={Historicos} />
 
-                     <Route exact path={Rotas.EstatisticasChave} component={EstatisticasChaves} />
-                     <Route exact path={Rotas.EstatisticasAmolacoes} component={EstatisticasAmolacoes} />
-                     <Route exact path={Rotas.EstatisticasServicos} component={EstatisticasServicos} />
+                        <Route exact path={Rotas.EstatisticasChave} component={EstatisticasChaves} />
+                        <Route exact path={Rotas.EstatisticasAmolacoes} component={EstatisticasAmolacoes} />
+                        <Route exact path={Rotas.EstatisticasServicos} component={EstatisticasServicos} />
 
-                     <Route exact path={Rotas.Configuracoes} component={Configuracoes} />
-                     
-                     <Route path="*" component={Erro} />
-                 </Switch>
+                        <Route exact path={Rotas.Configuracoes} component={Configuracoes} />
+
+                        <Route path="*" component={Erro} />
+                    </Switch>
             }
         </>
     );

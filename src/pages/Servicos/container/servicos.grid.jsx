@@ -2,15 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { messages } from '../../../common/Enum/messages';
 import { Tooltip } from 'antd';
 import { toast } from "react-toastify";
-import service from '../../../services';
-import servicosService from '../service/servicos.service';
+import { Rotas } from '../../../Routes/rotas';
+
 import tabelas from '../../../common/Enum/tabelas';
 import Loading from '../../../common/components/Loading/Loading';
 import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
 import Grid from '../../../common/components/Grid/Grid';
+import ButtonNovoRegistro from '../../../common/components/ButtonNovoRegistro/ButtonNovoRegistro';
 import ServicosEditModal from '../components/servicos.edit.modal';
 import YesOrNoModal from '../../../common/components/yesOrNoModal/yesOrNoModal';
-import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+
+import service from '../../../services';
+import servicosService from '../../../services/servicos.service';
+
+import {
+    AiOutlineEdit,
+    AiOutlineDelete,
+    AiOutlinePlus
+} from "react-icons/ai";
 
 const ServicosTabela = () => {
     const [servicos, setServicos] = useState([]);
@@ -25,7 +34,7 @@ const ServicosTabela = () => {
         service.app.ref(tabelas.Servicos).on('value', (snapshot) => {
 
             let servicos = [];
-            
+
             snapshot.forEach((x) => {
                 servicos.push({
                     Id: x.key,
@@ -33,7 +42,7 @@ const ServicosTabela = () => {
                     Data: x.val().Data,
                     Descricao: x.val().Descricao,
                     Valor: x.val().Valor,
-                    ValorGrid: x.val().Valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'}),
+                    ValorGrid: x.val().Valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
                     Pago: x.val().Pago ? 'Sim' : 'Não'
                 })
             })
@@ -104,7 +113,14 @@ const ServicosTabela = () => {
             <HeaderForm
                 titulo={'Tabelas de Serviços'}
                 listaCaminhos={['Serviços', 'Tabelas de Serviços']}
-            />  
+            />
+
+            <ButtonNovoRegistro
+                tooltipTitle={'Cadastrar um novo serviço'}
+                route={Rotas.ServicoNew}
+                icon={<AiOutlinePlus size={16} className='mr-1' />}
+                buttonText={'Novo Serviço'}
+            />
 
             {
                 loading ?

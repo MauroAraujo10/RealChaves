@@ -7,7 +7,7 @@ import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
 import moment from 'moment';
 
-import service from '../service/servicos.service';
+import service from '../../../services/servicos.service';
 import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 

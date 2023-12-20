@@ -5,7 +5,8 @@ export default {
     MotivosDescarte: 'MotivosDescarte',
     PedidoEstoque: 'PedidoEstoque',
     BaixaPedidoChaves: 'BaixaPedidoChaves',
-    Amolacao: 'Amolacao',
+    Produtos: 'Produtos',
+    Pagamentos: 'Pagamentos',
     ProdutosAmolados: 'ProdutosAmolados',
     Servicos: 'Servicos',
     Configuracoes: 'Configuracoes'

@@ -56,7 +56,6 @@ const ChaveGrid = () => {
                     quantidadeTotal = quantidadeTotal + x.val().Quantidade;
                 }
             })
-
             setChaves(chaves);
             setQuantidadeTotal(quantidadeTotal);
             setLoading(false);

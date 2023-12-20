@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Tooltip } from 'antd';
 import { toast } from "react-toastify";
 import { messages } from '../../../common/Enum/messages';
+import { Rotas } from '../../../Routes/rotas';
 
 import Loading from '../../../common/components/Loading/Loading';
 import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
+import ButtonNovoRegistro from '../../../common/components/ButtonNovoRegistro/ButtonNovoRegistro';
 import Grid from '../../../common/components/Grid/Grid';
 import tabelas from '../../../common/Enum/tabelas';
 import Service from '../../../services/index';
@@ -14,7 +16,12 @@ import BaixaModal from '../components/amolacao.baixa.modal';
 import EditModal from '../components/amolacao.edit.modal';
 import YesOrNoModal from '../../../common/components/yesOrNoModal/yesOrNoModal';
 
-import { AiOutlineLike, AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { 
+    AiOutlineLike, 
+    AiOutlineEdit, 
+    AiOutlineDelete,
+    AiOutlinePlus
+} from "react-icons/ai";
 
 const AmolacaoGrid = () => {
     const [produtos, setProdutos] = useState([]);
@@ -28,28 +35,26 @@ const AmolacaoGrid = () => {
     useEffect(() => {
 
         setLoading(true);
-        
-        Service.app.ref(tabelas.Amolacao).on('value', (amolacoes) => {
+
+        Service.app.ref(tabelas.Produtos).on('value', (amolacoes) => {
             let produtos = [];
             let quantidadeTotal = 0;
 
             amolacoes.forEach((x) => {
-                
-                if (!x.val().Entregue){
+
+                if (!x.val().Entregue) {
                     produtos.push({
                         Id: x.key,
                         Cliente: x.val().Cliente,
                         Telefone: x.val().Telefone,
-                        Produto: x.val().Produto,
+                        Tipo: x.val().Tipo,
                         Marca: x.val().Marca,
                         DataRecebimento: x.val().DataRecebimento,
-                        Quantidade: x.val().Quantidade,
+                        QuantidadeEstoque: x.val().QuantidadeEstoque,
                         Pago: x.val().Pago ? "Sim" : "Não",
-                        Valor: x.val().Valor,
-                        ValorGrid: x.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
                     })
 
-                    quantidadeTotal += x.val().Quantidade;
+                    quantidadeTotal += x.val().QuantidadeEstoque;
                 }
             })
 
@@ -61,12 +66,11 @@ const AmolacaoGrid = () => {
 
     const columns = [
         { title: 'Cliente', dataIndex: 'Cliente', key: 'Cliente', width: '30%' },
-        { title: 'Produto', dataIndex: 'Produto', key: 'Produto', width: '10%' },
+        { title: 'Produto', dataIndex: 'Tipo', key: 'Tipo', width: '10%' },
         { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '10%' },
         { title: 'Data Recebimento', dataIndex: 'DataRecebimento', key: 'DataRecebimento', width: '10%' },
-        { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', width: '10%' },
+        { title: 'Quantidade em Estoque', dataIndex: 'QuantidadeEstoque', key: 'QuantidadeEstoque', width: '10%' },
         { title: 'Pago', dataIndex: 'Pago', key: 'Pago', width: '5%' },
-        { title: 'Valor', dataIndex: 'ValorGrid', key: 'Valor', width: '10%' },
         {
             title: 'Ações', key: 'acoes', width: '10%', render: (status, dto) => (
                 <div style={{ display: 'flex' }}>
@@ -132,9 +136,17 @@ const AmolacaoGrid = () => {
         <div className="mt-2">
 
             <HeaderForm
-                titulo={'Tabela de Amolações'}
+                titulo={'Tabela de Produtos'}
                 listaCaminhos={['Amolação']}
             />
+
+            <ButtonNovoRegistro
+                tooltipTitle={'Cadastrar um novo produto'}
+                route={Rotas.AmolacaoCadastro}
+                icon={<AiOutlinePlus size={16} className='mr-1' />}
+                buttonText={'Novo Produto'}
+            />
+
             {
                 loading ?
                     <Loading /> :

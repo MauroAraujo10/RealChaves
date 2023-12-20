@@ -5,7 +5,7 @@ import { messages } from '../../../common/Enum/messages';
 import { toast } from "react-toastify";
 import moment from 'moment';
 
-import service from '../service/servicos.service';
+import service from '../../../services/servicos.service';
 import TituloModal from '../../../common/components/TituloModal/TituloModal';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 

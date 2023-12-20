@@ -20,26 +20,34 @@ const AmolacaoCadastro = () => {
     const { Option } = Select;
 
     const submitForm = async (form) => {
+
         const dto = {
             Cliente: form.Cliente,
             Telefone: form.Telefone ?? "",
-            Produto: form.Produto,
+            Tipo: form.Tipo,
             Marca: form.Marca,
             Quantidade: Number(form.Quantidade),
-            Pago: pago ?? false,
-            Valor: pago ? parseFloat(form.Valor) : 0
-        }
+            Pago: pago ?? false
+        };
 
         await AmolacaoService.Post(dto)
-            .then(() => {
-                toast.success(messages.cadastradoSucesso(dto.Produto));
+            .then(async (idProduto) => {
+                if (dto.Pago) {
+                    const dto = {
+                        IdProduto: idProduto,
+                        Quantidade: Number(form.Quantidade),
+                        Valor: parseFloat(form.Valor ?? 0)
+                    };
+                    await AmolacaoService.PostPagamento(dto);
+                }
+                toast.success(messages.cadastradoSucesso(form.Tipo));
                 history.push(Rotas.AmolacaoEstoque);
             })
             .catch(() => {
                 toast.error(messages.cadastradoErro(dto.Produto));
             })
     }
-    
+
     return (
         <div className="mt-2">
 
@@ -48,8 +56,8 @@ const AmolacaoCadastro = () => {
                 listaCaminhos={['Amolação', 'Cadastro']}
             />
 
-            <Form 
-                layout="vertical" 
+            <Form
+                layout="vertical"
                 onFinish={submitForm}
                 className='container-form'
             >
@@ -86,24 +94,22 @@ const AmolacaoCadastro = () => {
                     <Col md={4} xs={24}>
                         <Form.Item
                             label="Produto"
-                            name="Produto"
+                            name="Tipo"
                             rules={[{ required: true, message: messages.CampoObrigatorio }]}
+                            tabIndex={1}
                         >
-                            <Select 
-                                defaultValue="Selecione" 
-                                tabIndex={1}
-                            >
+                            <Select defaultValue="Selecione" >
                                 <Option value="Alicate">
                                     <AiOutlineFork className="mr-1" />
-                                        Alicate
+                                    Alicate
                                 </Option>
                                 <Option value="Tesoura">
                                     <AiOutlineScissor className="mr-1" />
-                                        Tesoura
+                                    Tesoura
                                 </Option>
                                 <Option value="Faca" >
                                     <RiKnifeLine className="mr-1" />
-                                        Faca
+                                    Faca
                                 </Option>
                             </Select>
 
@@ -114,12 +120,12 @@ const AmolacaoCadastro = () => {
                         <Form.Item
                             label="Marca"
                             name="Marca"
-                            rules={[{ required: true, message: messages.CampoObrigatorio }]}>
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
+                            tabIndex={2}>
                             <Input
                                 type="text"
                                 placeholder="Marca"
                                 maxLength={15}
-                                tabIndex={2}
                             />
                         </Form.Item>
                     </Col>
@@ -131,13 +137,14 @@ const AmolacaoCadastro = () => {
                         <Form.Item
                             label="Quantidade"
                             name="Quantidade"
-                            rules={[{ required: true, message: messages.CampoObrigatorio }]}>
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
+                            tabIndex={3}
+                        >
                             <Input
                                 type="number"
                                 placeholder="Quantidade"
                                 min={1}
                                 max={25}
-                                tabIndex={3}
                             />
                         </Form.Item>
 
@@ -147,7 +154,9 @@ const AmolacaoCadastro = () => {
 
                         <Form.Item
                             label="Pago"
-                            name="Pago">
+                            name="Pago"
+                            tabIndex={4}
+                        >
                             <Switch
                                 onChange={(value) => setPago(value)}
                                 checkedChildren={<CheckOutlined />}
@@ -178,7 +187,7 @@ const AmolacaoCadastro = () => {
                 </Row>
 
                 <BotaoCadastar
-                    funcaoCancelar={() => history.push(Rotas.AmolacaoHistoricoAmolacoes)}
+                    funcaoCancelar={() => history.push(Rotas.AmolacaoEstoque)}
                     tabIndex={6}
                 />
             </Form>

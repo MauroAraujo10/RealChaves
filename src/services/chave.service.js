@@ -1,26 +1,11 @@
 import Service from '.';
-import tabelas from '../common/Enum/tabelas';
+import Tabelas from '../common/Enum/tabelas';
 import moment from 'moment';
 
 const methods = {
-    async GetAllCopias(){
-        let copiasChaves = [];
-
-        await Service.app.ref(tabelas.CopiasChave).once('value', snapshot => {
-            snapshot.forEach((x) => {
-                if (!x.val().Deletado) {
-                    copiasChaves.push({
-                        Data: x.val().Data
-                    });
-                }
-            });
-        });
-
-        return copiasChaves;
-    },
-    async GetAllNumeroSerie(){
+    async GetAllNumeroSerie() {
         let chaves = [];
-        await Service.app.ref(tabelas.Chave).once('value', snapshot => {
+        await Service.app.ref(Tabelas.Chave).once('value', snapshot => {
             snapshot.forEach((x) => {
                 if (!x.val().Deletado) {
                     chaves.push({
@@ -38,7 +23,7 @@ const methods = {
     },
     async Post(dto) {
         let id = Date.now();
-        await Service.app.ref(tabelas.Chave).child(id).set({
+        await Service.app.ref(Tabelas.Chave).child(id).set({
             Marca: dto.Marca,
             NumeroSerie: dto.NumeroSerie,
             Data: moment().format('DD/MM/yyyy'),
@@ -48,7 +33,7 @@ const methods = {
         });
     },
     async Update(id, dto) {
-        await Service.app.ref(tabelas.Chave).child(id).set({
+        await Service.app.ref(Tabelas.Chave).child(id).set({
             Marca: dto.Marca,
             NumeroSerie: dto.NumeroSerie,
             Data: dto.Data,
@@ -58,7 +43,7 @@ const methods = {
         });
     },
     async Delete(dto) {
-        await Service.app.ref(tabelas.Chave).child(dto.Id).set({
+        await Service.app.ref(Tabelas.Chave).child(dto.Id).set({
             Marca: dto.Marca,
             NumeroSerie: dto.NumeroSerie,
             Data: dto.Data,
@@ -69,7 +54,7 @@ const methods = {
     },
     async PostCopiaChave(dto) {
         let id = Date.now();
-        await Service.app.ref(tabelas.CopiasChave).child(id).set({
+        await Service.app.ref(Tabelas.CopiasChave).child(id).set({
             IdChave: dto.IdChave,
             Data: dto.Data,
             Quantidade: dto.Quantidade,
@@ -79,7 +64,7 @@ const methods = {
     },
     async PostDescarte(dto) {
         let id = Date.now();
-        await Service.app.ref(tabelas.Descarte).child(id).set({
+        await Service.app.ref(Tabelas.Descarte).child(id).set({
             IdChave: dto.IdChave,
             Data: dto.Data,
             Quantidade: dto.Quantidade,
