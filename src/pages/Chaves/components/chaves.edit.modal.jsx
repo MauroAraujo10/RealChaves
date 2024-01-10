@@ -4,7 +4,7 @@ import { messages } from '../../../common/Enum/messages';
 import { toast } from "react-toastify";
 
 import TituloModal from '../../../common/components/TituloModal/TituloModal';
-import ChaveSevice from '../../../services/chave.service';
+import ChaveService from '../../../services/chave.service';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
 import Plana from '../assets/Plana.jpg';
@@ -34,15 +34,25 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
             Data: chaveSelecionada.Data
         };
 
-        await ChaveSevice.Update(chaveSelecionada.Id, dto)
-            .then(() => {
-                toast.success(messages.EditadoSucesso('Chave'));
-                onClose();
+        await ChaveService.GetAllNumeroSerie()
+            .then(async (arrayNumeroSerie) => {
+                let existeChaveSalva = arrayNumeroSerie.find(x => x.NumeroSerie === dto.NumeroSerie);
+
+                if (existeChaveSalva) {
+                    toast.warning('Este número de série ja foi cadastrado');
+                    return;
+                }
+
+                await ChaveService.Update(chaveSelecionada.Id, dto)
+                    .then(() => {
+                        toast.success(messages.EditadoSucesso('Chave'));
+                        onClose();
+                    })
+                    .catch(() => {
+                        toast.error(messages.EditadoErro('Chave'));
+                    });
             })
-            .catch(() => {
-                toast.error(messages.EditadoErro('Chave'));
-            });
-    }
+    };
 
 
     const handleChangeOptionTipo = (tipo) => {
@@ -73,7 +83,7 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
             footer={null}
             destroyOnClose={true}
         >
-            <TituloModal 
+            <TituloModal
                 titulo={'Edição de Chave'}
                 subTitulo={'Atualize as informações sobre a chave'}
             />
@@ -142,7 +152,7 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
                             </Select>
                         </Form.Item>
                     </Col>
-                    
+
                     <Col md={8} xs={12}>
                         <Image.PreviewGroup>
                             <Image

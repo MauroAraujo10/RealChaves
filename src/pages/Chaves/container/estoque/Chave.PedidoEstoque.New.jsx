@@ -17,7 +17,7 @@ const ChavePedidoEstoqueNew = () => {
 
 
     useEffect(() => {
-        ChaveService.GetAllNumeroSerie()
+        ChaveService.GetAllChaves()
             .then((chaves) => {
                 setListaChavesSalvas(chaves);
             })

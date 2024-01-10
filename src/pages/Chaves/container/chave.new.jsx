@@ -25,7 +25,7 @@ const ChaveCadastro = () => {
     const history = useHistory();
     const { Option } = Select;
     const [imgSrc, setImgSrc] = useState('');
-    
+
     const submitForm = async (form) => {
         const dto = {
             Marca: form.Marca,
@@ -34,14 +34,24 @@ const ChaveCadastro = () => {
             Quantidade: Number(form.Quantidade)
         };
 
-        await ChaveService.Post(dto)
-            .then(() => {
-                toast.success(messages.cadastradoSucesso('Chave'));
-                history.push(Rotas.Chaves);
+        await ChaveService.GetAllNumeroSerie()
+            .then(async (arrayNumeroSerie) => {
+                let existeChaveSalva = arrayNumeroSerie.find(x => x.NumeroSerie === dto.NumeroSerie);
+
+                if (existeChaveSalva) {
+                    toast.warning('Este número de série ja foi cadastrado');
+                    return;
+                }
+
+                await ChaveService.Post(dto)
+                    .then(() => {
+                        toast.success(messages.cadastradoSucesso('Chave'));
+                        history.push(Rotas.Chaves);
+                    })
+                    .catch(() => {
+                        toast.error(messages.cadastradoErro('Chave'));
+                    });
             })
-            .catch(() => {
-                toast.error(messages.cadastradoErro('Chave'));
-            });
     };
 
     const handleChange = (tipo) => {
@@ -71,8 +81,8 @@ const ChaveCadastro = () => {
                 listaCaminhos={['Chaves', 'Cadastrar chave']}
             />
 
-            <Form 
-                layout="vertical" 
+            <Form
+                layout="vertical"
                 onFinish={submitForm}
                 className='container-form'
             >
@@ -160,7 +170,7 @@ const ChaveCadastro = () => {
                             )}
                         </Image.PreviewGroup>
                     </Col>
-                    
+
                 </Row>
 
                 <BotaoCadastrar

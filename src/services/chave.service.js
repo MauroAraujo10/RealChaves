@@ -9,6 +9,19 @@ const methods = {
             snapshot.forEach((x) => {
                 if (!x.val().Deletado) {
                     chaves.push({
+                        NumeroSerie: x.val().NumeroSerie,
+                    });
+                }
+            });
+        });
+        return chaves;
+    },
+    async GetAllChaves() {
+        let chaves = [];
+        await Service.app.ref(Tabelas.Chave).once('value', snapshot => {
+            snapshot.forEach((x) => {
+                if (!x.val().Deletado) {
+                    chaves.push({
                         Id: x.key,
                         Marca: x.val().Marca,
                         NumeroSerie: x.val().NumeroSerie,
