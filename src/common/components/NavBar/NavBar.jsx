@@ -89,7 +89,7 @@ const NavBar = () => {
                             Histórico
                         </Link>
                     </li>
-                    <li>
+                    {/* <li>
                         <Link>Estatísticas</Link>
                         <ul>
                             <li>
@@ -111,10 +111,10 @@ const NavBar = () => {
                                 </Link>
                             </li>
                         </ul>
-                    </li>
-                    <li>
+                    </li> */}
+                    {/* <li>
                         <Link to={Rotas.Configuracoes}>Configurações</Link>
-                    </li>
+                    </li> */}
                 </ul>
             </nav>
 
