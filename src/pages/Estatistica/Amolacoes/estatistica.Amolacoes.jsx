@@ -23,7 +23,7 @@ const EstatisticaAmolacoes = () => {
     useState(() => {
         setLoading(true);
 
-        function getProdutosAmolados() {
+        function GetProdutosAmolados() {
             EstatisticaService.getProdutosAmolados()
                 .then((produtosAmolados) => {
 
@@ -36,7 +36,7 @@ const EstatisticaAmolacoes = () => {
                 });
         }
 
-        getProdutosAmolados();
+        GetProdutosAmolados();
     }, []);
 
     return (

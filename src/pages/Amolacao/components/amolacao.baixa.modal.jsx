@@ -26,7 +26,8 @@ const AmolacaoBaixaModal = ({ visible, onClose, produtoSelecionado }) => {
             DataRecebimento: produtoSelecionado.DataRecebimento,
             QuantidadeEstoque: novaQuantidade,
             Pago: novaQuantidade === 0,
-            Entregue: novaQuantidade === 0
+            Entregue: novaQuantidade === 0,
+            Deletado: false
         };
 
         await AmolacaoService.Update(produtoSelecionado.Id, dtoProduto)

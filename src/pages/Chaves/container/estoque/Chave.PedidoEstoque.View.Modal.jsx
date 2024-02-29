@@ -42,7 +42,7 @@ const ChaveEstoqueViewPedidoModal = ({ visible, onClose, pedidoSelecionado }) =>
 
             <List
                 header={<div>Chaves</div>}
-                footer={<div>Quantidade total de chaves: <b>{pedidoSelecionado?.QuantidadePedidaTotal}</b></div>}
+                footer={<div>Quantidade total de chaves: <b>{pedidoSelecionado?.QuantidadeTotal}</b></div>}
                 bordered
                 dataSource={data}
                 renderItem={(item) => <List.Item>{item}</List.Item>}

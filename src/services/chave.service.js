@@ -16,8 +16,10 @@ const methods = {
         });
         return chaves;
     },
-    async GetAllChaves() {
+    async GetAllChavesEQuantidade() {
         let chaves = [];
+        let quantidade = 0;
+
         await Service.app.ref(Tabelas.Chave).once('value', snapshot => {
             snapshot.forEach((x) => {
                 if (!x.val().Deletado) {
@@ -29,9 +31,13 @@ const methods = {
                         Tipo: x.val().Tipo,
                         Data: x.val().Data,
                     });
+
+                    quantidade += x.val().Quantidade;
                 }
             });
         });
+        
+        chaves.Quantidade = quantidade ?? 0;
         return chaves;
     },
     async Post(dto) {

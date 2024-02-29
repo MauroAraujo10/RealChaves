@@ -89,7 +89,7 @@ const NavBar = () => {
                             Histórico
                         </Link>
                     </li>
-                    {/* <li>
+                    <li>
                         <Link>Estatísticas</Link>
                         <ul>
                             <li>
@@ -101,7 +101,7 @@ const NavBar = () => {
                             <li>
                                 <Link to={Rotas.EstatisticasAmolacoes}>
                                     <AiOutlineAppstore size={16} className='mr-1' />
-                                    Produtos
+                                    Amolações
                                 </Link>
                             </li>
                             <li>
@@ -111,7 +111,7 @@ const NavBar = () => {
                                 </Link>
                             </li>
                         </ul>
-                    </li> */}
+                    </li>
                     {/* <li>
                         <Link to={Rotas.Configuracoes}>Configurações</Link>
                     </li> */}

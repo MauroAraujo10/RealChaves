@@ -24,7 +24,8 @@ const AmolacaoEditModal = ({ visible, onClose, produtoSelecionado }) => {
             DataRecebimento: produtoSelecionado.DataRecebimento,
             QuantidadeEstoque: produtoSelecionado.QuantidadeEstoque,
             Pago: produtoSelecionado.Pago === "Sim",
-            Entregue: false
+            Entregue: false,
+            Deletado: false
         };
 
         await AmolacaoService.Update(produtoSelecionado.Id, dto)

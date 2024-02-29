@@ -85,6 +85,7 @@ const ServicoEditModal = ({ visible, onClose, servicoSelecionado }) => {
                                 onChange={(value) => setPago(value)}
                                 checkedChildren={<CheckOutlined />}
                                 unCheckedChildren={<CloseOutlined />}
+                                disabled={servicoSelecionado?.Pago === 'Sim'}
                             />
                         </Form.Item>
                     </Col>

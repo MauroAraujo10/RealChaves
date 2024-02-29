@@ -6,7 +6,7 @@ import Grid from '../../../../common/components/Grid/Grid';
 
 import { AiOutlinePlus } from "react-icons/ai";
 
-const ChavePedidoEstoqueModalAdd = ({ visible, onClose, listaChavesSalvas, pedidoEstoque, setPedidoEstoque }) => {
+const ChavePedidoEstoqueModalAdd = ({ visible, onClose, listaChavesSalvas, setListaChavesSalvas, pedidoEstoque, setPedidoEstoque, quantidadeTotal }) => {
 
     const submitForm = async (form) => {
         const numeroSerieForm = Number(form.NumeroSerie);
@@ -27,8 +27,11 @@ const ChavePedidoEstoqueModalAdd = ({ visible, onClose, listaChavesSalvas, pedid
                 QuantidadeEmEstoque: chave.Quantidade,
                 QuantidadeSolicitada: Number(form.Quantidade)
             }]);
-            onClose();
 
+            let newLista = listaChavesSalvas.filter((listaChavesSalvas) => listaChavesSalvas.NumeroSerie !== numeroSerieForm);
+            setListaChavesSalvas(newLista);
+
+            onClose();
             return;
         }
 
@@ -113,6 +116,7 @@ const ChavePedidoEstoqueModalAdd = ({ visible, onClose, listaChavesSalvas, pedid
             <Grid
                 dataSource={listaChavesSalvas}
                 columns={columns}
+                QuantidadeTotal={quantidadeTotal}
                 pagination
             />
 

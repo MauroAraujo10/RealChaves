@@ -33,7 +33,6 @@ const ChaveEstoqueTabelaPedido = () => {
             let pedido = [];
             let quantidadeTotal = 0;
             snapshot.forEach((x) => {
-
                 if (!x.val().Entregue) {
 
                     pedido.push({
@@ -43,7 +42,7 @@ const ChaveEstoqueTabelaPedido = () => {
                         DataPedido: x.val()?.DataPedido,
                         QuantidadeTotal: x.val()?.QuantidadeTotal
                     })
-                    quantidadeTotal = quantidadeTotal + x.val().QuantidadePedidaTotal
+                    quantidadeTotal += x.val().QuantidadeTotal;
 
                 }
             })

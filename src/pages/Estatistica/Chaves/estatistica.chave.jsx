@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
 
-import estatisticaService from '../service/estatisticas.service';
+import EstatisticaService from '../service/estatisticas.service';
 
 import Loading from '../../../common/components/Loading/Loading';
 import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
@@ -18,28 +18,30 @@ const EstatisticaChave = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        setLoading(true);
 
-        function getEstatisticasCopias() {
-            estatisticaService.getEstatisticaCopias()
-                .then((dtoListCopia) => { setDtoListaCopia(dtoListCopia);  })
-                
-            setLoading(false);
+        const GetEstatisticasCopias = async () => {
+            await EstatisticaService.getEstatisticaCopias()
+                .then((dtoListCopia) => { setDtoListaCopia(dtoListCopia);})
         }
 
-        function getEstatisticasDescartes() {
-            estatisticaService.getEstatisticaDescartes()
+        const GetEstatisticasDescartes = async () => {
+            await EstatisticaService.getEstatisticaDescartes()
                 .then((dtoListaDescartes) => { setDtoListaDescarte(dtoListaDescartes); })
         }
 
-        function getEstatisticasPedidoEstoque() {
-            estatisticaService.getEstatisticasPedidoEstoque()
-                .then((dtoPedidoEstoque) => {setDtoListaPedidoEstoque(dtoPedidoEstoque);})
+        const GetEstatisticasPedidoEstoque = async () => {
+            await EstatisticaService.getEstatisticasPedidoEstoque()
+                .then((dtoPedidoEstoque) => { setDtoListaPedidoEstoque(dtoPedidoEstoque); })
         }
 
-        getEstatisticasCopias();
-        getEstatisticasDescartes();
-        getEstatisticasPedidoEstoque();
+        const GetEstatisicasChaves = async () => {
+            await GetEstatisticasCopias();
+            await GetEstatisticasDescartes();
+            await GetEstatisticasPedidoEstoque();
+        }
+
+        GetEstatisicasChaves()
+            .then(() => { setLoading(false); });
     }, []);
 
     return (

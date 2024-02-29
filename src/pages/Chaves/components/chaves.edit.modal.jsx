@@ -36,11 +36,14 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
 
         await ChaveService.GetAllNumeroSerie()
             .then(async (arrayNumeroSerie) => {
-                let existeChaveSalva = arrayNumeroSerie.find(x => x.NumeroSerie === dto.NumeroSerie);
 
-                if (existeChaveSalva) {
-                    toast.warning('Este número de série ja foi cadastrado');
-                    return;
+                if (dto.NumeroSerie !== chaveSelecionada.NumeroSerie) {
+                    let existeChaveSalva = arrayNumeroSerie.find(x => x.NumeroSerie === dto.NumeroSerie);
+
+                    if (existeChaveSalva) {
+                        toast.warning('Este número de série ja foi cadastrado');
+                        return;
+                    }
                 }
 
                 await ChaveService.Update(chaveSelecionada.Id, dto)

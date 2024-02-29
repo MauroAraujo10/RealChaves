@@ -41,8 +41,7 @@ const AmolacaoGrid = () => {
             let quantidadeTotal = 0;
 
             amolacoes.forEach((x) => {
-
-                if (!x.val().Entregue) {
+                if (!x.val().Entregue && !x.val().Deletado) {
                     produtos.push({
                         Id: x.key,
                         Cliente: x.val().Cliente,
@@ -67,9 +66,9 @@ const AmolacaoGrid = () => {
     const columns = [
         { title: 'Cliente', dataIndex: 'Cliente', key: 'Cliente', width: '30%' },
         { title: 'Produto', dataIndex: 'Tipo', key: 'Tipo', width: '10%' },
+        { title: 'Quantidade em Estoque', dataIndex: 'QuantidadeEstoque', key: 'QuantidadeEstoque', width: '10%' },
         { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '10%' },
         { title: 'Data Recebimento', dataIndex: 'DataRecebimento', key: 'DataRecebimento', width: '10%' },
-        { title: 'Quantidade em Estoque', dataIndex: 'QuantidadeEstoque', key: 'QuantidadeEstoque', width: '10%' },
         { title: 'Pago', dataIndex: 'Pago', key: 'Pago', width: '5%' },
         {
             title: 'Ações', key: 'acoes', width: '10%', render: (status, dto) => (
@@ -122,7 +121,11 @@ const AmolacaoGrid = () => {
     }
 
     const deletarProduto = async (dto) => {
-        await AmolacaoService.Delete(dto.Id)
+        dto.Pago = dto.Pago === 'Sim';
+        dto.Entregue = false;
+        dto.Deletado = true;
+
+        await AmolacaoService.Update(dto.Id, dto)
             .then(() => {
                 toast.success(messages.exclusaoSucesso());
                 setModalDeletarVisible(false);

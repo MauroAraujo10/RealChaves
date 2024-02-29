@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Table, Tooltip, Button } from 'antd';
 
 import HeaderForm from '../../../../common/components/HeaderForm/HeaderForm';
@@ -9,17 +10,20 @@ import { toast } from 'react-toastify';
 import { messages } from '../../../../common/Enum/messages';
 
 import { AiOutlinePlus, AiOutlineSave, AiOutlineClose } from "react-icons/ai";
+import { Rotas } from '../../../../Routes/rotas';
 
 const ChavePedidoEstoqueNew = () => {
     const [pedidoEstoque, setPedidoEstoque] = useState([]);
     const [visiblePedidoEstoqueModalAdd, setVisiblePedidoEstoqueModalAdd] = useState(false);
     const [listaChavesSalvas, setListaChavesSalvas] = useState([]);
-
+    const [quantidadeTotal, setQuantidadeTotal] = useState(0);
+    const history = useHistory();
 
     useEffect(() => {
-        ChaveService.GetAllChaves()
+        ChaveService.GetAllChavesEQuantidade()
             .then((chaves) => {
                 setListaChavesSalvas(chaves);
+                setQuantidadeTotal(chaves.Quantidade);
             })
     }, [])
 
@@ -63,6 +67,7 @@ const ChavePedidoEstoqueNew = () => {
             .then(() => {
                 toast.success(messages.cadastradoSucesso('pedido de estoque'));
                 setPedidoEstoque([]);
+                history.push(Rotas.ChavePedidoEstoque);
             })
             .catch(() => {
                 toast.error(messages.cadastradoErro('pedido de estoque'));
@@ -133,8 +138,10 @@ const ChavePedidoEstoqueNew = () => {
                 visible={visiblePedidoEstoqueModalAdd}
                 onClose={() => setVisiblePedidoEstoqueModalAdd(false)}
                 listaChavesSalvas={listaChavesSalvas}
+                setListaChavesSalvas={setListaChavesSalvas}
                 pedidoEstoque={pedidoEstoque}
                 setPedidoEstoque={setPedidoEstoque}
+                quantidadeTotal={quantidadeTotal}
             />
 
         </div>

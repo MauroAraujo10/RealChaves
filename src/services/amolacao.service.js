@@ -13,7 +13,8 @@ const Methods = {
             DataRecebimento: moment().format('DD/MM/yyyy'),
             QuantidadeEstoque: dto.Quantidade,
             Pago: dto.Pago,
-            Entregue: false
+            Entregue: false,
+            Deletado: false
         })
 
         return id;
@@ -27,11 +28,22 @@ const Methods = {
             DataRecebimento: dto.DataRecebimento,
             QuantidadeEstoque: dto.QuantidadeEstoque,
             Pago: dto.Pago,
-            Entregue: dto.Entregue
+            Entregue: dto.Entregue,
+            Deletado: dto.Deletado
         });
     },
-    async Delete(id) {
-        await Service.app.ref(tabelas.Produtos).child(id).remove();
+    async Delete(id, dto) {
+        await Service.app.ref(tabelas.Produtos).child(id).set({
+            Cliente: dto.Cliente,
+            Telefone: dto.Telefone,
+            Tipo: dto.Tipo,
+            Marca: dto.Marca,
+            DataRecebimento: dto.DataRecebimento,
+            QuantidadeEstoque: dto.QuantidadeEstoque,
+            Pago: dto.Pago,
+            Entregue: dto.Entregue,
+            Deletado: true
+        });
     },
     async PostPagamento(dto){
         let id = Date.now();
