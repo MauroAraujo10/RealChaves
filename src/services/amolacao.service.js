@@ -13,6 +13,7 @@ const Methods = {
             DataRecebimento: moment().format('DD/MM/yyyy'),
             QuantidadeEstoque: dto.Quantidade,
             Pago: dto.Pago,
+            TipoPagamento: dto.TipoPagamento,
             Entregue: false,
             Deletado: false
         })
@@ -28,6 +29,7 @@ const Methods = {
             DataRecebimento: dto.DataRecebimento,
             QuantidadeEstoque: dto.QuantidadeEstoque,
             Pago: dto.Pago,
+            TipoPagamento: dto.TipoPagamento,
             Entregue: dto.Entregue,
             Deletado: dto.Deletado
         });
@@ -41,6 +43,7 @@ const Methods = {
             DataRecebimento: dto.DataRecebimento,
             QuantidadeEstoque: dto.QuantidadeEstoque,
             Pago: dto.Pago,
+            TipoPagamento: dto.TipoPagamento,
             Entregue: dto.Entregue,
             Deletado: true
         });
@@ -50,8 +53,10 @@ const Methods = {
         await Service.app.ref(tabelas.Pagamentos).child(id).set({
             IdProduto: dto.IdProduto,
             DataPagamento: moment().format('DD/MM/yyyy'),
+            TipoProduto: dto.TipoProduto,
             Quantidade: dto.Quantidade,
-            Valor: dto.Valor
+            Valor: dto.Valor,
+            TipoPagamento: dto.TipoPagamento
         })
     }
 }

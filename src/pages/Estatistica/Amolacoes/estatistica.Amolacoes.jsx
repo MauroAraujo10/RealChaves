@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'antd';
 
-import EstatisticaService from '../service/estatisticas.service';
+import EstatiticaService from '../../../services/estatisticas.service';
 
 import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
 import EstatisticaCard from '../../../common/components/EstatisticaCard/EstatisticaCard';
@@ -12,7 +12,6 @@ import Scizoricon from '../assets/Scizor-icon.png';
 import Knifeicon from '../assets/Knife-icon.png';
 
 const EstatisticaAmolacoes = () => {
-
     const [dtoListaProdutosAmolados, setDtoListaProdutosAmolados] = useState({});
     const [dtoListaAlicates, setDtoListaAlicates] = useState({});
     const [dtoListaTesouras, setDtoListaTesouras] = useState({});
@@ -20,23 +19,19 @@ const EstatisticaAmolacoes = () => {
 
     const [loading, setLoading] = useState(false);
 
-    useState(() => {
+    useEffect(() => {
         setLoading(true);
 
-        function GetProdutosAmolados() {
-            EstatisticaService.getProdutosAmolados()
-                .then((produtosAmolados) => {
+        EstatiticaService.getProdutosAmolados()
+            .then((produtosAmolados) => {
+                
+                setDtoListaAlicates({ Vetor: produtosAmolados.VetorAlicates });
+                setDtoListaTesouras({ Vetor: produtosAmolados.VetorTesouras });
+                setDtoListaFacas({ Vetor: produtosAmolados.VetorFacas });
 
-                    setDtoListaAlicates({ Vetor: produtosAmolados.VetorAlicates });
-                    setDtoListaTesouras({ Vetor: produtosAmolados.VetorTesouras });
-                    setDtoListaFacas({ Vetor: produtosAmolados.VetorFacas });
-
-                    setDtoListaProdutosAmolados(produtosAmolados);
-                    setLoading(false);
-                });
-        }
-
-        GetProdutosAmolados();
+                setDtoListaProdutosAmolados(produtosAmolados);
+                setLoading(false);
+            })
     }, []);
 
     return (
@@ -54,39 +49,42 @@ const EstatisticaAmolacoes = () => {
                             <EstatisticaCard
                                 title={'Alicates'}
                                 icon={<img src={Pliericon} alt={'icon'} width={60} height={60} />}
+                                dominio={'alicate'}
                                 arrayInformacoes={dtoListaAlicates}
-                                quantidadeHoje={dtoListaProdutosAmolados?.AlicatesAmoladosHojeQuantidade}
-                                quantidadeEsteMes={dtoListaProdutosAmolados?.AlicatesAmoladosEsteMesQuantidade}
-                                quantidadeTotal={dtoListaProdutosAmolados?.AlicatesAmoladosTotalQuantidade}
-                                valorHoje={dtoListaProdutosAmolados?.AlicatesAmoladosHojeValor}
-                                valorEsteMes={dtoListaProdutosAmolados?.AlicatesAmoladosEsteMesValor}
-                                valorTotal={dtoListaProdutosAmolados?.AlicatesAmoladosTotalValor}
+                                quantidadeHoje={dtoListaProdutosAmolados.AlicatesAmoladosHojeQuantidade}
+                                quantidadeEsteMes={dtoListaProdutosAmolados.AlicatesAmoladosEsteMesQuantidade}
+                                quantidadeTotal={dtoListaProdutosAmolados.AlicatesAmoladosTotalQuantidade}
+                                valorHoje={dtoListaProdutosAmolados.AlicatesAmoladosHojeValor}
+                                valorEsteMes={dtoListaProdutosAmolados.AlicatesAmoladosEsteMesValor}
+                                valorTotal={dtoListaProdutosAmolados.AlicatesAmoladosTotalValor}
                             />
                         </Col>
                         <Col xs={24} sm={24} md={24} lg={8} xl={8} xxl={8} className="mb-1">
                             <EstatisticaCard
                                 title={'Tesouras'}
                                 icon={<img src={Scizoricon} alt={'icon'} width={60} height={60} />}
+                                dominio={'tesoura'}
                                 arrayInformacoes={dtoListaTesouras}
-                                quantidadeHoje={dtoListaProdutosAmolados?.TesourasAmoladosHojeQuantidade}
-                                quantidadeEsteMes={dtoListaProdutosAmolados?.TesourasAmoladosEsteMesQuantidade}
-                                quantidadeTotal={dtoListaProdutosAmolados?.TesourasAmoladosTotalQuantidade}
-                                valorHoje={dtoListaProdutosAmolados?.TesourasAmoladosHojeValor}
-                                valorEsteMes={dtoListaProdutosAmolados?.TesourasAmoladosEsteMesValor}
-                                valorTotal={dtoListaProdutosAmolados?.TesourasAmoladosTotalValor}
+                                quantidadeHoje={dtoListaProdutosAmolados.TesourasAmoladosHojeQuantidade}
+                                quantidadeEsteMes={dtoListaProdutosAmolados.TesourasAmoladosEsteMesQuantidade}
+                                quantidadeTotal={dtoListaProdutosAmolados.TesourasAmoladosTotalQuantidade}
+                                valorHoje={dtoListaProdutosAmolados.TesourasAmoladosHojeValor}
+                                valorEsteMes={dtoListaProdutosAmolados.TesourasAmoladosEsteMesValor}
+                                valorTotal={dtoListaProdutosAmolados.TesourasAmoladosTotalValor}
                             />
                         </Col>
                         <Col xs={24} sm={24} md={24} lg={8} xl={8} xxl={8} className="mb-1">
                             <EstatisticaCard
                                 title={'Facas'}
                                 icon={<img src={Knifeicon} alt={'icon'} width={60} height={60} />}
+                                dominio={'faca'}
                                 arrayInformacoes={dtoListaFacas}
-                                quantidadeHoje={dtoListaProdutosAmolados?.FacasAmoladosHojeQuantidade}
-                                quantidadeEsteMes={dtoListaProdutosAmolados?.FacasAmoladosEsteMesQuantidade}
-                                quantidadeTotal={dtoListaProdutosAmolados?.FacasAmoladosTotalQuantidade}
-                                valorHoje={dtoListaProdutosAmolados?.FacasAmoladosHojeValor}
-                                valorEsteMes={dtoListaProdutosAmolados?.FacasAmoladosEsteMesValor}
-                                valorTotal={dtoListaProdutosAmolados?.FacasAmoladosTotalValor}
+                                quantidadeHoje={dtoListaProdutosAmolados.FacasAmoladosHojeQuantidade}
+                                quantidadeEsteMes={dtoListaProdutosAmolados.FacasAmoladosEsteMesQuantidade}
+                                quantidadeTotal={dtoListaProdutosAmolados.FacasAmoladosTotalQuantidade}
+                                valorHoje={dtoListaProdutosAmolados.FacasAmoladosHojeValor}
+                                valorEsteMes={dtoListaProdutosAmolados.FacasAmoladosEsteMesValor}
+                                valorTotal={dtoListaProdutosAmolados.FacasAmoladosTotalValor}
                             />
                         </Col>
                     </Row>

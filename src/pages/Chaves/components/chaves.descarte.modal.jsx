@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Row, Col } from 'antd';
 import { Modal, Form, Input, Select } from 'antd';
 import { messages } from '../../../common/Enum/messages';
@@ -7,28 +7,11 @@ import moment from 'moment';
 
 import TituloModal from '../../../common/components/TituloModal/TituloModal';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
-
 import ChaveService from '../../../services/chave.service';
-import ConfiguracoesService from '../../../services/configuracoes.service';
 
 const ChaveDescarteModal = ({ visible, onClose, chaveSelecionada }) => {
 
     const { Option } = Select;
-    const [arrayMotivos, setArrayMotivos] = useState([]);
-
-
-    useEffect( () => {
-
-        function GetMotivosDescarte (){
-            ConfiguracoesService.GetAllMotivosDescartes()
-            .then((x) => {
-                setArrayMotivos(x);
-            });
-        }
-
-        GetMotivosDescarte();
-        
-    }, []);
 
     const submitForm = async (form) => {
         let novaQuantidade = chaveSelecionada.Quantidade - Number(form.Quantidade);
@@ -40,15 +23,14 @@ const ChaveDescarteModal = ({ visible, onClose, chaveSelecionada }) => {
 
         const dtoDescarte = {
             IdChave: chaveSelecionada.Id,
-            IdMotivo: form.Motivo,
+            Motivo: form.Motivo,
             Quantidade: Number(form.Quantidade),
             Data: moment().format('DD/MM/yyyy'),
         };
-
+        
         await ChaveService.PostDescarte(dtoDescarte)
-            .then( async() => {
-
-                chaveSelecionada.Quantidade = novaQuantidade
+            .then(async () => {
+                chaveSelecionada.Quantidade = novaQuantidade;
                 await ChaveService.Update(chaveSelecionada.Id, chaveSelecionada);
                 toast.success(messages.cadastradoSucesso('Descarte de Chave'));
                 onClose();
@@ -99,19 +81,13 @@ const ChaveDescarteModal = ({ visible, onClose, chaveSelecionada }) => {
                             name={'Motivo'}
                             rules={[{ required: true, message: messages.CampoObrigatorio }]}
                         >
-                            <Select 
-                                defaultValue="Selecione" 
+                            <Select
+                                defaultValue="Selecione"
                                 tabIndex={3}
                             >
-                                {arrayMotivos?.map(({Index, Motivo}) => (
-                                    <Option 
-                                        key={Index} 
-                                        value={Index}
-                                    >
-                                        {Motivo}
-                                    </Option>
-                        ))}
-
+                                <Option key={1} value={'A chave quebrou no processo'}>A chave quebrou no processo</Option>
+                                <Option key={2} value={'Chave não funcionou para o cliente'}>Chave não funcionou para o cliente</Option>
+                                <Option key={3} value={'A chave foi perdida'}>A chave foi perdida</Option>
                             </Select>
                         </Form.Item>
                     </Col>

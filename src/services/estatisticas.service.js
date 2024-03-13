@@ -1,5 +1,5 @@
-import service from '../../../services/index';
-import tabelas from '../../../common/Enum/tabelas';
+import Service from './index';
+import Tabelas from '../common/Enum/tabelas';
 import moment from 'moment';
 
 const dataAtual = moment().format('DD/MM/yyyy');
@@ -10,7 +10,7 @@ const methods = {
     async getEstatisticaCopias() {
         let dto = {};
 
-        await service.app.ref(tabelas.CopiasChave).once('value', (snapshot) => {
+        await Service.app.ref(Tabelas.CopiasChave).once('value', (snapshot) => {
 
             let copias = [];
 
@@ -22,16 +22,18 @@ const methods = {
             let valorCopiasFeitasEsteMes = 0;
             let valorCopiasFeitasTotal = 0;
 
+
             snapshot.forEach((x) => {
 
                 let dataSplit = x.val().Data.split('/');
 
                 copias.push({
-                    datasConvertida: {
-                        Data: new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])),
-                        Quantidade: x.val().Quantidade,
-                        Valor: x.val().Valor
-                    }
+                    DataCadastroReal: x.val().Data,
+                    DataCadastroConvertida: new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])),
+                    Quantidade: x.val().Quantidade,
+                    Valor: x.val().Valor,
+                    ValorGrid: x.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                    TipoPagamento: x.val().TipoPagamento
                 })
 
                 if (x.val().Data === dataAtual) {
@@ -57,12 +59,13 @@ const methods = {
                 ValorCopiasFeitasTotal: valorCopiasFeitasTotal,
             }
         })
+
         return dto;
     },
     async getEstatisticaDescartes() {
         let dto = {};
 
-        await service.app.ref(tabelas.Descarte).once('value', (snapshot) => {
+        await Service.app.ref(Tabelas.Descarte).once('value', (snapshot) => {
 
             let descartes = [];
 
@@ -70,30 +73,30 @@ const methods = {
             let chavesDescartadasEsteMes = 0;
             let chavesDescartadasTotal = 0;
 
-            snapshot.forEach((x) => {
-                let dataSplit = x.val().Data.split('/');
+            snapshot.forEach((descarte) => {
+                let dataSplit = descarte.val().Data.split('/');
 
                 descartes.push({
-                    datasConvertida: {
-                        Data: new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])),
-                        Quantidade: x.val().Quantidade
-                    }
+                    DataCadastroReal: descarte.val().Data,
+                    DataCadastroConvertida: new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])),
+                    Quantidade: descarte.val().Quantidade,
+                    Motivo: descarte.val().Motivo
                 })
 
-                if (x.val().Data === dataAtual)
-                    chavesDescartadasHoje += x.val().Quantidade;
+                if (descarte.val().Data === dataAtual)
+                    chavesDescartadasHoje += descarte.val().Quantidade;
 
                 if (dataSplit[1] === mesAtual && dataSplit[2] === anoAtual)
-                    chavesDescartadasEsteMes += x.val().Quantidade;
+                    chavesDescartadasEsteMes += descarte.val().Quantidade;
 
-                chavesDescartadasTotal += x.val().Quantidade;
+                chavesDescartadasTotal += descarte.val().Quantidade;
             })
 
             dto = {
                 Vetor: descartes,
                 ChavesDescartadasHoje: chavesDescartadasHoje,
                 ChavesDescartadasEsteMes: chavesDescartadasEsteMes,
-                ChavesDescartadasTotal: chavesDescartadasTotal
+                ChavesDescartadasTotal: chavesDescartadasTotal,
             };
         })
         return dto;
@@ -101,7 +104,7 @@ const methods = {
     async getEstatisticasPedidoEstoque() {
         let dto = {};
 
-        await service.app.ref(tabelas.PedidoEstoque).once('value', (snapshot) => {
+        await Service.app.ref(Tabelas.BaixaPedidoChaves).once('value', (snapshot) => {
 
             let pedidosEstoque = [];
 
@@ -109,17 +112,20 @@ const methods = {
             let pedidosEstoqueFeitosEsteMes = 0;
             let pedidosEstoqueFeitosTotal = 0;
 
-            snapshot.forEach((x) => {
-                let dataSplit = x.val().DataPedido.split('/');
+            snapshot.forEach((pedidoEstoque) => {
+                let dataSplit = pedidoEstoque.val().DataBaixa.split('/');
 
                 pedidosEstoque.push({
-                    datasConvertida: {
-                        Data: new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])),
-                        Quantidade: 1
-                    }
+                    DataCadastroReal: pedidoEstoque.val().DataBaixa,
+                    DataCadastroConvertida: new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])),
+                    Quantidade: pedidoEstoque.val().QuantidadeTotalRecebida,
+                    Valor: pedidoEstoque.val().Valor,
+                    ValorGrid: pedidoEstoque.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                    Status: pedidoEstoque.val().Status,
+                    TipoPagamento: pedidoEstoque.val().TipoPagamento
                 })
 
-                if (x.val().DataPedido === dataAtual)
+                if (pedidoEstoque.val().DataBaixa === dataAtual)
                     pedidosEstoqueFeitosHoje++;
 
                 if (dataSplit[1] === mesAtual && dataSplit[2] === anoAtual)
@@ -140,7 +146,7 @@ const methods = {
     async getProdutosAmolados() {
         let dto = {};
 
-        await service.app.ref(tabelas.ProdutosAmolados).once('value', snap => {
+        await Service.app.ref(Tabelas.Pagamentos).once('value', snapshot => {
 
             let alicatesAmolados = [];
             let tesourasAmoladas = [];
@@ -167,75 +173,80 @@ const methods = {
             let facasAmoladosEsteMesValor = 0;
             let facasAmoladosTotalValor = 0;
 
-            snap.forEach((x) => {
-                let dataSplit = x.val().DataEntrega.split('/');
+            snapshot.forEach((pagamento) => {
+                const dataSplit = pagamento.val().DataPagamento.split('/');
 
-                switch (x.val().Produto) {
+                switch (pagamento.val().TipoProduto) {
                     case 'Alicate':
                         alicatesAmolados.push({
-                            datasConvertida: {
-                                Data: new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])),
-                                Quantidade: x.val().Quantidade
-                            }
+                            DataCadastroReal: pagamento.val().DataPagamento,
+                            DataCadastroConvertida: new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])),
+                            Quantidade: pagamento.val().Quantidade,
+                            Valor: pagamento.val().Valor,
+                            ValorGrid: pagamento.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                            TipoPagamento: pagamento.val().TipoPagamento,
                         })
 
-                        if (x.val().DataEntrega === dataAtual) {
-                            alicatesAmoladosHojeQuantidade += x.val().Quantidade;
-                            alicatesAmoladosHojeValor += x.val().Valor;
+                        if (pagamento.val().DataPagamento === dataAtual) {
+                            alicatesAmoladosHojeQuantidade += pagamento.val().Quantidade;
+                            alicatesAmoladosHojeValor += pagamento.val().Valor;
                         }
 
                         if (dataSplit[1] === mesAtual && dataSplit[2] === anoAtual) {
-                            alicatesAmoladosEsteMesQuantidade += x.val().Quantidade;
-                            alicatesAmoladosEsteMesValor += x.val().Valor;
+                            alicatesAmoladosEsteMesQuantidade += pagamento.val().Quantidade;
+                            alicatesAmoladosEsteMesValor += pagamento.val().Valor;
                         }
 
-                        alicatesAmoladosTotalQuantidade += x.val().Quantidade;
-                        alicatesAmoladosTotalValor += x.val().Valor;
-
+                        alicatesAmoladosTotalQuantidade += pagamento.val().Quantidade;
+                        alicatesAmoladosTotalValor += pagamento.val().Valor;
                         break;
 
                     case 'Tesoura':
                         tesourasAmoladas.push({
-                            datasConvertida: {
-                                Data: new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])),
-                                Quantidade: x.val().Quantidade
-                            }
+                            DataCadastroReal: pagamento.val().DataPagamento,
+                            DataCadastroConvertida: new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])),
+                            Quantidade: pagamento.val().Quantidade,
+                            Valor: pagamento.val().Valor,
+                            ValorGrid: pagamento.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                            TipoPagamento: pagamento.val().TipoPagamento,
                         })
 
-                        if (x.val().DataEntrega === dataAtual) {
-                            tesourasAmoladosHojeQuantidade += x.val().Quantidade;
-                            tesourasAmoladosHojeValor += x.val().Valor;
+                        if (pagamento.val().DataPagamento === dataAtual) {
+                            tesourasAmoladosHojeQuantidade += pagamento.val().Quantidade;
+                            tesourasAmoladosHojeValor += pagamento.val().Valor;
                         }
 
                         if (dataSplit[1] === mesAtual && dataSplit[2] === anoAtual) {
-                            tesourasAmoladosEsteMesQuantidade += x.val().Quantidade;
-                            tesourasAmoladosEsteMesValor += x.val().Valor;
+                            tesourasAmoladosEsteMesQuantidade += pagamento.val().Quantidade;
+                            tesourasAmoladosEsteMesValor += pagamento.val().Valor;
                         }
 
-                        tesourasAmoladosTotalQuantidade += x.val().Quantidade;
-                        tesourasAmoladosTotalValor += x.val().Valor;
+                        tesourasAmoladosTotalQuantidade += pagamento.val().Quantidade;
+                        tesourasAmoladosTotalValor += pagamento.val().Valor;
                         break;
 
                     case 'Faca':
                         facasAmoladas.push({
-                            datasConvertida: {
-                                Data: new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])),
-                                Quantidade: x.val().Quantidade
-                            }
+                            DataCadastroReal: pagamento.val().DataPagamento,
+                            DataCadastroConvertida: new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])),
+                            Quantidade: pagamento.val().Quantidade,
+                            Valor: pagamento.val().Valor,
+                            ValorGrid: pagamento.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                            TipoPagamento: pagamento.val().TipoPagamento,
                         })
 
-                        if (x.val().DataEntrega === dataAtual) {
-                            facasAmoladosHojeQuantidade += x.val().Quantidade;
-                            facasAmoladosHojeValor += x.val().Valor;
+                        if (pagamento.val().DataPagamento === dataAtual) {
+                            facasAmoladosHojeQuantidade += pagamento.val().Quantidade;
+                            facasAmoladosHojeValor += pagamento.val().Valor;
                         }
 
                         if (dataSplit[1] === mesAtual && dataSplit[2] === anoAtual) {
-                            facasAmoladosEsteMesQuantidade += x.val().Quantidade;
-                            facasAmoladosEsteMesValor += x.val().Valor;
+                            facasAmoladosEsteMesQuantidade += pagamento.val().Quantidade;
+                            facasAmoladosEsteMesValor += pagamento.val().Valor;
                         }
 
-                        facasAmoladosTotalQuantidade += x.val().Quantidade;
-                        facasAmoladosTotalValor += x.val().Valor;
+                        facasAmoladosTotalQuantidade += pagamento.val().Quantidade;
+                        facasAmoladosTotalValor += pagamento.val().Valor;
                         break;
 
                     default:
@@ -275,7 +286,7 @@ const methods = {
     async getServicos() {
         let dto = {};
 
-        await service.app.ref(tabelas.Servicos).once('value', (snapshot) => {
+        await Service.app.ref(Tabelas.Servicos).once('value', (snapshot) => {
 
             let servicos = [];
 
@@ -286,29 +297,34 @@ const methods = {
             let servicosFeitosEsteMesValor = 0;
             let servicosFeitosTotalValor = 0;
 
-            snapshot.forEach((x) => {
-                let dataSplit = x.val().Data.split('/');
+            snapshot.forEach((servico) => {
+                if (servico.val().Pago) {
 
-                servicos.push({
-                    datasConvertida: {
-                        Data: new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])),
-                        Quantidade: 1
+                    let dataSplit = servico.val().Data.split('/');
+
+                    servicos.push({
+                        DataCadastroReal: servico.val().Data,
+                        DataCadastroConvertida: new Date(Number(dataSplit[2]), Number(dataSplit[1] - 1), Number(dataSplit[0])),
+                        Quantidade: servico.val().Quantidade,
+                        Valor: servico.val().Valor,
+                        ValorGrid: servico.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                    });
+
+                    if (servico.val().Data === dataAtual) {
+                        servicosFeitosHojeQuantidade++;
+                        servicosFeitosHojeValor += servico.val().Valor;
                     }
-                })
 
-                if (x.val().Data === dataAtual) {
-                    servicosFeitosHojeQuantidade++;
-                    servicosFeitosHojeValor += x.val().Valor;
+                    if (dataSplit[1] === mesAtual && dataSplit[2] === anoAtual) {
+                        servicosFeitosEsteMesQuantidade++;
+                        servicosFeitosEsteMesValor += servico.val().Valor;
+                    }
+
+                    servicosFeitosTotalQuantidade++;
+                    servicosFeitosTotalValor += servico.val().Valor;
                 }
-
-                if (dataSplit[1] === mesAtual && dataSplit[2] === anoAtual){
-                    servicosFeitosEsteMesQuantidade++;
-                    servicosFeitosEsteMesValor += x.val().Valor;
-                }
-
-                servicosFeitosTotalQuantidade ++;
-                servicosFeitosTotalValor += x.val().Valor;
             })
+
 
             dto = {
                 Vetor: servicos,

@@ -36,7 +36,7 @@ const methods = {
                 }
             });
         });
-        
+
         chaves.Quantidade = quantidade ?? 0;
         return chaves;
     },
@@ -87,7 +87,7 @@ const methods = {
             IdChave: dto.IdChave,
             Data: dto.Data,
             Quantidade: dto.Quantidade,
-            IdMotivo: dto.IdMotivo,
+            Motivo: dto.Motivo,
         });
     }
 };

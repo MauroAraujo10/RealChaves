@@ -3,135 +3,121 @@ import React, { useEffect, useState, useRef } from 'react';
 import TotalRegistros from '../TotalRegistros/TotalRegistros';
 import { AiOutlineSearch } from "react-icons/ai";
 
-import Highlighter from 'react-highlight-words';
 import { Button, Input, Space, Table } from 'antd';
 
 const Grid = ({ dataSource, columns, QuantidadeTotal }) => {
-    const [searchText, setSearchText] = useState('');
-    const [searchedColumn, setSearchedColumn] = useState('');
-    const [column, setColumn] = useState([]);
-    const searchInput = useRef(null);
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const [column, setColumn] = useState([]);
+  const searchInput = useRef(null);
 
-    const handleSearch = (selectedKeys, confirm, dataIndex) => {
-        confirm();
-        setSearchText(selectedKeys[0]);
-        setSearchedColumn(dataIndex);
-      };
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
 
-      const handleReset = (clearFilters) => {
-        clearFilters();
-        setSearchText('');
-      };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText('');
+  };
 
-      const getColumnSearchProps = (dataIndex) => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
-          <div
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Buscar ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: 'block',
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<AiOutlineSearch />}
+            size="small"
             style={{
-              padding: 8,
+              width: 90,
             }}
-            onKeyDown={(e) => e.stopPropagation()}
           >
-            <Input
-              ref={searchInput}
-              placeholder={`Buscar ${dataIndex}`}
-              value={selectedKeys[0]}
-              onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-              onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-              style={{
-                marginBottom: 8,
-                display: 'block',
-              }}
-            />
-            <Space>
-              <Button
-                type="primary"
-                onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                icon={<AiOutlineSearch />}
-                size="small"
-                style={{
-                  width: 90,
-                }}
-              >
-                Buscar
-              </Button>
-              <Button
-                onClick={() => clearFilters && handleReset(clearFilters)}
-                size="small"
-                style={{
-                  width: 90,
-                }}
-              >
-                Resetar
-              </Button>
-            </Space>
-          </div>
-        ),
-        filterIcon: (filtered) => (
-          <AiOutlineSearch
+            &nbsp; Buscar
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
             style={{
-              color: filtered ? '#1677ff' : undefined,
+              width: 90,
             }}
-          />
-        ),
-        onFilter: (value, record) =>
-          record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-        onFilterDropdownOpenChange: (visible) => {
-          if (visible) {
-            setTimeout(() => searchInput.current?.select(), 100);
-          }
-        },
-        render: (text) =>
-        searchedColumn === dataIndex ? (
-          <Highlighter
-            highlightStyle={{
-              backgroundColor: '#ffc069',
-              padding: 0,
-            }}
-            searchWords={[searchText]}
-            autoEscape
-            textToHighlight={text ? text.toString() : ''}
-          />
-        ) : (
-          text
-        ),
-      });
+          >
+            Resetar
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <AiOutlineSearch
+        style={{
+          color: filtered ? '#1677ff' : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) => text
+  });
 
 
-    useEffect(() => {
-        let newColumns = [];
-        columns.forEach((x) => {
-            if (x.key === 'acoes')
-                newColumns.push({
-                    title: x.title,
-                    width: x.width,
-                    render: x.render
-                });
-            else
-                newColumns.push({
-                    title: x.title,
-                    dataIndex: x.dataIndex,
-                    key: x.key,
-                    ...getColumnSearchProps(x.key),
-                    width: x.width
-                });
-        })
-        setColumn(newColumns);
-    },[]);
+  useEffect(() => {
+    let newColumns = [];
+    columns.forEach((x) => {
+      if (x.key === 'acoes')
+        newColumns.push({
+          title: x.title,
+          width: x.width,
+          render: x.render
+        });
+      else
+        newColumns.push({
+          title: x.title,
+          dataIndex: x.dataIndex,
+          key: x.key,
+          ...getColumnSearchProps(x.key),
+          width: x.width
+        });
+    })
+    setColumn(newColumns);
+  }, []);
 
-    return (
-        <div className="container">
-            <TotalRegistros
-                numeroRegistros={dataSource.length}
-                QuantidadeTotal={QuantidadeTotal}
-            />
-            <Table
-                className="Grid"
-                bordered
-                dataSource={dataSource}
-                columns={column}
-            />
-        </div>
-    );
+  return (
+    <div className="container">
+      <TotalRegistros
+        numeroRegistros={dataSource.length}
+        QuantidadeTotal={QuantidadeTotal}
+      />
+      <Table
+        className="Grid"
+        bordered
+        dataSource={dataSource}
+        columns={column}
+      />
+    </div>
+  );
 }
 
 export default Grid;

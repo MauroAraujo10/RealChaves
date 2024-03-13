@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
 
-import EstatisticaService from '../service/estatisticas.service';
+import EstatisticaService from '../../../services/estatisticas.service';
 
 import Loading from '../../../common/components/Loading/Loading';
 import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
@@ -21,7 +21,7 @@ const EstatisticaChave = () => {
 
         const GetEstatisticasCopias = async () => {
             await EstatisticaService.getEstatisticaCopias()
-                .then((dtoListCopia) => { setDtoListaCopia(dtoListCopia);})
+                .then((dtoListCopia) => { setDtoListaCopia(dtoListCopia); })
         }
 
         const GetEstatisticasDescartes = async () => {
@@ -58,6 +58,7 @@ const EstatisticaChave = () => {
                             <EstatisticaCard
                                 title={'Cópias de chaves feitas'}
                                 icon={<img src={keyIcon} alt={'icon'} width={60} height={60} />}
+                                dominio={'copia'}
                                 arrayInformacoes={dtoListaCopia}
                                 quantidadeHoje={dtoListaCopia?.CopiasFeitasHoje}
                                 quantidadeEsteMes={dtoListaCopia?.CopiasFeitasEsteMes}
@@ -72,6 +73,7 @@ const EstatisticaChave = () => {
                             <EstatisticaCard
                                 title={'Chaves descartadas'}
                                 icon={<FcReuse size={60} />}
+                                dominio={'descarte'}
                                 arrayInformacoes={dtoListaDescarte}
                                 quantidadeHoje={dtoListaDescarte?.ChavesDescartadasHoje}
                                 quantidadeEsteMes={dtoListaDescarte?.ChavesDescartadasEsteMes}
@@ -84,6 +86,7 @@ const EstatisticaChave = () => {
                             <EstatisticaCard
                                 title={'Pedidos de estoque feitos'}
                                 icon={<FcFilingCabinet size={60} />}
+                                dominio={'pedidoestoque'}
                                 arrayInformacoes={dtoListaPedidoEstoque}
                                 quantidadeHoje={dtoListaPedidoEstoque?.PedidosEstoqueFeitosHoje}
                                 quantidadeEsteMes={dtoListaPedidoEstoque?.PedidosEstoqueFeitosEsteMes}
@@ -91,6 +94,7 @@ const EstatisticaChave = () => {
                                 valorHoje={null}
                             />
                         </Col>
+
                     </Row>
             }
         </div >

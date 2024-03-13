@@ -51,6 +51,10 @@ const AmolacaoGrid = () => {
                         DataRecebimento: x.val().DataRecebimento,
                         QuantidadeEstoque: x.val().QuantidadeEstoque,
                         Pago: x.val().Pago ? "Sim" : "Não",
+                        TipoPagamento: x.val().TipoPagamento,
+                        TipoPagamentoGrid: x.val().TipoPagamento === "CartaoDebito" ? "Cartão de Débito" : 
+                                           x.val().TipoPagamento === "CartaoCredito" ? "Cartão de Crédito" : 
+                                           x.val().TipoPagamento
                     })
 
                     quantidadeTotal += x.val().QuantidadeEstoque;
@@ -64,12 +68,13 @@ const AmolacaoGrid = () => {
     }, []);
 
     const columns = [
-        { title: 'Cliente', dataIndex: 'Cliente', key: 'Cliente', width: '30%' },
+        { title: 'Data Recebimento', dataIndex: 'DataRecebimento', key: 'DataRecebimento', width: '10%' },
+        { title: 'Cliente', dataIndex: 'Cliente', key: 'Cliente', width: '20%' },
         { title: 'Produto', dataIndex: 'Tipo', key: 'Tipo', width: '10%' },
         { title: 'Quantidade em Estoque', dataIndex: 'QuantidadeEstoque', key: 'QuantidadeEstoque', width: '10%' },
         { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '10%' },
-        { title: 'Data Recebimento', dataIndex: 'DataRecebimento', key: 'DataRecebimento', width: '10%' },
         { title: 'Pago', dataIndex: 'Pago', key: 'Pago', width: '5%' },
+        { title: 'Tipo Pagamento', dataIndex: 'TipoPagamentoGrid', key: 'TipoPagamentoGrid', width: '10%' },
         {
             title: 'Ações', key: 'acoes', width: '10%', render: (status, dto) => (
                 <div style={{ display: 'flex' }}>

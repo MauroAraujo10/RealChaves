@@ -1,30 +1,33 @@
 import React, { useState, useEffect } from 'react'
-import { Modal, Form, Input, Switch } from 'antd';
+import { Modal, Form, Input, Switch, Select } from 'antd';
 import { Row, Col } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { toast } from "react-toastify";
-import moment from 'moment';
 
 import service from '../../../services/servicos.service';
 import TituloModal from '../../../common/components/TituloModal/TituloModal';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
+import { AiOutlineCreditCard, AiOutlineSlack } from "react-icons/ai";
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
+import { FaRegMoneyBillAlt } from "react-icons/fa";
 
 const ServicoEditModal = ({ visible, onClose, servicoSelecionado }) => {
+    const { Option } = Select;
     const [pago, setPago] = useState(false);
 
     useEffect(() => {
         setPago(servicoSelecionado?.Pago === "Sim");
-    }, [servicoSelecionado]);
+    }, [visible]);
 
     const submitForm = async (form) => {
 
         const dto = {
             Descricao: form.Descricao,
-            Data: moment().format('DD/MM/yyyy'),
+            Data: servicoSelecionado.Data,
             Pago: pago ?? false,
-            Valor: form.Valor ? parseFloat(form.Valor) : 0
+            Valor: form.Valor ? parseFloat(form.Valor) : 0,
+            TipoPagamento: pago ? form.TipoPagamento : ''
         };
 
         await service.Update(servicoSelecionado.Id, dto)
@@ -42,9 +45,9 @@ const ServicoEditModal = ({ visible, onClose, servicoSelecionado }) => {
             visible={visible}
             onCancel={onClose}
             footer={null}
-            destroyOnClose
+            destroyOnClose={true}
         >
-            <TituloModal 
+            <TituloModal
                 titulo={'Editar Serviço'} />
 
             <Form
@@ -74,7 +77,7 @@ const ServicoEditModal = ({ visible, onClose, servicoSelecionado }) => {
                 </Row>
 
                 <Row gutter={10}>
-                    
+
                     <Col md={4} xs={4}>
                         <Form.Item
                             label="Pago"
@@ -90,23 +93,56 @@ const ServicoEditModal = ({ visible, onClose, servicoSelecionado }) => {
                         </Form.Item>
                     </Col>
                     {
-                        pago &&
-                        <Col md={6} xs={8}>
-                            <Form.Item
-                                label="Valor"
-                                name="Valor"
-                                rules={[{ required: pago, message: messages.CampoObrigatorio }]}
-                            >
-                                <Input
-                                    type="number"
-                                    placeholder="Valor"
-                                    min={0}
-                                    max={1000}
-                                    step="0.10"
-                                />
-                            </Form.Item>
-                        </Col>
+                        pago ?
+                            <>
+                                <Col md={6} sm={5} xs={8}>
+                                    <Form.Item
+                                        label="Valor"
+                                        name="Valor"
+                                        rules={[{ required: pago, message: messages.CampoObrigatorio }]}
+                                    >
+                                        <Input
+                                            type="number"
+                                            placeholder="Valor"
+                                            min={0}
+                                            max={10000}
+                                            step="0.10"
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                <Col lg={10} md={10} sm={10} xs={24}>
+                                    <Form.Item
+                                        label={"Tipo de Pagamento"}
+                                        name="TipoPagamento"
+                                        rules={[{ required: true, message: messages.CampoObrigatorio }]}
+                                    >
+                                        <Select defaultValue="Selecione" tabIndex={4}>
+                                            <Option value="Dinheiro">
+                                                <FaRegMoneyBillAlt size={16} className="mr-2" />
+                                                Dinheiro
+                                            </Option>
+                                            <Option value="CartaoDebito">
+                                                <AiOutlineCreditCard size={16} className="mr-2" />
+                                                Cartão de Débito
+                                            </Option>
+                                            <Option value="CartaoCredito">
+                                                <AiOutlineCreditCard size={16} className="mr-2" />
+                                                Cartão de Crédito
+                                            </Option>
+                                            <Option value="Pix" >
+                                                <AiOutlineSlack size={16} className="mr-2" />
+                                                Pix
+                                            </Option>
+                                        </Select>
+                                    </Form.Item>
+                                </Col>
+                            </>
+                            :
+                            <></>
                     }
+
+
+
                 </Row>
 
                 <BotaoCadastrar

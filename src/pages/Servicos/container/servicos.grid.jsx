@@ -42,8 +42,12 @@ const ServicosTabela = () => {
                     Data: x.val().Data,
                     Descricao: x.val().Descricao,
                     Valor: x.val().Valor,
-                    ValorGrid: x.val().Valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
-                    Pago: x.val().Pago ? 'Sim' : 'Não'
+                    ValorGrid: x.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                    Pago: x.val().Pago ? 'Sim' : 'Não',
+                    TipoPagamento: x.val().TipoPagamento,
+                    TipoPagamentoGrid: x.val().TipoPagamento === "CartaoDebito" ? "Cartão de Débito" :
+                        x.val().TipoPagamento === "CartaoCredito" ? "Cartão de Crédito" :
+                            x.val().TipoPagamento
                 })
             })
 
@@ -54,10 +58,11 @@ const ServicosTabela = () => {
     }, []);
 
     const columns = [
-        { title: 'Descrição', dataIndex: 'Descricao', key: 'Descricao', width: '60%' },
+        { title: 'Descrição', dataIndex: 'Descricao', key: 'Descricao', width: '50%' },
         { title: 'Data do Serviço', dataIndex: 'Data', key: 'Data', width: '10%' },
         { title: 'Pago', dataIndex: 'Pago', key: 'Pago', width: '10%' },
         { title: 'Valor', dataIndex: 'ValorGrid', key: 'ValorGrid', width: '10%' },
+        { title: 'Tipo Pagamento', dataIndex: 'TipoPagamentoGrid', key: 'TipoPagamentoGrid', width: '10%' },
         {
             title: 'Ações', key: 'acoes', width: '10%', render: (status, dto) => (
                 <div style={{ display: 'flex' }}>

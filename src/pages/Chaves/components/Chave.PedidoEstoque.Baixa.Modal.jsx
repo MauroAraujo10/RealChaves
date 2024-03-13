@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Row, Col, Modal, Form, Input, Table } from 'antd';
+import { Row, Col, Modal, Form, Input, Table, Select } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { toast } from 'react-toastify';
 import { TagStatusEnum } from '../../../common/Enum/TagStatusEnum';
@@ -12,10 +12,15 @@ import PedidoEstoqueService from '../../../services/pedido.estoque.service';
 import TituloModal from '../../../common/components/TituloModal/TituloModal';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
+import { FaRegMoneyBillAlt } from "react-icons/fa";
+import { AiOutlineCreditCard, AiOutlineSlack } from "react-icons/ai";
+
 const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
+    const { Option } = Select;
+    const { Column } = Table;
+    
     const [listaQuantidadesEntregues, setListaQuantidadesEntregues] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { Column } = Table;
 
     useEffect(() => {
         setListaQuantidadesEntregues([]);
@@ -29,6 +34,7 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
             DataPedido: pedidoSelecionado.DataPedido,
             Empresa: form.Empresa,
             Valor: parseFloat(form.Valor),
+            TipoPagamento: form.TipoPagamento,
             Status: TagStatusEnum.Completo,
             QuantidadeTotalRecebida: 0,
             QuantidadeTotalSolicitada: 0,
@@ -46,11 +52,11 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
                 Quantidade: chave.QuantidadeEmEstoque + quantidadeRecebida
             };
 
-            if (chave.QuantidadeSolicitada > quantidadeRecebida) 
+            if (chave.QuantidadeSolicitada > quantidadeRecebida)
                 dtoBaixaPedido.Status = TagStatusEnum.Incompleto;
-            else 
-            if (chave.QuantidadeSolicitada < quantidadeRecebida) 
-                dtoBaixaPedido.Status = TagStatusEnum.Excedente;
+            else
+                if (chave.QuantidadeSolicitada < quantidadeRecebida)
+                    dtoBaixaPedido.Status = TagStatusEnum.Excedente;
 
             dtoBaixaPedido.QuantidadeTotalSolicitada += chave.QuantidadeSolicitada;
             dtoBaixaPedido.QuantidadeTotalRecebida += quantidadeRecebida;
@@ -94,9 +100,9 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
                     <Loading /> :
                     <Form onFinish={submitForm} layout='vertical'>
                         <Row gutter={10}>
-                            <Col md={10} xs={12}>
+                            <Col md={8} xs={12}>
                                 <Form.Item
-                                    label="Empresa responsável"
+                                    label="Nome Empresa"
                                     name="Empresa"
                                     rules={[{ required: true, message: messages.CampoObrigatorio }]}
                                 >
@@ -122,6 +128,32 @@ const ChavesEstoquePedidoModal = ({ visible, onClose, pedidoSelecionado }) => {
                                         step="0.10"
                                         tabIndex={2}
                                     />
+                                </Form.Item>
+                            </Col>
+                            <Col md={10} xs={24}>
+                                <Form.Item
+                                    label={"Tipo de Pagamento"}
+                                    name="TipoPagamento"
+                                    rules={[{ required: true, message: messages.CampoObrigatorio }]}
+                                >
+                                    <Select defaultValue="Selecione" tabIndex={4}>
+                                        <Option value="Dinheiro">
+                                            <FaRegMoneyBillAlt size={16} className="mr-2" />
+                                            Dinheiro
+                                        </Option>
+                                        <Option value="CartaoDebito">
+                                            <AiOutlineCreditCard size={16} className="mr-2" />
+                                            Cartão de Débito
+                                        </Option>
+                                        <Option value="CartaoCredito">
+                                            <AiOutlineCreditCard size={16} className="mr-2" />
+                                            Cartão de Crédito
+                                        </Option>
+                                        <Option value="Pix" >
+                                            <AiOutlineSlack size={16} className="mr-2" />
+                                            Pix
+                                        </Option>
+                                    </Select>
                                 </Form.Item>
                             </Col>
                         </Row>

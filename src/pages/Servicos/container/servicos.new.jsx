@@ -1,28 +1,31 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Form, Input, Switch } from 'antd';
+import { Form, Input, Switch, Select } from 'antd';
 import { Row, Col } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { Rotas } from '../../../Routes/rotas';
 import { toast } from "react-toastify";
-import moment from 'moment';
 
 import service from '../../../services/servicos.service';
 import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
+import { AiOutlineCreditCard, AiOutlineSlack } from "react-icons/ai";
+import { FaRegMoneyBillAlt } from "react-icons/fa";
 
 const ServicosCadastro = () => {
-    const [pago, setPago] = useState();
+    const { Option } = Select;
     const history = useHistory();
+
+    const [pago, setPago] = useState();
 
     const submitForm = async (form) => {
         const dto = {
             Descricao: form.Descricao,
-            Data: moment().format('DD/MM/yyyy'),
             Pago: pago ?? false,
-            Valor: form.Valor ? parseFloat(form.Valor) : 0
+            Valor: pago ? parseFloat(form.Valor) : 0,
+            TipoPagamento: pago ? form.TipoPagamento : ''
         };
 
         await service.Post(dto)
@@ -65,38 +68,67 @@ const ServicosCadastro = () => {
                             />
                         </Form.Item>
                     </Col>
-                    
+
                     <Col md={1} sm={3} xs={8}>
                         <Form.Item
                             label="Pago"
                             name="Pago">
-                                <Switch
-                                    defaultChecked={false}
-                                    onChange={(value) => setPago(value)}
-                                    checkedChildren={<CheckOutlined />}
-                                    unCheckedChildren={<CloseOutlined />}
-                                    tabIndex={1}
-                                />
+                            <Switch
+                                defaultChecked={false}
+                                onChange={(value) => setPago(value)}
+                                checkedChildren={<CheckOutlined />}
+                                unCheckedChildren={<CloseOutlined />}
+                                tabIndex={1}
+                            />
                         </Form.Item>
 
                     </Col>
 
-                    <Col md={2} sm={8} xs={12}>
-                        {pago &&
-                            <Form.Item
-                                label="Valor"
-                                name="Valor"
-                                rules={[{ required: pago, message: messages.CampoObrigatorio }]}>
-                                <Input
-                                    type="number"
-                                    placeholder="Valor"
-                                    min={1}
-                                    step="0.1"
-                                    tabIndex={2}
-                                />
-                            </Form.Item>
-                        }
-                    </Col>
+                    {pago &&
+                        <>
+                            <Col md={2} sm={6} xs={12}>
+                                <Form.Item
+                                    label="Valor"
+                                    name="Valor"
+                                    rules={[{ required: pago, message: messages.CampoObrigatorio }]}>
+                                    <Input
+                                        type="number"
+                                        placeholder="Valor"
+                                        min={1}
+                                        step="0.1"
+                                        tabIndex={2}
+                                    />
+                                </Form.Item>
+
+                            </Col>
+                            <Col lg={4} md={4} sm={7} xs={24}>
+                                <Form.Item
+                                    label={"Tipo de Pagamento"}
+                                    name="TipoPagamento"
+                                    rules={[{ required: true, message: messages.CampoObrigatorio }]}
+                                >
+                                    <Select defaultValue="Selecione" tabIndex={4}>
+                                        <Option value="Dinheiro">
+                                            <FaRegMoneyBillAlt size={16} className="mr-2" />
+                                            Dinheiro
+                                        </Option>
+                                        <Option value="CartaoDebito">
+                                            <AiOutlineCreditCard size={16} className="mr-2" />
+                                            Cartão de Débito
+                                        </Option>
+                                        <Option value="CartaoCredito">
+                                            <AiOutlineCreditCard size={16} className="mr-2" />
+                                            Cartão de Crédito
+                                        </Option>
+                                        <Option value="Pix" >
+                                            <AiOutlineSlack size={16} className="mr-2" />
+                                            Pix
+                                        </Option>
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                        </>
+                    }
                 </Row>
 
                 <BotaoCadastrar

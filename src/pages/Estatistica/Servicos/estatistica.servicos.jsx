@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Row, Col } from 'antd';
 
-import EstatisticaService from '../service/estatisticas.service';
+import EstatisticaService from '../../../services/estatisticas.service';
 
 import Loading from '../../../common/components/Loading/Loading';
 import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';

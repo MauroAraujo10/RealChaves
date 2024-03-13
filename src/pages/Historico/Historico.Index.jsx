@@ -6,7 +6,6 @@ import Tabelas from '../../common/Enum/tabelas';
 
 import Services from '../../services';
 import ServicosService from '../../services/servicos.service';
-import ConfiguracoesService from '../../services/configuracoes.service';
 
 import Loading from '../../common/components/Loading/Loading';
 
@@ -32,7 +31,7 @@ const HistoricoIndex = () => {
                     { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '20%' },
                     { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', width: '20%' },
                     { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', width: '10%' },
-                    { title: 'TipoPagamento', dataIndex: 'TipoPagamento', key: 'TipoPagamento', width: '20%' },
+                    { title: 'TipoPagamento', dataIndex: 'TipoPagamentoGrid', key: 'TipoPagamentoGrid', width: '20%' },
                     { title: 'Valor', dataIndex: 'Valor', key: 'Valor', width: '10%' },
                 ];
 
@@ -47,6 +46,9 @@ const HistoricoIndex = () => {
                                         NumeroSerie: chave.val().NumeroSerie,
                                         Quantidade: copia.val().Quantidade,
                                         TipoPagamento: copia.val().TipoPagamento,
+                                        TipoPagamentoGrid: copia.val().TipoPagamento === "CartaoDebito" ? "Cartão de Débito" :
+                                            copia.val().TipoPagamento === "CartaoCredito" ? "Cartão de Crédito" :
+                                                copia.val().TipoPagamento,
                                         Valor: copia.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
                                     });
                                     setIsGridVisible(true);
@@ -59,38 +61,35 @@ const HistoricoIndex = () => {
                     });
                 break;
             case 'Descarte':
-                await ConfiguracoesService.GetAllMotivosDescartes()
-                    .then(async (motivos) => {
-
+                setLoading(true);
+                await Services.app.ref(Tabelas.Descarte).once('value')
+                    .then((snapshot) => {
                         let arrayDescartes = [];
+
                         const columnDescartes = [
-                            { title: 'Data do descarte', dataIndex: 'Data', key: 'Data', width: '10%' },
-                            { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '10%' },
+                            { title: 'Data do descarte', dataIndex: 'Data', key: 'Data', width: '15%' },
+                            { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', width: '10%' },
+                            { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '15%' },
                             { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', width: '10%' },
-                            { title: 'Motivo', dataIndex: 'Motivo', key: 'Motivo', width: '20%' },
-                            { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', width: '20%' },
+                            { title: 'Motivo', dataIndex: 'Motivo', key: 'Motivo', width: '40%' },
                         ];
 
-                        await Services.app.ref(Tabelas.Descarte).once('value')
-                            .then((snapshot) => {
-                                snapshot.forEach((descarte) => {
-                                    Services.app.ref(Tabelas.Chave).child(descarte.val().IdChave).once('value')
-                                        .then((chave) => {
-                                            var motivo = motivos.find(x => x.Index === descarte.val().IdMotivo);
-                                            arrayDescartes.push({
-                                                Marca: chave.val().Marca,
-                                                NumeroSerie: chave.val().NumeroSerie,
-                                                Data: descarte.val().Data,
-                                                Motivo: motivo.Motivo,
-                                                Quantidade: descarte.val().Quantidade
-                                            });
-                                            setIsGridVisible(true);
-                                            setColumns(columnDescartes);
-                                            setData([]);
-                                            setData(arrayDescartes);
-                                        });
-                                })
-                            })
+                        snapshot.forEach((descarte) => {
+                            Services.app.ref(Tabelas.Chave).child(descarte.val().IdChave).once('value')
+                                .then((chave) => {
+                                    arrayDescartes.push({
+                                        Marca: chave.val().Marca,
+                                        NumeroSerie: chave.val().NumeroSerie,
+                                        Data: descarte.val().Data,
+                                        Motivo: descarte.val().Motivo,
+                                        Quantidade: descarte.val().Quantidade
+                                    });
+                                    setIsGridVisible(true);
+                                    setColumns(columnDescartes);
+                                    setData([]);
+                                    setData(arrayDescartes);
+                                });
+                        })
                         setLoading(false);
                     })
                 break;
@@ -104,6 +103,7 @@ const HistoricoIndex = () => {
                     { title: 'Empresa', dataIndex: 'Empresa', key: 'Empresa', width: '20%' },
                     { title: 'Status', dataIndex: 'Status', key: 'Status', width: '15%' },
                     { title: 'Valor', dataIndex: 'Valor', key: 'Valor', width: '15%' },
+                    { title: 'Tipo Pagamento', dataIndex: 'TipoPagamentoGrid', key: 'TipoPagamentoGrid', width: '10%' },
                 ];
 
                 await Services.app.ref(Tabelas.BaixaPedidoChaves).once('value')
@@ -119,6 +119,9 @@ const HistoricoIndex = () => {
                                         Empresa: baixa.val().Empresa,
                                         Status: baixa.val().Status,
                                         Valor: baixa.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                                        TipoPagamentoGrid: baixa.val().TipoPagamento === "CartaoDebito" ? "Cartão de Débito" :
+                                                           baixa.val().TipoPagamento === "CartaoCredito" ? "Cartão de Crédito" :
+                                                           baixa.val().TipoPagamento,
                                     });
                                     setIsGridVisible(true);
                                     setColumns(columnPedidoEstoque);
@@ -139,6 +142,7 @@ const HistoricoIndex = () => {
                     { title: 'Tipo produto', dataIndex: 'Tipo', key: 'Tipo', width: '10%' },
                     { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', width: '5%' },
                     { title: 'Valor', dataIndex: 'ValorGrid', key: 'ValorGrid', width: '5%' },
+                    { title: 'Tipode Pagamento', dataIndex: 'TipoPagamentoGrid', key: 'TipoPagamentoGrid', width: '10%' },
                 ];
 
                 await Services.app.ref(Tabelas.Pagamentos).once('value')
@@ -154,6 +158,9 @@ const HistoricoIndex = () => {
                                         Tipo: produto.val().Tipo,
                                         Quantidade: pagamento.val().Quantidade,
                                         ValorGrid: pagamento.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                                        TipoPagamentoGrid: pagamento.val().TipoPagamento === "CartaoDebito" ? "Cartão de Débito" :
+                                            pagamento.val().TipoPagamento === "CartaoCredito" ? "Cartão de Crédito" :
+                                                pagamento.val().TipoPagamento,
                                     })
                                     setIsGridVisible(true);
                                     setColumns(columns);

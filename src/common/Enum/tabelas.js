@@ -7,7 +7,6 @@ export default {
     BaixaPedidoChaves: 'BaixaPedidoChaves',
     Produtos: 'Produtos',
     Pagamentos: 'Pagamentos',
-    ProdutosAmolados: 'ProdutosAmolados',
     Servicos: 'Servicos',
     Configuracoes: 'Configuracoes'
 }

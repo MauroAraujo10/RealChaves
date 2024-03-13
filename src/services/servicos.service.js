@@ -1,17 +1,20 @@
 import Service from './index';
 import Tabelas from '../common/Enum/tabelas';
+import moment from 'moment';
 
 const methods = {
-    async GetAllServicos(){
+    async GetAllServicos() {
         let servicos = [];
 
-        await Service.app.ref(Tabelas.Servicos).once('value', snapshot =>{
+        await Service.app.ref(Tabelas.Servicos).once('value', snapshot => {
             snapshot.forEach((servico) => {
-                servicos.push({
-                    Data: servico.val().Data,
-                    Descricao: servico.val().Descricao,
-                    Valor: servico.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
-                });
+                if (servico.val().Pago) {
+                    servicos.push({
+                        Data: servico.val().Data,
+                        Descricao: servico.val().Descricao,
+                        Valor: servico.val().Valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),
+                    });
+                }
             })
         })
 
@@ -21,9 +24,10 @@ const methods = {
         let id = Date.now();
         await Service.app.ref(Tabelas.Servicos).child(id).set({
             Descricao: dto.Descricao,
-            Data: dto.Data,
+            Data: moment().format('DD/MM/yyyy'),
             Pago: dto.Pago,
-            Valor: dto.Valor
+            Valor: dto.Valor,
+            TipoPagamento: dto.TipoPagamento
         });
     },
     async Update(id, dto) {
@@ -31,7 +35,8 @@ const methods = {
             Descricao: dto.Descricao,
             Data: dto.Data,
             Pago: dto.Pago,
-            Valor: dto.Valor
+            Valor: dto.Valor,
+            TipoPagamento: dto.TipoPagamento
         });
     },
     async Delete(id) {

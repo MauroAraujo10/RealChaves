@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Form, Input, Select, Switch } from 'antd';
 import { Row, Col } from 'antd';
@@ -9,15 +9,22 @@ import { toast } from "react-toastify";
 import AmolacaoService from '../../../services/amolacao.service';
 import BotaoCadastar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 import HeaderForm from '../../../common/components/HeaderForm/HeaderForm';
+import Inputmask from 'inputmask';
 
-import { AiOutlineFork, AiOutlineScissor } from "react-icons/ai";
+import { AiOutlineFork, AiOutlineScissor, AiOutlineCreditCard, AiOutlineSlack } from "react-icons/ai";
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import { RiKnifeLine } from "react-icons/ri";
+import { FaRegMoneyBillAlt } from "react-icons/fa";
 
 const AmolacaoCadastro = () => {
+    const { Option } = Select;
     const [pago, setPago] = useState(false);
     const history = useHistory();
-    const { Option } = Select;
+    const telefoneRef = useRef(null);
+
+    useEffect(() => {
+        Inputmask({ mask: '(99) 9999-9999[9]' }).mask(telefoneRef.current);
+    }, [])
 
     const submitForm = async (form) => {
 
@@ -27,7 +34,8 @@ const AmolacaoCadastro = () => {
             Tipo: form.Tipo,
             Marca: form.Marca,
             Quantidade: Number(form.Quantidade),
-            Pago: pago ?? false
+            Pago: pago ?? false,
+            TipoPagamento: pago ? form.TipoPagamento : ''
         };
 
         await AmolacaoService.Post(dto)
@@ -36,7 +44,9 @@ const AmolacaoCadastro = () => {
                     const dto = {
                         IdProduto: idProduto,
                         Quantidade: Number(form.Quantidade),
-                        Valor: parseFloat(form.Valor ?? 0)
+                        TipoProduto: form.Tipo,
+                        Valor: parseFloat(form.Valor ?? 0),
+                        TipoPagamento: form.TipoPagamento
                     };
                     await AmolacaoService.PostPagamento(dto);
                 }
@@ -85,6 +95,7 @@ const AmolacaoCadastro = () => {
                             <Input
                                 type="text"
                                 placeholder="Telefone"
+                                ref={telefoneRef}
                                 maxLength={15}
                                 tabIndex={0}
                             />
@@ -166,24 +177,51 @@ const AmolacaoCadastro = () => {
                         </Form.Item>
                     </Col>
 
-                    <Col md={2} sm={6} xs={14}>
 
-                        {pago &&
-                            <Form.Item
-                                label="Valor pago"
-                                name="Valor"
-                                rules={[{ required: true, message: messages.CampoObrigatorio }]}>
-                                <Input
-                                    type="number"
-                                    placeholder="Valor"
-                                    min="0.1"
-                                    step="0.10"
-                                    tabIndex={5}
-                                />
-                            </Form.Item>
-                        }
-                    </Col>
-
+                    {pago &&
+                        <>
+                            <Col md={2} sm={6} xs={14}>
+                                <Form.Item
+                                    label="Valor pago"
+                                    name="Valor"
+                                    rules={[{ required: true, message: messages.CampoObrigatorio }]}>
+                                    <Input
+                                        type="number"
+                                        placeholder="Valor"
+                                        min="0.1"
+                                        step="0.10"
+                                        tabIndex={5}
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col lg={4} md={2} sm={7} xs={24}>
+                                <Form.Item
+                                    label={"Tipo de Pagamento"}
+                                    name="TipoPagamento"
+                                    rules={[{ required: true, message: messages.CampoObrigatorio }]}
+                                >
+                                    <Select defaultValue="Selecione" tabIndex={4}>
+                                        <Option value="Dinheiro">
+                                            <FaRegMoneyBillAlt size={16} className="mr-2" />
+                                            Dinheiro
+                                        </Option>
+                                        <Option value="CartaoDebito">
+                                            <AiOutlineCreditCard size={16} className="mr-2" />
+                                            Cartão de Débito
+                                        </Option>
+                                        <Option value="CartaoCredito">
+                                            <AiOutlineCreditCard size={16} className="mr-2" />
+                                            Cartão de Crédito
+                                        </Option>
+                                        <Option value="Pix" >
+                                            <AiOutlineSlack size={16} className="mr-2" />
+                                            Pix
+                                        </Option>
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                        </>
+                    }
                 </Row>
 
                 <BotaoCadastar
@@ -191,7 +229,7 @@ const AmolacaoCadastro = () => {
                     tabIndex={6}
                 />
             </Form>
-        </div>
+        </div >
     )
 }
 

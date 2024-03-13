@@ -39,6 +39,7 @@ const methods = {
             DataBaixa: moment().format('DD/MM/yyyy'),
             Empresa: dto.Empresa,
             Valor: dto.Valor,
+            TipoPagamento: dto.TipoPagamento,
             Status: dto.Status,
             QuantidadeTotalSolicitada: dto.QuantidadeTotalSolicitada,
             QuantidadeTotalRecebida: dto.QuantidadeTotalRecebida,
