@@ -9,7 +9,7 @@ import TituloModal from '../../../common/components/TituloModal/TituloModal'
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 import { messages } from '../../../common/Enum/messages';
 
-const EstatisticaDetalhesPedidoEstoqueModal = ({ visible, onClose, arrayInformacoes }) => {
+const EstatisticaDetalhesPedidoEstoqueModal = ({ visible, onClose, arrayInformacoes, dominio }) => {
     const [dataInicial, setDataInicial] = useState('');
     const [dataFinal, setDataFinal] = useState('');
 
@@ -56,8 +56,6 @@ const EstatisticaDetalhesPedidoEstoqueModal = ({ visible, onClose, arrayInformac
 
         setVisibleDashBoard(true);
         setLoading(true);
-
-        console.log(arrayInformacoes);
 
         let valoresCoincidentes = [];
         let quantidadeTotal = 0;
@@ -175,7 +173,7 @@ const EstatisticaDetalhesPedidoEstoqueModal = ({ visible, onClose, arrayInformac
             destroyOnClose={true}
         >
             <TituloModal
-                titulo={'Busca Detalhada'}
+                titulo={`Busca Detalhada de ${dominio}`}
                 subTitulo={'Selecione o período pelo qual deseja buscar informação'}
             />
 
@@ -248,7 +246,7 @@ const EstatisticaDetalhesPedidoEstoqueModal = ({ visible, onClose, arrayInformac
 
                                 <Col md={6} xs={24}>
                                     <div className='Estatistica-Busca-Detalhada-Card'>
-                                        <p>Tipo de pagamento por quantidade</p>
+                                        <p>Tipo de Pagamento por quantidade</p>
                                         <PieChart width={200} height={300}>
                                             <Pie
                                                 dataKey="value"
@@ -296,7 +294,7 @@ const EstatisticaDetalhesPedidoEstoqueModal = ({ visible, onClose, arrayInformac
 
                                 <Col md={6} xs={24}>
                                     <div className='Estatistica-Busca-Detalhada-Card'>
-                                        <p>Tipo de pagamento por valor (R$)</p>
+                                        <p>Status dos pagamentos</p>
                                         <PieChart width={200} height={300}>
                                             <Pie
                                                 dataKey="value"

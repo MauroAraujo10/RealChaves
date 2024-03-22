@@ -33,6 +33,15 @@ const ChavePedidoEstoqueNew = () => {
     }
 
     const handleRemoverdoPedido = (dto) => {
+        setListaChavesSalvas([...listaChavesSalvas, {
+            Id: dto.IdChave,
+            Marca: dto.Marca,
+            NumeroSerie: dto.NumeroSerie,
+            Tipo: dto.Tipo,
+            Data: dto.Data,
+            Quantidade: dto.QuantidadeEmEstoque
+        }]);
+
         const novoPedidoEstoque = pedidoEstoque.filter((pedidoEstoque) => pedidoEstoque.IdChave !== dto.IdChave);
         setPedidoEstoque(novoPedidoEstoque);
     }

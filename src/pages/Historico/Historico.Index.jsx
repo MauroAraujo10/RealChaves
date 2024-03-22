@@ -68,9 +68,9 @@ const HistoricoIndex = () => {
 
                         const columnDescartes = [
                             { title: 'Data do descarte', dataIndex: 'Data', key: 'Data', width: '15%' },
-                            { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', width: '10%' },
                             { title: 'Marca', dataIndex: 'Marca', key: 'Marca', width: '15%' },
                             { title: 'Número de Série', dataIndex: 'NumeroSerie', key: 'NumeroSerie', width: '10%' },
+                            { title: 'Quantidade', dataIndex: 'Quantidade', key: 'Quantidade', width: '10%' },
                             { title: 'Motivo', dataIndex: 'Motivo', key: 'Motivo', width: '40%' },
                         ];
 

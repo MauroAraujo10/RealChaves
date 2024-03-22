@@ -64,14 +64,8 @@ const EstatisticaCard = ({
                                 key="2"
                                 size={20}
                                 onClick={() => alert('função indisponivel no momento, contactar o desenvolvedor')}
-                                //onClick={() => handleFuncaoModal('graficoValores')}
                             />
                         </Tooltip>
-                        // <Tooltip>
-                        //     <FcLike
-                        //         key="3"
-                        //         size={20} />
-                        // </Tooltip>
                     ]
                 }
                 style={{ boxShadow: '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)' }}
@@ -109,18 +103,21 @@ const EstatisticaCard = ({
                 visible={estatisticaDetalhesTipoPagamentomodalVisible}
                 onClose={() => setEstatisticaDetalhesTipoPagamentomodalVisible(false)}
                 arrayInformacoes={arrayInformacoes}
+                dominio={dominio}
             />
 
             <EstatisticaDetalhesMotivoDescarteModal
                 visible={estatisticaDetalhesMotivoDescarteVisible}
                 onClose={() => setEstatisticaDetalhesMotivoDescarteVisible(false)}
                 arrayInformacoes={arrayInformacoes}
+                dominio={dominio}
             />
 
             <EstatisticaDetalhesPedidoEstoqueModal
                 visible={estatisticaDetalhesPedidoEstoqueVisible}
                 onClose={() => setEstatisticaDetalhesPedidoEstoqueVisible(false)}
                 arrayInformacoes={arrayInformacoes}
+                dominio={dominio}
             />
 
             <EstatisticasGraficoValoresModal

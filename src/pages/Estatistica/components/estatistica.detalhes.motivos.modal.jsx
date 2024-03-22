@@ -9,7 +9,7 @@ import TituloModal from '../../../common/components/TituloModal/TituloModal'
 import BotaoCadastrar from '../../../common/components/BotaoCadastrar/BotaoCadastrar';
 import { messages } from '../../../common/Enum/messages';
 
-const EstatisticaDetalhesTipoPagamentomodal = ({ visible, onClose, arrayInformacoes }) => {
+const EstatisticaDetalhesTipoPagamentomodal = ({ visible, onClose, arrayInformacoes, dominio }) => {
     const [dataInicial, setDataInicial] = useState('');
     const [dataFinal, setDataFinal] = useState('');
 
@@ -116,7 +116,7 @@ const EstatisticaDetalhesTipoPagamentomodal = ({ visible, onClose, arrayInformac
             destroyOnClose={true}
         >
             <TituloModal
-                titulo={'Busca Detalhada'}
+                titulo={`Busca Detalhada de ${dominio}`}
                 subTitulo={'Selecione o período pelo qual deseja buscar informação'}
             />
 
