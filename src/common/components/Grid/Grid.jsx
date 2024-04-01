@@ -6,20 +6,15 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { Button, Input, Space, Table } from 'antd';
 
 const Grid = ({ dataSource, columns, QuantidadeTotal }) => {
-  const [searchText, setSearchText] = useState('');
-  const [searchedColumn, setSearchedColumn] = useState('');
   const [column, setColumn] = useState([]);
   const searchInput = useRef(null);
 
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+  const handleSearch = (confirm) => {
     confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
   };
 
   const handleReset = (clearFilters) => {
     clearFilters();
-    setSearchText('');
   };
 
   const getColumnSearchProps = (dataIndex) => ({
@@ -35,7 +30,7 @@ const Grid = ({ dataSource, columns, QuantidadeTotal }) => {
           placeholder={`Buscar ${dataIndex}`}
           value={selectedKeys[0]}
           onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          onPressEnter={() => handleSearch(confirm)}
           style={{
             marginBottom: 8,
             display: 'block',
@@ -44,7 +39,7 @@ const Grid = ({ dataSource, columns, QuantidadeTotal }) => {
         <Space>
           <Button
             type="primary"
-            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            onClick={() => handleSearch(confirm)}
             icon={<AiOutlineSearch />}
             size="small"
             style={{
