@@ -113,9 +113,6 @@ const NavBar = () => {
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <Link to={Rotas.Configuracoes}>Configurações</Link>
-                    </li>
                 </ul>
             </nav>
 

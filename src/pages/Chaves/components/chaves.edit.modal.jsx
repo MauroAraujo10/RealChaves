@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, Row, Col, Select, Image, Divider } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { toast } from "react-toastify";
@@ -29,7 +29,7 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
         const dto = {
             Marca: form.Marca,
             NumeroSerie: Number(form.NumeroSerie),
-            Quantidade: Number(chaveSelecionada.Quantidade),
+            Quantidade: Number(form.Quantidade),
             Tipo: form.Tipo,
             Data: chaveSelecionada.Data
         };
@@ -85,7 +85,7 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
             >
                 <Row gutter={10}>
 
-                    <Col md={10} xs={24}>
+                    <Col md={9} xs={24}>
                         <Form.Item
                             name="Marca"
                             label="Marca"
@@ -101,7 +101,7 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
                         </Form.Item>
                     </Col>
 
-                    <Col md={10} xs={24}>
+                    <Col md={9} xs={24}>
                         <Form.Item
                             name="NumeroSerie"
                             label="Número de Série"
@@ -116,7 +116,21 @@ const ChaveEditModal = ({ visible, onClose, chaveSelecionada }) => {
                             />
                         </Form.Item>
                     </Col>
-
+                    <Col md={5} xs={24}>
+                        <Form.Item
+                            name="Quantidade"
+                            label="Quantidade"
+                            rules={[{ required: true, message: messages.CampoObrigatorio }]}
+                        >
+                            <Input
+                                type="number"
+                                placeholder={"Quantidade"}
+                                max={99999}
+                                min={1}
+                                tabIndex={2}
+                            />
+                        </Form.Item>
+                    </Col>
                 </Row>
 
                 <Row gutter={10}>
