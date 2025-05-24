@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Modal, Form, Input, Row, Col, Select, Image, Divider } from 'antd';
 import { messages } from '../../../common/Enum/messages';
 import { toast } from "react-toastify";
